@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/bnbMenuBookings"
+        android:title="@string/title_myBookings"
+        android:icon="@drawable/ic_baseline_airplane_ticket_24"/>
+
+    <item android:id="@+id/bnbMenuAllBookings"
+        android:title="@string/title_allBookings"
+        android:icon="@drawable/ic_baseline_view_list_24"/>
+
+    <item android:id="@+id/bnbPlaceholder"
+        android:title=""/>
+
+    <item android:id="@+id/bnbMenuUsers"
+        android:title="@string/title_users"
+        android:icon="@drawable/ic_baseline_people_24"/>
+
+    <item android:id="@+id/bnbMenuProfile"
+        android:title="@string/title_profile"
+        android:icon="@drawable/ic_baseline_person_24"/>
+
+</menu>
