@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="green_blue">#2081C3</color>
-    <color name="middle_blue">#83C5BE</color>
+    <color name="primary_blue">#2081C3</color>
+    <color name="secondary">#83C5BE</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_blue_600">#FF039BE5</color>
