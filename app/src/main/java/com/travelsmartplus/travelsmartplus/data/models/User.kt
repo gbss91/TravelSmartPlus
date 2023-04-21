@@ -1,4 +1,4 @@
-package com.travelsmartplus.travelsmartplus.models
+package com.travelsmartplus.travelsmartplus.data.remote.models
 
 data class User(
     val id: Int? = 0,

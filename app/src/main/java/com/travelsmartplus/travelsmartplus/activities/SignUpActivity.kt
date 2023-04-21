@@ -3,12 +3,26 @@ package com.travelsmartplus.travelsmartplus.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignInRequest
+import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignUpRequest
+import com.travelsmartplus.travelsmartplus.data.services.AuthService
 import com.travelsmartplus.travelsmartplus.databinding.ActivitySignUpBinding
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Exception
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
 
+    @Inject lateinit var authService: AuthService
     private lateinit var binding: ActivitySignUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,11 +76,38 @@ class SignUpActivity : AppCompatActivity() {
 
         if(inputValidation()) {
 
+            val signUpRequest = SignUpRequest(
+                firstName.text.toString(),
+                lastName.text.toString(),
+                email.text.toString(),
+                password.text.toString(),
+                companyName.text.toString(),
+                duns.text.toString().toInt()
+            )
 
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    val response = authService.signUp(signUpRequest)
+                    withContext(Dispatchers.Main) {
+                        if (response.isSuccessful) {
+                            val signInRequest = SignInRequest(email.text.toString(), password.text.toString())
+                            val intent = Intent(this@SignUpActivity, SignInActivity::class.java)
+                            startActivity(intent)
+                            Toast.makeText(this@SignUpActivity, "", Toast.LENGTH_SHORT).show()
+                        } else {
+                            // Display response message using Toast if sign up fails
+                            val message = response.body?.string()
+                            Toast.makeText(this@SignUpActivity, message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("SignUpActivity", "Exception: $e")
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@SignUpActivity, "Unknown error occurred", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
 
         }
-
-
-
     }
 }

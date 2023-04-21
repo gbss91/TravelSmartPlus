@@ -1,4 +1,4 @@
-package com.travelsmartplus.travelsmartplus.models.requests
+package com.travelsmartplus.travelsmartplus.data.remote.models.requests
 
 data class SignInRequest(
     val email: String,
