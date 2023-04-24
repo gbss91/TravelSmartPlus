@@ -5,6 +5,8 @@ import com.beust.klaxon.Klaxon
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignUpRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -21,17 +23,18 @@ class AuthServiceImpl @Inject constructor( private val client: OkHttpClient) : A
             .post(requestBody)
             .build()
 
-        try {
-            val response = client.newCall(request).execute()
-            if (!response.isSuccessful) {
-                Log.e("AuthService", "Error response: ${response.code} ${response.message}")
-                return response
-            }
-            return response
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = client.newCall(request).execute()
+                if (!response.isSuccessful) {
+                    Log.e("AuthService", "Error response: ${response.code} ${response.message}")
+                }
+                response
 
-        } catch (e: Exception) {
-            Log.e("AuthService", "Exception: $e")
-            throw e
+            } catch (e: Exception) {
+                Log.e("AuthService", "Exception: $e")
+                throw e
+            }
         }
     }
 
@@ -42,20 +45,18 @@ class AuthServiceImpl @Inject constructor( private val client: OkHttpClient) : A
             .post(requestBody)
             .build()
 
-        try {
-            val response = client.newCall(request).execute()
-            if (!response.isSuccessful) {
-                Log.e("AuthService", "Error response: ${response.code} ${response.message}")
-                return response
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = client.newCall(request).execute()
+                if (!response.isSuccessful) {
+                    Log.e("AuthService", "Error response: ${response.code} ${response.message}")
+                }
+                response
+
+            } catch (e: Exception) {
+                Log.e("AuthService", "Exception: $e")
+                throw e
             }
-
-            return response
-
-        } catch (e: Exception) {
-            Log.e("AuthService", "Exception: $e")
-            throw e
         }
-
     }
-
 }

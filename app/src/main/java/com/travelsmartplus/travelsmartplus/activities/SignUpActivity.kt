@@ -5,33 +5,36 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
 import com.travelsmartplus.travelsmartplus.databinding.ActivitySignUpBinding
+import com.travelsmartplus.travelsmartplus.viewModels.AuthViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import okhttp3.Response
 import java.lang.Exception
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
 
-    @Inject lateinit var authService: AuthService
     private lateinit var binding: ActivitySignUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val authViewModel: AuthViewModel by viewModels()
 
         binding.signUpBtn.setOnClickListener {
-            signUp()
+            signUp(authViewModel)
         }
 
         binding.signInLink.setOnClickListener {
@@ -39,9 +42,20 @@ class SignUpActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Observer - Observes response changes
+        authViewModel.authResponse.observe(this) { response ->
+            if (response != null && response.isSuccessful) {
+                Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            } else {
+                val error = response.peekBody(Long.MAX_VALUE).string()
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+            }
+        }
     }
 
-    private fun signUp() {
+    private fun signUp(authViewModel: AuthViewModel) {
 
         val firstName = binding.firstName
         val lastName = binding.lastName
@@ -85,29 +99,9 @@ class SignUpActivity : AppCompatActivity() {
                 duns.text.toString().toInt()
             )
 
-            GlobalScope.launch(Dispatchers.IO) {
-                try {
-                    val response = authService.signUp(signUpRequest)
-                    withContext(Dispatchers.Main) {
-                        if (response.isSuccessful) {
-                            val signInRequest = SignInRequest(email.text.toString(), password.text.toString())
-                            val intent = Intent(this@SignUpActivity, SignInActivity::class.java)
-                            startActivity(intent)
-                            Toast.makeText(this@SignUpActivity, "", Toast.LENGTH_SHORT).show()
-                        } else {
-                            // Display response message using Toast if sign up fails
-                            val message = response.body?.string()
-                            Toast.makeText(this@SignUpActivity, message, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                } catch (e: Exception) {
-                    Log.e("SignUpActivity", "Exception: $e")
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@SignUpActivity, "Unknown error occurred", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
+            val signInRequest = SignInRequest(email.text.toString(), password.text.toString())
 
+            authViewModel.signUpAndSignIn(signUpRequest, signInRequest)
         }
     }
 }
