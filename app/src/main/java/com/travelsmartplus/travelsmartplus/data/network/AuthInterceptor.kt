@@ -21,7 +21,6 @@ class AuthInterceptor @Inject constructor(
         val token = sessionManager.getToken()
         val originalRequest = chain.request().newBuilder()
 
-
         // Add JWT token to request
         if (token != null) {
             originalRequest.addHeader("Authorization", "Bearer $token")

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
+import com.travelsmartplus.travelsmartplus.data.network.SessionManager
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
@@ -70,4 +71,6 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
+
+
 }

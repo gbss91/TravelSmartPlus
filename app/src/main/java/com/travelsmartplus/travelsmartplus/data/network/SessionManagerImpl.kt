@@ -10,6 +10,7 @@ class SessionManagerImpl @Inject constructor(private val sharedPreferences: Shar
     companion object {
         private const val ACCESS_TOKEN = "token"
         private const val REFRESH_TOKEN = "refreshToken"
+        private const val USER_ID_COOKIE = "userId"
     }
 
     override fun getToken(): String? {
@@ -26,6 +27,14 @@ class SessionManagerImpl @Inject constructor(private val sharedPreferences: Shar
 
     override fun saveRefreshToken(refreshToken: String) {
         sharedPreferences.edit().putString(REFRESH_TOKEN, refreshToken).apply()
+    }
+
+    override fun getUserId(): Int? {
+        return sharedPreferences.getInt(USER_ID_COOKIE, -1)
+    }
+
+    override fun saveUserId(userId: Int) {
+        sharedPreferences.edit().putInt(USER_ID_COOKIE, userId).apply()
     }
 
     override fun clearSession() {

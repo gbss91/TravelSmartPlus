@@ -2,7 +2,9 @@ package com.travelsmartplus.travelsmartplus.data.services
 
 import android.util.Log
 import com.beust.klaxon.Klaxon
+import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
+import com.travelsmartplus.travelsmartplus.data.network.SessionManager
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignUpRequest
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +18,10 @@ import java.io.IOException
 import java.lang.Exception
 import javax.inject.Inject
 
-class AuthServiceImpl @Inject constructor( private val client: OkHttpClient) : AuthService {
+class AuthServiceImpl @Inject constructor(
+    private val client: OkHttpClient,
+    private val sessionManager: SessionManager
+) : AuthService {
     override suspend fun signUp(signUpRequest: SignUpRequest): Response {
         val requestBody = Klaxon().toJsonString(signUpRequest).toRequestBody("application/json".toMediaTypeOrNull())
         val request = Request.Builder()
@@ -52,7 +57,19 @@ class AuthServiceImpl @Inject constructor( private val client: OkHttpClient) : A
         return withContext(Dispatchers.IO) {
             try {
                 val response = client.newCall(request).execute()
-                if (!response.isSuccessful) {
+
+                // If successful store token and user ID in cookie
+                if (response.isSuccessful ) {
+                    val authResponse = Klaxon().parse<AuthResponse>(response.body.toString())
+                    val cookie = response.headers("Set-Cookie").find { it.startsWith("user_session=") }
+
+                    if (authResponse != null && cookie != null) {
+                        sessionManager.saveToken(authResponse.token)
+                        sessionManager.saveRefreshToken(authResponse.refreshToken)
+                        sessionManager.saveUserId(cookie.toInt())
+                    }
+
+                } else {
                     Log.e("AuthService", "Error response: ${response.code} ${response.message}")
                 }
                 response
