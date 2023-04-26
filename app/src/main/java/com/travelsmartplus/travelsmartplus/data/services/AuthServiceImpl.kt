@@ -2,7 +2,7 @@ package com.travelsmartplus.travelsmartplus.data.services
 
 import android.util.Log
 import com.beust.klaxon.Klaxon
-import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
+import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignUpRequest
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import java.io.IOException
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -31,6 +32,9 @@ class AuthServiceImpl @Inject constructor( private val client: OkHttpClient) : A
                 }
                 response
 
+            } catch (e: IOException) {
+                Log.e("AuthService", "Exception: $e")
+                throw NetworkException("Network error occurred. Please try again later!")
             } catch (e: Exception) {
                 Log.e("AuthService", "Exception: $e")
                 throw e
@@ -53,6 +57,9 @@ class AuthServiceImpl @Inject constructor( private val client: OkHttpClient) : A
                 }
                 response
 
+            } catch (e: IOException) {
+                Log.e("AuthService", "Exception: $e")
+                throw NetworkException("Network error occurred. Please try again later!")
             } catch (e: Exception) {
                 Log.e("AuthService", "Exception: $e")
                 throw e

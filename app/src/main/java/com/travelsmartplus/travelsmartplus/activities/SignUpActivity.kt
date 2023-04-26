@@ -26,15 +26,15 @@ import javax.inject.Inject
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val authViewModel: AuthViewModel by viewModels()
 
         binding.signUpBtn.setOnClickListener {
-            signUp(authViewModel)
+            signUp()
         }
 
         binding.signInLink.setOnClickListener {
@@ -42,7 +42,7 @@ class SignUpActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Observer - Observes response changes
+        // Observers - observes responses and errors
         authViewModel.authResponse.observe(this) { response ->
             if (response != null && response.isSuccessful) {
                 Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT).show()
@@ -53,9 +53,13 @@ class SignUpActivity : AppCompatActivity() {
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
             }
         }
+
+        authViewModel.errorMessage.observe(this) { error ->
+            Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+        }
     }
 
-    private fun signUp(authViewModel: AuthViewModel) {
+    private fun signUp() {
 
         val firstName = binding.firstName
         val lastName = binding.lastName

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
@@ -19,36 +20,54 @@ class AuthViewModel @Inject constructor(
 
     // LiveData object to hold the responses
     private val _authResponse = MutableLiveData<Response>()
+    private val _errorMessage = MutableLiveData<String>()
     val authResponse: LiveData<Response> = _authResponse
+    val errorMessage: LiveData<String> = _errorMessage
 
     // Sign up using coroutine
     fun signUp(signUpRequest: SignUpRequest) {
         viewModelScope.launch {
-            val response = authService.signUp(signUpRequest)
-            _authResponse.postValue(response)
+            try {
+                val response = authService.signUp(signUpRequest)
+                _authResponse.postValue(response)
+            } catch (e: NetworkException) {
+                _errorMessage.postValue(e.message)
+            } catch (e: Exception) {
+                _errorMessage.postValue("Unknown error occurred")
+            }
         }
     }
 
     // Sign in using coroutine
     fun signIn(signInRequest: SignInRequest) {
         viewModelScope.launch {
-            val response = authService.signIn(signInRequest)
-            _authResponse.postValue(response)
+            try {
+                val response = authService.signIn(signInRequest)
+                _authResponse.postValue(response)
+            } catch (e: NetworkException) {
+                _errorMessage.postValue(e.message)
+            } catch (e: Exception) {
+                _errorMessage.postValue("Unknown error occurred")
+            }
         }
     }
 
     // Sign up and sign in using coroutine
     fun signUpAndSignIn(signUpRequest: SignUpRequest, signInRequest: SignInRequest) {
         viewModelScope.launch {
-            val signUpResponse = authService.signUp(signUpRequest)
-            if (signUpResponse.isSuccessful) {
-                val signInResponse = authService.signIn(signInRequest)
-                _authResponse.postValue(signInResponse)
-            } else {
-                _authResponse.postValue(signUpResponse)
+            try {
+                val signUpResponse = authService.signUp(signUpRequest)
+                if (signUpResponse.isSuccessful) {
+                    val signInResponse = authService.signIn(signInRequest)
+                    _authResponse.postValue(signInResponse)
+                } else {
+                    _authResponse.postValue(signUpResponse)
+                }
+            } catch (e: NetworkException) {
+                _errorMessage.postValue(e.message)
+            } catch (e: Exception) {
+                _errorMessage.postValue("Unknown error occurred")
             }
         }
     }
-
-
 }
