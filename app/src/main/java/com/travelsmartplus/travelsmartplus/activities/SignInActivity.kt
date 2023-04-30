@@ -3,12 +3,12 @@ package com.travelsmartplus.travelsmartplus.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.android.material.snackbar.Snackbar
-import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignInRequest
+import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.databinding.ActivitySignInBinding
+import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNKNOWN_ERROR
 import com.travelsmartplus.travelsmartplus.viewModels.AuthViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,13 +34,12 @@ class SignInActivity : AppCompatActivity() {
         }
 
         // Observers - observes responses and errors
-        authViewModel.authResponse.observe(this) { response ->
+        authViewModel.signInResponse.observe(this) { response ->
             if (response != null && response.isSuccessful) {
-                Toast.makeText(this, "Sign in successful", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             } else {
-                val error = response.peekBody(Long.MAX_VALUE).string()
+                val error = response?.errorBody()?.string() ?: UNKNOWN_ERROR
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
             }
         }

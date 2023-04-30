@@ -1,13 +1,13 @@
 package com.travelsmartplus.travelsmartplus.data.network
 
 import android.util.Log
-import com.beust.klaxon.Klaxon
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.lang.Exception
 
 
 class TokenRefreshServiceImpl : TokenRefreshService {
@@ -24,7 +24,9 @@ class TokenRefreshServiceImpl : TokenRefreshService {
                 val response = client.newCall(request).execute()
                 response.use {
                     if (response.isSuccessful) {
-                        Klaxon().parse<AuthResponse>(response.body.toString()).also { response.close() }
+                        val objectMapper = jacksonObjectMapper()
+                        objectMapper.registerModule(KotlinModule())
+                        objectMapper.readValue(response.body?.string(), AuthResponse::class.java)
                     } else {
                         // Handle unsuccessful response
                         Log.e("AuthService", "Error response: ${response.code} ${response.message}")

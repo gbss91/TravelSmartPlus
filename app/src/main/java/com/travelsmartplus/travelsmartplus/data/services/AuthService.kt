@@ -1,11 +1,18 @@
 package com.travelsmartplus.travelsmartplus.data.services
 
+import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
+import com.travelsmartplus.travelsmartplus.data.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
-import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignInRequest
-import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignUpRequest
-import okhttp3.Response
+import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.SIGN_IN
+import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.SIGN_UP
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 interface AuthService {
-    suspend fun signUp(signUpRequest: SignUpRequest): Response
-    suspend fun signIn(signInRequest: SignInRequest): Response
+    @POST(SIGN_UP)
+    suspend fun signUp(@Body signUpRequest: SignUpRequest): Response<Unit>
+
+    @POST(SIGN_IN)
+    suspend fun signIn(@Body signInRequest: SignInRequest): Response<AuthResponse>
 }

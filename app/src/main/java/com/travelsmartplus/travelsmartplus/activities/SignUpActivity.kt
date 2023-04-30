@@ -3,24 +3,16 @@ package com.travelsmartplus.travelsmartplus.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignInRequest
-import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignUpRequest
-import com.travelsmartplus.travelsmartplus.data.services.AuthService
+import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
+import com.travelsmartplus.travelsmartplus.data.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.databinding.ActivitySignUpBinding
+import com.travelsmartplus.travelsmartplus.utils.ErrorMessages
 import com.travelsmartplus.travelsmartplus.viewModels.AuthViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
-import okhttp3.Response
-import java.lang.Exception
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
@@ -43,13 +35,12 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         // Observers - observes responses and errors
-        authViewModel.authResponse.observe(this) { response ->
+        authViewModel.signUpResponse.observe(this) { response ->
             if (response != null && response.isSuccessful) {
-                Toast.makeText(this, "Sign up successful", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             } else {
-                val error = response.peekBody(Long.MAX_VALUE).string()
+                val error = response?.errorBody()?.string() ?: ErrorMessages.UNKNOWN_ERROR
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
             }
         }

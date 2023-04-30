@@ -1,6 +1,8 @@
-package com.travelsmartplus.travelsmartplus.data.remote.models.requests
+package com.travelsmartplus.travelsmartplus.data.models.requests
+
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class SignInRequest(
-    val email: String,
-    val password: String
+    @JsonProperty("email") val email: String,
+    @JsonProperty("password") val password: String
 )

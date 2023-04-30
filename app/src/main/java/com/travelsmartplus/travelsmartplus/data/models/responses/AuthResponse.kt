@@ -1,6 +1,8 @@
 package com.travelsmartplus.travelsmartplus.data.models.responses
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class AuthResponse(
-    val token: String,
-    val refreshToken: String
+    @JsonProperty("token") val token: String,
+    @JsonProperty("refreshToken") val refreshToken: String,
 )

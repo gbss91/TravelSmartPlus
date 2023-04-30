@@ -1,11 +1,13 @@
-package com.travelsmartplus.travelsmartplus.data.remote.models
+package com.travelsmartplus.travelsmartplus.data.models
+
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class User(
-    val id: Int? = 0,
-    val orgId: Int,
-    val firstName: String,
-    val lastName: String,
-    val email: String,
-    val password: String,
-    val salt: String
+    @JsonProperty("id") val id: Int? = 0,
+    @JsonProperty("orgId") val orgId: Int,
+    @JsonProperty("firstName") val firstName: String,
+    @JsonProperty("lastName") val lastName: String,
+    @JsonProperty("email") val email: String,
+    @JsonProperty("password") val password: String,
+    @JsonProperty("salt") val salt: String
 )
