@@ -1,4 +1,4 @@
-package com.travelsmartplus.travelsmartplus.data.network
+package com.travelsmartplus.travelsmartplus.utils
 
 interface SessionManager {
     fun getToken(): String?

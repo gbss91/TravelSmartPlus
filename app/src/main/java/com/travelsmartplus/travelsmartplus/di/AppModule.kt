@@ -3,12 +3,10 @@ package com.travelsmartplus.travelsmartplus.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.travelsmartplus.travelsmartplus.data.network.AuthInterceptor
-import com.travelsmartplus.travelsmartplus.data.network.SessionManager
-import com.travelsmartplus.travelsmartplus.data.network.SessionManagerImpl
+import com.travelsmartplus.travelsmartplus.utils.SessionManager
+import com.travelsmartplus.travelsmartplus.utils.SessionManagerImpl
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
 import com.travelsmartplus.travelsmartplus.data.services.AuthServiceImpl
-import com.travelsmartplus.travelsmartplus.data.services.TokenRefreshService
-import com.travelsmartplus.travelsmartplus.data.services.TokenRefreshServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,8 +41,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthService(client: OkHttpClient): AuthService {
-        return AuthServiceImpl(client)
+    fun provideAuthService(client: OkHttpClient, sessionManager: SessionManager): AuthService {
+        return AuthServiceImpl(client, sessionManager)
     }
 
 }

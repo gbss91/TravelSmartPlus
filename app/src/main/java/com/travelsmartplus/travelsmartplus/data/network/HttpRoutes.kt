@@ -1,4 +1,4 @@
-package com.travelsmartplus.travelsmartplus.data.services
+package com.travelsmartplus.travelsmartplus.data.network
 
 object HttpRoutes {
     private const val BASE_URL = "http://10.0.2.2:8000/api"

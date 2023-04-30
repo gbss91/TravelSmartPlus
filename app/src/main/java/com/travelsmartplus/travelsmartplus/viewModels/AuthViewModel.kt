@@ -1,14 +1,15 @@
 package com.travelsmartplus.travelsmartplus.viewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
-import com.travelsmartplus.travelsmartplus.data.network.SessionManager
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.remote.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
+import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNKNOWN_ERROR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.Response
@@ -34,7 +35,7 @@ class AuthViewModel @Inject constructor(
             } catch (e: NetworkException) {
                 _errorMessage.postValue(e.message)
             } catch (e: Exception) {
-                _errorMessage.postValue("Unknown error occurred")
+                _errorMessage.postValue(UNKNOWN_ERROR)
             }
         }
     }
@@ -48,7 +49,7 @@ class AuthViewModel @Inject constructor(
             } catch (e: NetworkException) {
                 _errorMessage.postValue(e.message)
             } catch (e: Exception) {
-                _errorMessage.postValue("Unknown error occurred")
+                _errorMessage.postValue(UNKNOWN_ERROR)
             }
         }
     }
@@ -67,7 +68,7 @@ class AuthViewModel @Inject constructor(
             } catch (e: NetworkException) {
                 _errorMessage.postValue(e.message)
             } catch (e: Exception) {
-                _errorMessage.postValue("Unknown error occurred")
+                _errorMessage.postValue(UNKNOWN_ERROR)
             }
         }
     }

@@ -1,11 +1,12 @@
-package com.travelsmartplus.travelsmartplus.data.network
+package com.travelsmartplus.travelsmartplus.utils
 
 import android.content.SharedPreferences
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SessionManagerImpl @Inject constructor(private val sharedPreferences: SharedPreferences) : SessionManager {
+class SessionManagerImpl @Inject constructor(private val sharedPreferences: SharedPreferences) :
+    SessionManager {
 
     companion object {
         private const val ACCESS_TOKEN = "token"
