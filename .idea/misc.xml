@@ -9,16 +9,23 @@
         <entry key="app/src/main/res/drawable/ic_baseline_people_24.xml" value="0.1855" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.1855" />
         <entry key="app/src/main/res/drawable/ic_baseline_view_list_24.xml" value="0.1855" />
+        <entry key="app/src/main/res/drawable/ic_calendar.xml" value="0.2485" />
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.1855" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.278" />
+        <entry key="app/src/main/res/drawable/ic_location.xml" value="0.2485" />
         <entry key="app/src/main/res/drawable/ic_users.xml" value="0.278" />
         <entry key="app/src/main/res/drawable/splash_background.xml" value="0.278" />
         <entry key="app/src/main/res/layout/activity_landing_page.xml" value="0.3962158203125" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_sign_in.xml" value="0.30480072463768115" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_sign_in.xml" value="0.25539568345323743" />
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.2668759811616955" />
         <entry key="app/src/main/res/layout/auth_layout.xml" value="0.707969665527344" />
+        <entry key="app/src/main/res/layout/fragment_all_bookings.xml" value="0.3451086956521739" />
+        <entry key="app/src/main/res/layout/fragment_booking_search.xml" value="0.2725497461469687" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.17708333333333334" />
+        <entry key="app/src/main/res/layout/fragment_my_bookings.xml" value="0.3451086956521739" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.3451086956521739" />
+        <entry key="app/src/main/res/layout/fragment_users.xml" value="0.3451086956521739" />
         <entry key="app/src/main/res/layout/staff_layout.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/menu/bottom_menu_nav.xml" value="0.17604166666666668" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.17708333333333334" />
@@ -37,7 +44,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.707969665527344" />
+        <option name="scale" value="0.1" />
       </ProjectState>
     </option>
   </component>

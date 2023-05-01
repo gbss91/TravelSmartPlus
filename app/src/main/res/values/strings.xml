@@ -31,4 +31,25 @@
     <string name="link_forgot_password">Forgot password?</string>
     <string name="btn_sign_in">Sign In</string>
 
+    <!--Booking Search Fragment-->
+    <string name="search_fragment">Search fragment</string>
+    <string name="from_search">From</string>
+    <string name="to_search">To</string>
+    <string name="departure_search">Departure</string>
+    <string name="return_search">Return</string>
+
+    <!--My Bookings Fragment-->
+    <string name="my_bookings_fragment">My Bookings fragment</string>
+
+    <!--All Bookings Fragment-->
+    <string name="all_bookings_fragment">All Bookings fragment</string>
+
+    <!--Users Fragment-->
+    <string name="users_fragment">Users fragment</string>
+
+    <!--Profile Fragment-->
+    <string name="profile_fragment">Profile fragment</string>
+
+
+
 </resources>
