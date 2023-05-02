@@ -18,7 +18,7 @@ class MainViewModel @Inject constructor(
 
     init {
         // Set the initial value of the signedIn variable
-        _isSignedIn.value = sessionManager.getUserId() != -1
+        _isSignedIn.value = sessionManager.currentUser() != -1
     }
 
 }

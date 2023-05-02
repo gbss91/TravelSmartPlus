@@ -27,15 +27,13 @@ class AuthServiceImpl @Inject constructor(
                     Log.e("AuthService", "Error response: ${response.code()} ${response.message()}")
                 }
                 response
-            } catch (e: IOException) {
-                Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
-                throw NetworkException(NETWORK_ERROR)
-            } catch (e: IllegalStateException) {
-                Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
-                throw NetworkException(UNEXPECTED_ERROR)
             } catch (e: Exception) {
                 Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
-                throw e
+                when (e) {
+                    is IOException -> throw NetworkException(NETWORK_ERROR)
+                    is IllegalStateException -> throw NetworkException(UNEXPECTED_ERROR)
+                    else -> throw e
+                }
             }
         }
     }
@@ -52,27 +50,24 @@ class AuthServiceImpl @Inject constructor(
                     val decodedCookie = URLDecoder.decode(cookie, "UTF-8")
                     val encodedUserId = decodedCookie?.substringAfter("userId=")?.substringBefore(";")?.let { URLDecoder.decode(it, "UTF-8") }
                     val userId = encodedUserId?.substring(2)?.toIntOrNull()
-                    Log.e("USER ID", "User ID: $userId")
 
                     if (responseBody != null && userId != null) {
                         sessionManager.saveToken(responseBody.token)
                         sessionManager.saveRefreshToken(responseBody.refreshToken)
-                        sessionManager.saveUserId(userId)
+                        sessionManager.saveCurrentUser(userId)
                     }
                 } else {
                     Log.e("AuthService", "Error response: ${response.code()} ${response.message()}")
                 }
                 response
 
-            } catch (e: IOException) {
-                Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
-                throw NetworkException(NETWORK_ERROR)
-            } catch (e: IllegalStateException) {
-                Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
-                throw NetworkException(UNEXPECTED_ERROR)
             } catch (e: Exception) {
                 Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
-                throw e
+                when (e) {
+                    is IOException -> throw NetworkException(NETWORK_ERROR)
+                    is IllegalStateException -> throw NetworkException(UNEXPECTED_ERROR)
+                    else -> throw e
+                }
             }
         }
     }

@@ -37,6 +37,24 @@
     <string name="to_search">To</string>
     <string name="departure_search">Departure</string>
     <string name="return_search">Return</string>
+    <string name="adult_search">Adults</string>
+    <string name="booking_class">Class</string>
+
+
+    <!-- Dropdown Menus-->
+    <string-array name="booking_classes_dropdown">
+        <item>Economy</item>
+        <item>Premium</item>
+        <item>Business</item>
+        <item>First Class</item>
+    </string-array>
+    <string-array name="adults_dropdown">
+        <item>1 Adult</item>
+        <item>2 Adults</item>
+        <item>3 Adults</item>
+        <item>4 Adults</item>
+    </string-array>
+
 
     <!--My Bookings Fragment-->
     <string name="my_bookings_fragment">My Bookings fragment</string>

@@ -30,11 +30,11 @@ class SessionManagerImpl @Inject constructor(private val sharedPreferences: Shar
         sharedPreferences.edit().putString(REFRESH_TOKEN, refreshToken).apply()
     }
 
-    override fun getUserId(): Int? {
+    override fun currentUser(): Int? {
         return sharedPreferences.getInt(USER_ID_COOKIE, -1)
     }
 
-    override fun saveUserId(userId: Int) {
+    override fun saveCurrentUser(userId: Int) {
         sharedPreferences.edit().putInt(USER_ID_COOKIE, userId).apply()
     }
 

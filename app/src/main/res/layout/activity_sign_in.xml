@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="32dp"
+        android:layout_margin="@dimen/default_margin"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -22,20 +22,20 @@
             android:text="@string/title_sign_in"
             android:textAlignment="textStart"
             android:textColor="@color/black"
-            android:textSize="40sp" />
+            android:textSize="@dimen/title_text" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/small_margin"
             android:hint="@string/signin_email"
             app:boxBackgroundColor="@android:color/transparent"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidth="2dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email"
+                android:id="@+id/emailInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -50,7 +50,7 @@
             android:id="@+id/passwordContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/small_margin"
             android:hint="@string/signin_password"
             app:boxBackgroundColor="@android:color/transparent"
             app:boxStrokeColor="@color/black"
@@ -58,7 +58,7 @@
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password"
+                android:id="@+id/passwordInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -73,18 +73,18 @@
             android:id="@+id/forgotPassLink"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="@dimen/small_margin"
             android:fontFamily="@font/roboto"
             android:text="@string/link_forgot_password"
             android:textAlignment="textEnd"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="@dimen/small_text" />
 
         <Button
             android:id="@+id/signInBtn"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/default_margin"
             android:fontFamily="@font/roboto_bold"
             android:padding="15dp"
             android:text="@string/btn_sign_in"
@@ -94,8 +94,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginBottom="@dimen/default_margin"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -105,7 +105,7 @@
                 android:fontFamily="@font/roboto"
                 android:text="@string/dont_have_an_account"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="@dimen/small_text" />
 
             <TextView
                 android:id="@+id/signUpLink"
@@ -115,7 +115,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:text="@string/link_sign_up"
                 android:textColor="@color/primary_blue"
-                android:textSize="14sp"
+                android:textSize="@dimen/small_text"
                 tools:ignore="TextContrastCheck" />
 
         </LinearLayout>

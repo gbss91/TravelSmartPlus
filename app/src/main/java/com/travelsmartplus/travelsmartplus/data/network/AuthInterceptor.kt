@@ -13,7 +13,6 @@ class AuthInterceptor @Inject constructor(
 )  : Interceptor {
 
     private val scope = CoroutineScope(Dispatchers.IO)
-    private var isRefreshing = false // Avoid infinity refresh loop
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = sessionManager.getToken()
@@ -27,14 +26,15 @@ class AuthInterceptor @Inject constructor(
         val response = chain.proceed(originalRequest.build())
 
         // Retry with refresh token if unauthorised
-        if (response.code == 401 || !isRefreshing) {
-            isRefreshing = true
+        if (response.code == 401) {
             // If no refresh token available, return original response
             val refreshToken = sessionManager.getRefreshToken() ?: return response
 
+            response.close()
+
             val newRequest = originalRequest.addHeader("Authorization", "Bearer $refreshToken").build()
             val newResponse = chain.proceed(newRequest)
-            // Refresh tokens if refresh token is valid and request is successful, else return original response
+            // Refresh tokens if refresh token is valid and request is successful, else return unauthorised response
             if (newResponse.isSuccessful) {
                 scope.launch {
                     refreshTokens()
@@ -42,7 +42,6 @@ class AuthInterceptor @Inject constructor(
             }
             return newResponse
         }
-        isRefreshing = false
         return response
     }
 

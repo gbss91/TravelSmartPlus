@@ -28,20 +28,6 @@ class AuthViewModel @Inject constructor(
     val signInResponse: LiveData<Response<AuthResponse>> = _signInResponse
     val errorMessage: LiveData<String> = _errorMessage
 
-    // Sign up using coroutine
-    fun signUp(signUpRequest: SignUpRequest) {
-        viewModelScope.launch {
-            try {
-                val response = authService.signUp(signUpRequest)
-                _signUpResponse.postValue(response)
-            } catch (e: NetworkException) {
-                _errorMessage.postValue(e.message)
-            } catch (e: Exception) {
-                _errorMessage.postValue(UNKNOWN_ERROR)
-            }
-        }
-    }
-
     // Sign in using coroutine
     fun signIn(signInRequest: SignInRequest) {
         viewModelScope.launch {
@@ -74,6 +60,5 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
-
 
 }

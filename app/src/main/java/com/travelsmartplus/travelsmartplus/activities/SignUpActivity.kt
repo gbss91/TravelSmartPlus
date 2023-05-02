@@ -10,6 +10,7 @@ import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.databinding.ActivitySignUpBinding
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages
+import com.travelsmartplus.travelsmartplus.utils.NotBlankRule
 import com.travelsmartplus.travelsmartplus.viewModels.AuthViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,6 +46,16 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
 
+        authViewModel.signInResponse.observe(this) { response ->
+            if (response != null && response.isSuccessful) {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            } else {
+                val error = response?.errorBody()?.string() ?: ErrorMessages.UNKNOWN_ERROR
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+            }
+        }
+
         authViewModel.errorMessage.observe(this) { error ->
             Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
         }
@@ -52,21 +63,21 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun signUp() {
 
-        val firstName = binding.firstName
-        val lastName = binding.lastName
-        val email = binding.email
-        val password = binding.password
-        val confirmPass = binding.confirmPass
-        val companyName = binding.companyName
-        val duns = binding.duns
+        val firstName = binding.firstNameInput
+        val lastName = binding.lastNameInput
+        val email = binding.emailInput
+        val password = binding.passwordInput
+        val confirmPass = binding.confirmPassInput
+        val companyName = binding.companyNameInput
+        val duns = binding.dunsInput
 
         // Input validation
         var inputValidation = {
-            firstName.validator().nonEmpty().addErrorCallback { firstName.error = it }.check()
-            lastName.validator().nonEmpty().addErrorCallback { lastName.error = it }.check()
-            email.validator().nonEmpty().validEmail().addErrorCallback { email.error = it }.check()
-            companyName.validator().nonEmpty().addErrorCallback { companyName.error = it }.check()
-            duns.validator().nonEmpty().addErrorCallback { duns.error = it }.check()
+            firstName.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { firstName.error = it }.check()
+            lastName.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { lastName.error = it }.check()
+            email.validator().nonEmpty().addRule(NotBlankRule()).validEmail().addErrorCallback { email.error = it }.check()
+            companyName.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { companyName.error = it }.check()
+            duns.validator().nonEmpty().addRule(NotBlankRule()).validNumber().addErrorCallback { duns.error = it }.check()
 
             password.validator()
                 .nonEmpty()
@@ -81,6 +92,11 @@ class SignUpActivity : AppCompatActivity() {
                 .textEqualTo(password.text.toString())
                 .addErrorCallback { confirmPass.error = "Password doesn't match" }
                 .check()
+
+            // Return if not errors
+            firstName.error == null && lastName.error == null && email.error == null &&
+                    companyName.error == null && duns.error == null && password.error == null &&
+                    confirmPass.error == null
         }
 
         if(inputValidation()) {
@@ -95,7 +111,6 @@ class SignUpActivity : AppCompatActivity() {
             )
 
             val signInRequest = SignInRequest(email.text.toString(), password.text.toString())
-
             authViewModel.signUpAndSignIn(signUpRequest, signInRequest)
         }
     }

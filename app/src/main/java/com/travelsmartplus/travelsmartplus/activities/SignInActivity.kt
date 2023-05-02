@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.databinding.ActivitySignInBinding
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNKNOWN_ERROR
+import com.travelsmartplus.travelsmartplus.utils.NotBlankRule
 import com.travelsmartplus.travelsmartplus.viewModels.AuthViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,19 +52,20 @@ class SignInActivity : AppCompatActivity() {
 
     private fun signIn() {
 
-        val email = binding.email
-        val password = binding.password
+        val email = binding.emailInput
+        val password = binding.passwordInput
 
         // Input validation
         var inputValidation = {
-            email.validator().nonEmpty().validEmail().addErrorCallback { email.error = it }.check()
-            password.validator().nonEmpty().addErrorCallback { password.error = it }.check()
+            email.validator().nonEmpty().addRule(NotBlankRule()).validEmail().addErrorCallback { email.error = it }.check()
+            password.validator().nonEmpty().addRule(NotBlankRule()).addRule(NotBlankRule()).addErrorCallback { password.error = it }.check()
+
+            // Return if not errors
+            email.error == null &&  password.error == null
         }
 
         if (inputValidation()) {
-
             val signInRequest = SignInRequest(email.text.toString(), password.text.toString())
-
             authViewModel.signIn(signInRequest)
         }
     }

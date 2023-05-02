@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="32dp"
+    android:layout_marginBottom="@dimen/default_margin"
     android:scrollbars="none"
     android:background="@color/white"
     tools:context=".activities.SignUpActivity">
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="32dp"
+        android:layout_margin="@dimen/default_margin"
         android:gravity="center">
 
         <TextView
@@ -24,24 +24,24 @@
             android:textAlignment="textStart"
             android:textColor="@color/black"
             android:fontFamily="@font/roboto_bold"
-            android:textSize="40sp"
-            android:layout_marginTop="24dp"/>
+            android:textSize="@dimen/title_text"
+            android:layout_marginTop="@dimen/medium_margin"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/medium_margin"
             android:fontFamily="@font/roboto_bold"
             android:text="@string/your_details_signup"
             android:textAlignment="textStart"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="@dimen/subtitle_text" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/firstNameContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/small_margin"
             app:boxBackgroundColor="@android:color/transparent"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidth="2dp"
@@ -49,7 +49,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/firstName"
+                android:id="@+id/firstNameInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -64,14 +64,14 @@
             android:id="@+id/lastNameContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/small_margin"
             app:boxBackgroundColor="@android:color/transparent"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidth="2dp"
             android:hint="@string/signup_last_name">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/lastName"
+                android:id="@+id/lastNameInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -86,14 +86,14 @@
             android:id="@+id/emailContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/small_margin"
             app:boxBackgroundColor="@android:color/transparent"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidth="2dp"
             android:hint="@string/signup_email">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email"
+                android:id="@+id/emailInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -108,7 +108,7 @@
             android:id="@+id/passwordContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/small_margin"
             app:boxBackgroundColor="@android:color/transparent"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidth="2dp"
@@ -116,7 +116,7 @@
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password"
+                android:id="@+id/passwordInput"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/roboto"
@@ -131,7 +131,7 @@
             android:id="@+id/confirmPassContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/small_margin"
             app:boxBackgroundColor="@android:color/transparent"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidth="2dp"
@@ -139,7 +139,7 @@
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/confirmPass"
+                android:id="@+id/confirmPassInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -153,12 +153,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/default_margin"
             android:fontFamily="@font/roboto_bold"
             android:text="@string/title_company_details"
             android:textAlignment="textStart"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="@dimen/subtitle_text" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/companyNameContainer"
@@ -171,7 +171,7 @@
             android:hint="@string/signup_company_name">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/companyName"
+                android:id="@+id/companyNameInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -186,14 +186,14 @@
             android:id="@+id/dunsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/small_margin"
             app:boxBackgroundColor="@android:color/transparent"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidth="2dp"
             android:hint="@string/signup_duns">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/duns"
+                android:id="@+id/dunsInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -208,7 +208,7 @@
             android:id="@+id/signUpBtn"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/default_margin"
             android:fontFamily="@font/roboto_bold"
             android:padding="15dp"
             android:text="@string/btn_sign_up"
@@ -219,7 +219,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/small_margin"
             android:layout_marginBottom="60dp"
             android:gravity="center">
 
@@ -229,7 +229,7 @@
                 android:text="@string/already_have_an_account"
                 android:textColor="@color/black"
                 android:fontFamily="@font/roboto"
-                android:textSize="14sp"/>
+                android:textSize="@dimen/small_text"/>
 
             <TextView
                 android:id="@+id/signInLink"
@@ -239,7 +239,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:text="@string/link_sign_in"
                 android:textColor="@color/primary_blue"
-                android:textSize="14sp"
+                android:textSize="@dimen/small_text"
                 tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
