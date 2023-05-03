@@ -11,7 +11,7 @@
     <FrameLayout
         android:id="@+id/mainFragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,10 +31,10 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/small_margin"
             android:background="@android:color/transparent"
-            app:labelVisibilityMode="unlabeled"
+            app:elevation="0dp"
             app:itemIconTint="@color/bottom_nav_color"
             app:itemTextColor="@color/bottom_nav_color"
-            app:elevation="0dp"
+            app:labelVisibilityMode="unlabeled"
             app:menu="@menu/bottom_menu_nav" />
 
 

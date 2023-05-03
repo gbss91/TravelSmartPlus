@@ -41,16 +41,18 @@ class BookingSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.departureDateSearchInput.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                showDatePicker(binding.departureDateSearchInput)
-            }
+        // Disable Departure and Return field - Can only be updated via date picker
+        binding.departureDateSearchInput.isFocusable = false
+        binding.departureDateSearchInput.isFocusableInTouchMode = false
+        binding.returnDateSearchInput.isFocusable = false
+        binding.returnDateSearchInput.isFocusableInTouchMode = false
+
+        binding.departureDateSearchInput.setOnClickListener {
+            showDatePicker(binding.departureDateSearchInput)
         }
 
-        binding.returnDateSearchInput.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                showDatePicker(binding.returnDateSearchInput)
-            }
+        binding.returnDateSearchInput.setOnClickListener {
+            showDatePicker(binding.returnDateSearchInput)
         }
 
         // Dropdown Menus
@@ -58,6 +60,14 @@ class BookingSearchFragment : Fragment() {
         val bookingClasses = resources.getStringArray(R.array.booking_classes_dropdown)
         setDropdownMenu(binding.adultsDropdownInput, adults)
         setDropdownMenu(binding.bookingClassDropdownInput, bookingClasses)
+
+
+    }
+
+    private fun bookingSearch(): Boolean {
+
+
+
 
 
     }

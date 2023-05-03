@@ -82,7 +82,7 @@
 
         <Button
             android:id="@+id/signInBtn"
-            android:layout_width="150dp"
+            android:layout_width="@dimen/default_button_width"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_margin"
             android:fontFamily="@font/roboto_bold"

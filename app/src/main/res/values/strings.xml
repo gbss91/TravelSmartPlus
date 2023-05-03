@@ -39,6 +39,10 @@
     <string name="return_search">Return</string>
     <string name="adult_search">Adults</string>
     <string name="booking_class">Class</string>
+    <string name="btn_search">Search</string>
+    <string name="btn_return_search">Return</string>
+    <string name="btn_one_way_search">One-Way</string>
+    <string name="upcoming_booking_search">Upcoming Trip</string>
 
 
     <!-- Dropdown Menus-->
