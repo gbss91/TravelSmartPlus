@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">TravelSmartPlus</string>
+    <string name="title_allBookings">All Bookings</string>
+    <string name="title_myBookings">My Bookings</string>
+    <string name="title_users">Users</string>
+    <string name="title_profile">Profile</string>
+
+    <!--Sign Up Activity-->
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="your_details_signup">Your Details</string>
+    <string name="signup_first_name">First Name</string>
+    <string name="signup_last_name">Last name</string>
+    <string name="signup_email">Email</string>
+    <string name="signup_password">Password</string>
+    <string name="signup_confirm_password">Confirm password</string>
+    <string name="title_company_details">Company Details</string>
+    <string name="signup_company_name">Company name</string>
+    <string name="signup_duns">D-U-N-S Number</string>
+    <string name="link_sign_up">Sign Up</string>
+    <string name="btn_sign_up">Sign Up</string>
+    <string name="already_have_an_account">Already have an account?</string>
+
+    <!--Sign In Activity-->
+    <string name="title_activity_sign_in">SignInActivity</string>
+    <string name="title_sign_in">Sign In</string>
+    <string name="dont_have_an_account">Don\'t have an account?</string>
+    <string name="link_sign_in">Sign In</string>
+    <string name="signin_email">Email</string>
+    <string name="signin_password">Password</string>
+    <string name="link_forgot_password">Forgot password?</string>
+    <string name="btn_sign_in">Sign In</string>
+
+    <!--Booking Search Fragment-->
+    <string name="search_fragment">Search fragment</string>
+    <string name="from_search">From</string>
+    <string name="to_search">To</string>
+    <string name="departure_search">Departure</string>
+    <string name="return_search">Return</string>
+    <string name="adult_search">Adults</string>
+    <string name="booking_class">Class</string>
+    <string name="btn_search">Search</string>
+    <string name="btn_return_search">Return</string>
+    <string name="btn_one_way_search">One-Way</string>
+    <string name="upcoming_booking_search">Upcoming Trip</string>
+
+
+    <!-- Dropdown Menus-->
+    <string-array name="booking_classes_dropdown">
+        <item>Economy</item>
+        <item>Premium</item>
+        <item>Business</item>
+        <item>First Class</item>
+    </string-array>
+    <string-array name="adults_dropdown">
+        <item>1 Adult</item>
+        <item>2 Adults</item>
+        <item>3 Adults</item>
+        <item>4 Adults</item>
+    </string-array>
+
+
+    <!--My Bookings Fragment-->
+    <string name="my_bookings_fragment">My Bookings fragment</string>
+
+    <!--All Bookings Fragment-->
+    <string name="all_bookings_fragment">All Bookings fragment</string>
+
+    <!--Users Fragment-->
+    <string name="users_fragment">Users fragment</string>
+
+    <!--Profile Fragment-->
+    <string name="profile_fragment">Profile fragment</string>
+
+
+
+</resources>
