@@ -68,8 +68,6 @@ class BookingSearchFragment : Fragment() {
 
 
 
-
-
     }
 
     private fun showDatePicker(editText: EditText) {
