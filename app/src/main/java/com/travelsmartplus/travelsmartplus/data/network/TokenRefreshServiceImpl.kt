@@ -9,6 +9,13 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
+/**
+ * TokenRefreshServiceImpl
+ * Makes the call to authenticate and refresh tokens. Implements [TokenRefreshService]
+ *
+ * @return @return The authentication response containing the new tokens, or null if the operation fails.
+ * @author Gabriel Salas
+ */
 
 class TokenRefreshServiceImpl : TokenRefreshService {
 

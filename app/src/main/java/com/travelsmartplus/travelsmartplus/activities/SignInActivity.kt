@@ -1,10 +1,9 @@
 package com.travelsmartplus.travelsmartplus.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.databinding.ActivitySignInBinding
@@ -13,6 +12,13 @@ import com.travelsmartplus.travelsmartplus.utils.NotBlankRule
 import com.travelsmartplus.travelsmartplus.viewModels.AuthViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
+
+/**
+ * SignInActivity
+ * Represents the welcome sign in activity. Allows the user to sign in using email and password.
+ *
+ * @author Gabriel Salas
+ */
 
 @AndroidEntryPoint
 class SignInActivity : AppCompatActivity() {
@@ -36,9 +42,15 @@ class SignInActivity : AppCompatActivity() {
 
         // Observers - observes responses and errors
         authViewModel.signInResponse.observe(this) { response ->
+            val accountSetup = response.body()!!.accountSetup
             if (response != null && response.isSuccessful) {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                if (accountSetup) {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this, SetupWelcomeActivity::class.java)
+                    startActivity(intent)
+                }
             } else {
                 val error = response?.errorBody()?.string() ?: UNKNOWN_ERROR
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
@@ -56,7 +68,7 @@ class SignInActivity : AppCompatActivity() {
         val password = binding.passwordInput
 
         // Input validation
-        var inputValidation = {
+        val inputValidation = {
             email.validator().nonEmpty().addRule(NotBlankRule()).validEmail().addErrorCallback { email.error = it }.check()
             password.validator().nonEmpty().addRule(NotBlankRule()).addRule(NotBlankRule()).addErrorCallback { password.error = it }.check()
 

@@ -1,17 +1,26 @@
 package com.travelsmartplus.travelsmartplus.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.core.view.get
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.replace
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.databinding.ActivityMainBinding
-import com.travelsmartplus.travelsmartplus.fragments.*
+import com.travelsmartplus.travelsmartplus.fragments.AllBookingsFragment
+import com.travelsmartplus.travelsmartplus.fragments.BookingSearchFragment
+import com.travelsmartplus.travelsmartplus.fragments.MyBookingsFragment
+import com.travelsmartplus.travelsmartplus.fragments.ProfileFragment
+import com.travelsmartplus.travelsmartplus.fragments.UsersFragment
 import com.travelsmartplus.travelsmartplus.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
+/**
+ * MainActivity
+ * Represents the main activity of the Android app.
+ *
+ * @author Gabriel Salas
+ */
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -61,6 +70,13 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.isSignedIn.observe(this) { signedIn ->
             if (!signedIn) {
                 val intent = Intent(this, LandingPageActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+        mainViewModel.isSetup.observe(this) { isSetup ->
+            if(!isSetup) {
+                val intent = Intent(this, SetupWelcomeActivity::class.java)
                 startActivity(intent)
             }
         }

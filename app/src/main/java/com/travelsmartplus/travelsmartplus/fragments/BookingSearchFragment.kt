@@ -1,24 +1,28 @@
 package com.travelsmartplus.travelsmartplus.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import androidx.fragment.app.Fragment
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.databinding.FragmentBookingSearchBinding
 import java.text.SimpleDateFormat
-import java.util.Arrays
 import java.util.Date
 import java.util.Locale
+
+/**
+ * BookingSearchFragment
+ * Fragment for searching flights and hotels.
+ *
+ * @author Gabriel Salas
+ */
 
 class BookingSearchFragment : Fragment() {
 
@@ -64,11 +68,33 @@ class BookingSearchFragment : Fragment() {
 
     }
 
-    private fun bookingSearch(): Boolean {
+    /* private fun bookingSearch(): Boolean {
 
+        val originCity = binding.fromSearchInput
+        val destinationCity = binding.toSearchInput
+        val departureDate = binding.departureDateSearchInput
+        val returnDate = binding.returnDateSearchInput
+        val adultsNumber = binding.adultsDropdownInput
+        val bookingClass = binding.bookingClassDropdownInput
 
+        // Input validation
+        var inputValidation = {
+            originCity.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { originCity.error = it }.check()
+            destinationCity.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { destinationCity.error = it }.check()
+            departureDate.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { departureDate.error = it }.check()
+            returnDate.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { returnDate.error = it }.check()
+            adultsNumber.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { adultsNumber.error = it }.check()
+            bookingClass.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { bookingClass.error = it }.check()
 
-    }
+            // Return if not errors
+            originCity.error == null && destinationCity.error == null && departureDate.error == null &&returnDate.error == null
+                    && adultsNumber.error == null && bookingClass.error == null
+        }
+
+        if (inputValidation()) {
+            TODO()
+        }
+    }*/
 
     private fun showDatePicker(editText: EditText) {
 

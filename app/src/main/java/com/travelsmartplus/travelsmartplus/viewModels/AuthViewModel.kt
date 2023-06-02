@@ -4,16 +4,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
+import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNKNOWN_ERROR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
+
+/**
+ * AuthViewModel
+ * ViewModel class responsible for handling authentication-related operations.
+ *
+ * @property authService The AuthService instance for performing authentication API calls.
+ * @author Gabriel Salas
+ */
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(

@@ -5,6 +5,7 @@ import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
+import com.travelsmartplus.travelsmartplus.data.network.TokenRefreshService
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.NETWORK_ERROR
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNEXPECTED_ERROR
 import com.travelsmartplus.travelsmartplus.utils.SessionManager
@@ -14,6 +15,15 @@ import retrofit2.Response
 import java.io.IOException
 import java.net.URLDecoder
 import javax.inject.Inject
+
+/**
+ * AuthServiceImpl
+ * Makes authentication calls to the API
+ *
+ * @property authService The service for authentication API requests.
+ * @property sessionManager The session manager for handling user session data.
+ * @author Gabriel Salas
+ */
 
 class AuthServiceImpl @Inject constructor(
     private val authService: AuthService,
@@ -55,6 +65,8 @@ class AuthServiceImpl @Inject constructor(
                         sessionManager.saveToken(responseBody.token)
                         sessionManager.saveRefreshToken(responseBody.refreshToken)
                         sessionManager.saveCurrentUser(userId)
+                        sessionManager.saveSetup(responseBody.accountSetup)
+
                     }
                 } else {
                     Log.e("AuthService", "Error response: ${response.code()} ${response.message()}")

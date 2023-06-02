@@ -1,10 +1,9 @@
 package com.travelsmartplus.travelsmartplus.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignUpRequest
@@ -14,6 +13,13 @@ import com.travelsmartplus.travelsmartplus.utils.NotBlankRule
 import com.travelsmartplus.travelsmartplus.viewModels.AuthViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
+
+/**
+ * SignUpActivity
+ * Represents the welcome sign up activity. Allows the user to create a new account.
+ *
+ * @author Gabriel Salas
+ */
 
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
@@ -72,7 +78,7 @@ class SignUpActivity : AppCompatActivity() {
         val duns = binding.dunsInput
 
         // Input validation
-        var inputValidation = {
+        val inputValidation = {
             firstName.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { firstName.error = it }.check()
             lastName.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { lastName.error = it }.check()
             email.validator().nonEmpty().addRule(NotBlankRule()).validEmail().addErrorCallback { email.error = it }.check()

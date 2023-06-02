@@ -8,6 +8,15 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
+/**
+ * AuthInterceptor
+ * Intercepts the request chain and adds the JWT token to the request header.
+ * If the response is unauthorized, it attempts to refresh the token and retry the request.
+ *
+ * @return The response from the server
+ * @author Gabriel Salas
+ */
+
 class AuthInterceptor @Inject constructor(
     private val sessionManager: SessionManager
 )  : Interceptor {

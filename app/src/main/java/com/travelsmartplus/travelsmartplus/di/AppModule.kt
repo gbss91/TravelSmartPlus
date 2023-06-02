@@ -3,18 +3,17 @@ package com.travelsmartplus.travelsmartplus.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.travelsmartplus.travelsmartplus.data.network.AuthInterceptor
-import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes
 import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.BASE_URL
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
 import com.travelsmartplus.travelsmartplus.data.services.AuthServiceImpl
 import com.travelsmartplus.travelsmartplus.utils.SessionManager
 import com.travelsmartplus.travelsmartplus.utils.SessionManagerImpl
+import com.travelsmartplus.travelsmartplus.viewModels.SetupViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -58,6 +57,13 @@ object AppModule {
     fun provideAuthService(retrofit: Retrofit, sessionManager: SessionManager): AuthService {
         val authService = retrofit.create(AuthService::class.java)
         return AuthServiceImpl(authService, sessionManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSetupViewModel(authService: AuthService, sessionManager: SessionManager
+    ): SetupViewModel {
+        return SetupViewModel(authService, sessionManager)
     }
 
 }

@@ -4,6 +4,14 @@ import android.content.SharedPreferences
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * SessionManagerImpl
+ * Provides the implementation for managing user session data.
+ *
+ * @property sharedPreferences The SharedPreferences instance for storing session data.
+ * @author Gabriel Salas
+ */
+
 @Singleton
 class SessionManagerImpl @Inject constructor(private val sharedPreferences: SharedPreferences) :
     SessionManager {
@@ -12,6 +20,7 @@ class SessionManagerImpl @Inject constructor(private val sharedPreferences: Shar
         private const val ACCESS_TOKEN = "token"
         private const val REFRESH_TOKEN = "refreshToken"
         private const val USER_ID_COOKIE = "userId"
+        private const val SETUP = "isSetup"
     }
 
     override fun getToken(): String? {
@@ -36,6 +45,14 @@ class SessionManagerImpl @Inject constructor(private val sharedPreferences: Shar
 
     override fun saveCurrentUser(userId: Int) {
         sharedPreferences.edit().putInt(USER_ID_COOKIE, userId).apply()
+    }
+
+    override fun isSetup(): Boolean {
+        return sharedPreferences.getBoolean(SETUP, false)
+    }
+
+    override fun saveSetup(isSetup: Boolean) {
+        sharedPreferences.edit().putBoolean(SETUP, isSetup).apply()
     }
 
     override fun clearSession() {
