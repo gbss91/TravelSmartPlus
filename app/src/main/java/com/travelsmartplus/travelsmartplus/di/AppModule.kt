@@ -6,6 +6,8 @@ import com.travelsmartplus.travelsmartplus.data.network.AuthInterceptor
 import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.BASE_URL
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
 import com.travelsmartplus.travelsmartplus.data.services.AuthServiceImpl
+import com.travelsmartplus.travelsmartplus.data.services.UserService
+import com.travelsmartplus.travelsmartplus.data.services.UserServiceImpl
 import com.travelsmartplus.travelsmartplus.utils.SessionManager
 import com.travelsmartplus.travelsmartplus.utils.SessionManagerImpl
 import com.travelsmartplus.travelsmartplus.viewModels.SetupViewModel
@@ -61,9 +63,16 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSetupViewModel(authService: AuthService, sessionManager: SessionManager
+    fun provideUserService(retrofit: Retrofit, sessionManager: SessionManager): UserService {
+        val userService = retrofit.create(UserService::class.java)
+        return UserServiceImpl(userService, sessionManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSetupViewModel(authService: AuthService, userService: UserService, sessionManager: SessionManager
     ): SetupViewModel {
-        return SetupViewModel(authService, sessionManager)
+        return SetupViewModel(authService, userService, sessionManager)
     }
 
 }

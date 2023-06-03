@@ -3,6 +3,7 @@ package com.travelsmartplus.travelsmartplus.data.services
 import android.util.Log
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignUpRequest
+import com.travelsmartplus.travelsmartplus.data.models.requests.UpdatePasswordRequest
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.data.network.TokenRefreshService
@@ -66,9 +67,29 @@ class AuthServiceImpl @Inject constructor(
                         sessionManager.saveRefreshToken(responseBody.refreshToken)
                         sessionManager.saveCurrentUser(userId)
                         sessionManager.saveSetup(responseBody.accountSetup)
-
                     }
                 } else {
+                    Log.e("AuthService", "Error response: ${response.code()} ${response.message()}")
+                }
+                response
+
+            } catch (e: Exception) {
+                Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
+                when (e) {
+                    is IOException -> throw NetworkException(NETWORK_ERROR)
+                    is IllegalStateException -> throw NetworkException(UNEXPECTED_ERROR)
+                    else -> throw e
+                }
+            }
+        }
+    }
+
+    override suspend fun updatePassword(updatedPassword: UpdatePasswordRequest): Response<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = authService.updatePassword(updatedPassword)
+
+                if (!response.isSuccessful) {
                     Log.e("AuthService", "Error response: ${response.code()} ${response.message()}")
                 }
                 response
