@@ -27,7 +27,7 @@ class MainViewModel @Inject constructor(
     val isSetup: LiveData<Boolean> = _isSetup
 
     init {
-        // Set the initial value of the signedIn variable
+        // Set initial values
         _isSignedIn.value = sessionManager.currentUser() != -1
         _isSetup.value = sessionManager.isSetup()
     }

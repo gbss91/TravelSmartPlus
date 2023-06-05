@@ -112,8 +112,7 @@
             app:boxBackgroundColor="@android:color/transparent"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidth="2dp"
-            android:hint="@string/signup_password"
-            app:passwordToggleEnabled="true">
+            android:hint="@string/signup_password">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordInput"
@@ -135,8 +134,7 @@
             app:boxBackgroundColor="@android:color/transparent"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidth="2dp"
-            android:hint="@string/signup_confirm_password"
-            app:passwordToggleEnabled="true">
+            android:hint="@string/signup_confirm_password">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/confirmPassInput"

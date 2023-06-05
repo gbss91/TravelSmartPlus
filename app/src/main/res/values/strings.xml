@@ -39,9 +39,9 @@
     <string name="preferences_setup">Preferences</string>
     <string name="preferences_setup_text">This will help us improve our recommendations. You can always update this later.</string>
     <string name="airlines_setup">Airlines</string>
-    <string name="airlines_setup_text">Choose up to 3</string>
+    <string name="airlines_setup_text">Choose at least 1</string>
     <string name="hotels_setup">Hotel Chains</string>
-    <string name="hotels_setup_text">Choose up to 3</string>
+    <string name="hotels_setup_text">Choose at least 1</string>
     <string name="finish_setup">You\'re Ready!</string>
     <string name="finish_setup_text">We will suggest itineraries based on your preferences and previous bookings.</string>
     <string name="btn_setup_start">Start</string>
@@ -67,7 +67,6 @@
     <string name="mc">Marriott International</string>
     <string name="pd">Premier Inn</string>
     <string name="rd">Radisson Hotel Group</string>
-
 
 
 

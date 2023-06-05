@@ -41,7 +41,9 @@ class AuthInterceptor @Inject constructor(
 
             response.close()
 
-            val newRequest = originalRequest.addHeader("Authorization", "Bearer $refreshToken").build()
+            val newRequest = originalRequest
+                .removeHeader("Authorization")
+                .addHeader("Authorization", "Bearer $refreshToken").build()
             val newResponse = chain.proceed(newRequest)
             // Refresh tokens if refresh token is valid and request is successful, else return unauthorised response
             if (newResponse.isSuccessful) {

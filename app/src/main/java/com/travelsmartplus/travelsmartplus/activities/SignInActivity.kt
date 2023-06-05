@@ -8,9 +8,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.databinding.ActivitySignInBinding
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNKNOWN_ERROR
-import com.travelsmartplus.travelsmartplus.utils.NotBlankRule
 import com.travelsmartplus.travelsmartplus.viewModels.AuthViewModel
-import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -42,14 +40,18 @@ class SignInActivity : AppCompatActivity() {
 
         // Observers - observes responses and errors
         authViewModel.signInResponse.observe(this) { response ->
-            val accountSetup = response.body()!!.accountSetup
             if (response != null && response.isSuccessful) {
+                val accountSetup = response.body()!!.accountSetup
                 if (accountSetup) {
                     val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
+                    finish() // Avoids returning when pressing back button
                 } else {
                     val intent = Intent(this, SetupWelcomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
+                    finish() // Avoids returning when pressing back button
                 }
             } else {
                 val error = response?.errorBody()?.string() ?: UNKNOWN_ERROR
@@ -68,15 +70,9 @@ class SignInActivity : AppCompatActivity() {
         val password = binding.passwordInput
 
         // Input validation
-        val inputValidation = {
-            email.validator().nonEmpty().addRule(NotBlankRule()).validEmail().addErrorCallback { email.error = it }.check()
-            password.validator().nonEmpty().addRule(NotBlankRule()).addRule(NotBlankRule()).addErrorCallback { password.error = it }.check()
+        val inputValidation = authViewModel.signInValidation(email, password)
 
-            // Return if not errors
-            email.error == null &&  password.error == null
-        }
-
-        if (inputValidation()) {
+        if (inputValidation) {
             val signInRequest = SignInRequest(email.text.toString(), password.text.toString())
             authViewModel.signIn(signInRequest)
         }

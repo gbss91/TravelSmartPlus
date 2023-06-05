@@ -1,6 +1,8 @@
 package com.travelsmartplus.travelsmartplus.data.services
 
 import com.travelsmartplus.travelsmartplus.data.models.User
+import com.travelsmartplus.travelsmartplus.data.models.requests.SetupAccountRequest
+import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.SETUP_ACCOUNT
 import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.USER_URI
 import retrofit2.Response
 import retrofit2.http.Body
@@ -18,4 +20,7 @@ interface UserService {
 
     @DELETE(USER_URI)
     suspend fun deleteUser(@Path("id") id: String): Response<Unit>
+
+    @POST(SETUP_ACCOUNT)
+    suspend fun setupAccount(@Path("id") id: String, @Body setupAccountRequest: SetupAccountRequest): Response<Unit>
 }

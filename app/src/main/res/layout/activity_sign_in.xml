@@ -54,8 +54,7 @@
             android:hint="@string/signin_password"
             app:boxBackgroundColor="@android:color/transparent"
             app:boxStrokeColor="@color/black"
-            app:boxStrokeWidth="2dp"
-            app:passwordToggleEnabled="true">
+            app:boxStrokeWidth="2dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordInput"

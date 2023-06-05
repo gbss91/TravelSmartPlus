@@ -1,14 +1,12 @@
 package com.travelsmartplus.travelsmartplus.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.travelsmartplus.travelsmartplus.R
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.databinding.ActivitySetupPasswordBinding
-import com.travelsmartplus.travelsmartplus.utils.NotBlankRule
 import com.travelsmartplus.travelsmartplus.viewModels.SetupViewModel
-import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -30,39 +28,28 @@ class SetupPasswordActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.setupPassBtn.setOnClickListener {
-            //val intent = Intent(this, )
+            updatePassword()
         }
 
-        // Observers - observes responses and errors
+        // Observer - observes errors from View Model
+        setupViewModel.errorMessage.observe(this) { error ->
+            Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private fun updatePassword() {
 
-        val pass = binding.setupPasswordInput
+        val password = binding.setupPasswordInput
         val confirmPass = binding.setupConfirmPasswordInput
 
         // Input validation
-        val inputValidation = {
-            pass.validator()
-                .nonEmpty()
-                .atleastOneUpperCase()
-                .atleastOneLowerCase()
-                .atleastOneNumber()
-                .minLength(8)
-                .addErrorCallback { pass.error = it }
-                .check()
+        val inputValidation = setupViewModel.passwordValidation(password, confirmPass)
 
-            confirmPass.validator()
-                .textEqualTo(confirmPass.text.toString())
-                .addErrorCallback { confirmPass.error = "Password doesn't match" }
-                .check()
-
-            pass.error == null && confirmPass.error == null
-        }
-
-        if (inputValidation()) {
-
-
+        // If valid start new activity and sent password
+        if (inputValidation) {
+            val intent = Intent(this, SetupPreferencesActivity::class.java)
+            intent.putExtra("newPass", password.text.toString())
+            startActivity(intent)
         }
     }
 }

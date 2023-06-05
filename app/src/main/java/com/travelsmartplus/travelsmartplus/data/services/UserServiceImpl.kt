@@ -2,6 +2,7 @@ package com.travelsmartplus.travelsmartplus.data.services
 
 import android.util.Log
 import com.travelsmartplus.travelsmartplus.data.models.User
+import com.travelsmartplus.travelsmartplus.data.models.requests.SetupAccountRequest
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages
 import com.travelsmartplus.travelsmartplus.utils.SessionManager
@@ -80,4 +81,32 @@ class UserServiceImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun setupAccount(
+        id: String,
+        setupAccountRequest: SetupAccountRequest
+    ): Response<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = userService.setupAccount(id, setupAccountRequest)
+
+                if (response.isSuccessful) {
+                    sessionManager.saveSetup(true)
+                } else {
+                    Log.e("UserService", "Error response: ${response.code()} ${response.message()}")
+                }
+
+                response
+            } catch (e: Exception) {
+                Log.e("UserService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
+                when (e) {
+                    is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
+                    is IllegalStateException -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
+                    else -> throw e
+                }
+            }
+        }
+    }
+
+
 }

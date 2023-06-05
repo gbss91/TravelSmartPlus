@@ -6,7 +6,6 @@ import com.travelsmartplus.travelsmartplus.data.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.UpdatePasswordRequest
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
-import com.travelsmartplus.travelsmartplus.data.network.TokenRefreshService
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.NETWORK_ERROR
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNEXPECTED_ERROR
 import com.travelsmartplus.travelsmartplus.utils.SessionManager

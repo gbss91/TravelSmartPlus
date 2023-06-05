@@ -58,6 +58,7 @@
 
         <!--Airlines Checkboxes -->
         <GridLayout
+            android:id="@+id/airlineCheckboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
@@ -68,56 +69,64 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/ei" />
+                android:text="@string/ei"
+                android:tag="EI"/>
 
             <CheckBox
                 android:id="@+id/airline_aa"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/aa" />
+                android:text="@string/aa"
+                android:tag="AA"/>
 
             <CheckBox
                 android:id="@+id/airline_af"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/af" />
+                android:text="@string/af"
+                android:tag="AF"/>
 
             <CheckBox
                 android:id="@+id/airline_dl"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/dl" />
+                android:text="@string/dl"
+                android:tag="DL"/>
 
             <CheckBox
                 android:id="@+id/airline_ek"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/ek" />
+                android:text="@string/ek"
+                android:tag="EK"/>
 
             <CheckBox
                 android:id="@+id/airline_ey"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/ey" />
+                android:text="@string/ey"
+                android:tag="EY"/>
 
             <CheckBox
                 android:id="@+id/airline_lh"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/lh" />
+                android:text="@string/lh"
+                android:tag="LH"/>
 
             <CheckBox
                 android:id="@+id/airline_fr"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/fr" />
+                android:text="@string/fr"
+                android:tag="FR"/>
         </GridLayout>
 
         <TextView
@@ -144,6 +153,7 @@
 
         <!--Hotel Checkboxes -->
         <GridLayout
+            android:id="@+id/hotelCheckboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
@@ -154,56 +164,64 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/rt" />
+                android:text="@string/rt"
+                android:tag="RT"/>
 
             <CheckBox
                 android:id="@+id/hotel_bw"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/bw" />
+                android:text="@string/bw"
+                android:tag="BW"/>
 
             <CheckBox
                 android:id="@+id/hotel_fs"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/fs" />
+                android:text="@string/fs"
+                android:tag="FS"/>
 
             <CheckBox
                 android:id="@+id/hotel_hh"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/hh" />
+                android:text="@string/hh"
+                android:tag="HH"/>
 
             <CheckBox
                 android:id="@+id/hotel_ic"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/ic" />
+                android:text="@string/ic"
+                android:tag="IC"/>
 
             <CheckBox
                 android:id="@+id/hotel_mc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/mc" />
+                android:text="@string/mc"
+                android:tag="MC"/>
 
             <CheckBox
                 android:id="@+id/hotel_pd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/pd" />
+                android:text="@string/pd"
+                android:tag="PD"/>
 
             <CheckBox
                 android:id="@+id/hotel_rd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:text="@string/rd" />
+                android:text="@string/rd"
+                android:tag="RD"/>
         </GridLayout>
 
         <Button

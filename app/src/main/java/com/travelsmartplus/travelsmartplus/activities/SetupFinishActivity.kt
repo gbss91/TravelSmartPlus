@@ -1,8 +1,10 @@
 package com.travelsmartplus.travelsmartplus.activities
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import com.travelsmartplus.travelsmartplus.R
+import androidx.appcompat.app.AppCompatActivity
+import com.travelsmartplus.travelsmartplus.databinding.ActivitySetupFinishBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * SetupFinishActivity
@@ -11,10 +13,20 @@ import com.travelsmartplus.travelsmartplus.R
  * @author Gabriel Salas
  */
 
-
+@AndroidEntryPoint
 class SetupFinishActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySetupFinishBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setup_finish)
+        binding = ActivitySetupFinishBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.finishSetupBtn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            finish()  // Close the setup activities to prevent going back
+        }
     }
 }

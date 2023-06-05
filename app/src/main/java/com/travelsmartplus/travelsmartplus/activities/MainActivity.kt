@@ -68,18 +68,22 @@ class MainActivity : AppCompatActivity() {
 
         // Observers - observes responses and errors
         mainViewModel.isSignedIn.observe(this) { signedIn ->
-            if (!signedIn) {
+            if (signedIn) {
+                mainViewModel.isSetup.observe(this) { isSetup ->
+                    if (!isSetup) {
+                        val intent = Intent(this, SetupWelcomeActivity::class.java)
+                        startActivity(intent)
+                        finish() // Avoids returning when pressing back button
+                    }
+                }
+            } else {
                 val intent = Intent(this, LandingPageActivity::class.java)
                 startActivity(intent)
+                finish() // Avoids returning when pressing back button
             }
         }
 
-        mainViewModel.isSetup.observe(this) { isSetup ->
-            if(!isSetup) {
-                val intent = Intent(this, SetupWelcomeActivity::class.java)
-                startActivity(intent)
-            }
-        }
+
     }
 
     private fun replaceFragment(fragment: Fragment) {
