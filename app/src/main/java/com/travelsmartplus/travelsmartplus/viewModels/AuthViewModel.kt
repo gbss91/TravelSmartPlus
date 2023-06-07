@@ -32,7 +32,7 @@ class AuthViewModel @Inject constructor(
     private val authService: AuthService
 ) : ViewModel() {
 
-    // LiveData objects to hold the responses - Public val are readOnly
+    // LiveData objects to hold the responses and variables - Public val are readOnly
     private val _signUpResponse = MutableLiveData<Response<Unit>>()
     private val _signInResponse = MutableLiveData<Response<AuthResponse>>()
     private val _errorMessage = MutableLiveData<String>()
@@ -120,7 +120,7 @@ class AuthViewModel @Inject constructor(
 
         } catch (e: Exception) {
             e.printStackTrace()
-            _errorMessage.postValue(ErrorMessages.UNKNOWN_ERROR)
+            _errorMessage.postValue(UNKNOWN_ERROR)
             false
         }
     }

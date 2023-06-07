@@ -1,18 +1,25 @@
 package com.travelsmartplus.travelsmartplus.fragments
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.databinding.FragmentBookingSearchBinding
+import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -24,12 +31,14 @@ import java.util.Locale
  * @author Gabriel Salas
  */
 
+@AndroidEntryPoint
 class BookingSearchFragment : Fragment() {
 
     private lateinit var binding: FragmentBookingSearchBinding
+    private val bookingViewModel: BookingViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -39,17 +48,51 @@ class BookingSearchFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentBookingSearchBinding.inflate(inflater, container, false)
+
+        // Disable date fields - Can only be updated via date picker
+        binding.departureDateSearchInput.isFocusable = false
+        binding.departureDateSearchInput.isFocusableInTouchMode = false
+        binding.returnDateSearchInput.isFocusable = false
+        binding.returnDateSearchInput.isFocusableInTouchMode = false
+        binding.checkInDateInput.isFocusable = false
+        binding.checkInDateInput.isFocusableInTouchMode = false
+        binding.checkOutDateInput.isFocusable = false
+        binding.checkOutDateInput.isFocusableInTouchMode = false
+
+        // Set flight only button checked and remove hotel fields as default state
+        binding.searchToggleGroup.check(R.id.flightOnlySearchBtn)
+        binding.checkInDateContainer.visibility = View.GONE
+        binding.checkOutDateContainer.visibility = View.GONE
+
+        // Set Dropdown Menus
+        val onewayDropdown = resources.getStringArray(R.array.oneway_dropdown)
+        val adultsDropdown = resources.getStringArray(R.array.adults_dropdown)
+        val bookingClassesDropdown = resources.getStringArray(R.array.booking_classes_dropdown)
+        setDropdownMenu(binding.onewayDropdownInput, onewayDropdown)
+        setDropdownMenu(binding.adultsDropdownInput, adultsDropdown)
+        setDropdownMenu(binding.bookingClassDropdownInput, bookingClassesDropdown)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Disable Departure and Return field - Can only be updated via date picker
-        binding.departureDateSearchInput.isFocusable = false
-        binding.departureDateSearchInput.isFocusableInTouchMode = false
-        binding.returnDateSearchInput.isFocusable = false
-        binding.returnDateSearchInput.isFocusableInTouchMode = false
+        // Toggle button functionality
+        binding.searchToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.flightOnlySearchBtn -> {
+                        binding.checkInDateContainer.visibility = View.GONE
+                        binding.checkOutDateContainer.visibility = View.GONE
+                    }
+                    R.id.flightHotelSearchBtn -> {
+                        binding.checkInDateContainer.visibility = View.VISIBLE
+                        binding.checkOutDateContainer.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
 
         binding.departureDateSearchInput.setOnClickListener {
             showDatePicker(binding.departureDateSearchInput)
@@ -59,16 +102,22 @@ class BookingSearchFragment : Fragment() {
             showDatePicker(binding.returnDateSearchInput)
         }
 
-        // Dropdown Menus
-        val adults = resources.getStringArray(R.array.adults_dropdown)
-        val bookingClasses = resources.getStringArray(R.array.booking_classes_dropdown)
-        setDropdownMenu(binding.adultsDropdownInput, adults)
-        setDropdownMenu(binding.bookingClassDropdownInput, bookingClasses)
+        binding.checkInDateInput.setOnClickListener {
+            showDatePicker(binding.checkInDateInput)
+        }
+
+        binding.checkOutDateInput.setOnClickListener {
+            showDatePicker(binding.checkOutDateInput)
+        }
+
+        binding.searchBtn.setOnClickListener {
+            bookingSearch()
+        }
 
 
     }
 
-    /* private fun bookingSearch(): Boolean {
+    private fun bookingSearch(): Boolean {
 
         val originCity = binding.fromSearchInput
         val destinationCity = binding.toSearchInput
@@ -76,25 +125,30 @@ class BookingSearchFragment : Fragment() {
         val returnDate = binding.returnDateSearchInput
         val adultsNumber = binding.adultsDropdownInput
         val bookingClass = binding.bookingClassDropdownInput
+        val checkInDate = binding.checkInDateInput
+        val checkOutDate = binding.checkOutDateInput
 
         // Input validation
-        var inputValidation = {
-            originCity.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { originCity.error = it }.check()
-            destinationCity.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { destinationCity.error = it }.check()
-            departureDate.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { departureDate.error = it }.check()
-            returnDate.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { returnDate.error = it }.check()
-            adultsNumber.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { adultsNumber.error = it }.check()
-            bookingClass.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { bookingClass.error = it }.check()
+        var inputValidation = bookingViewModel.bookingSearchValidation(
+            flightOnly= true,
+            originCity= originCity,
+            destinationCity= destinationCity,
+            departureDate= departureDate,
+            returnDate= returnDate,
+            checkInDate= checkInDate,
+            checkOutDate= checkOutDate
+        )
 
-            // Return if not errors
-            originCity.error == null && destinationCity.error == null && departureDate.error == null &&returnDate.error == null
-                    && adultsNumber.error == null && bookingClass.error == null
+        if (inputValidation) {
+            return false
+        } else {
+            val snackBar = Snackbar.make(binding.root, "Fields can't be empty." , Snackbar.LENGTH_SHORT)
+            snackBar.setAnchorView(R.id.bottomNavigationView).show()
         }
+        return false
+    }
 
-        if (inputValidation()) {
-            TODO()
-        }
-    }*/
+
 
     private fun showDatePicker(editText: EditText) {
 
@@ -123,6 +177,7 @@ class BookingSearchFragment : Fragment() {
     private fun setDropdownMenu(autoCompleteTextView: AutoCompleteTextView, items: Array<String>) {
         val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, items)
         autoCompleteTextView.setAdapter(adapter)
+        autoCompleteTextView.setText(items[0], false) // Set the first item as preselected
     }
 
 }

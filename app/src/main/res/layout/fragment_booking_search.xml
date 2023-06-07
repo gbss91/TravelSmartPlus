@@ -25,63 +25,91 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:layout_marginTop="@dimen/medium_margin"
-            android:layout_marginEnd="@dimen/medium_margin"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/small_margin"
             android:layout_marginBottom="@dimen/large_margin">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/searchToggleGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/fromContainer"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/onewayDropdownContainer"
+                app:selectionRequired="true"
                 app:singleSelection="true">
 
                 <Button
-                    android:id="@+id/returnSearchBtn"
+                    android:id="@+id/flightOnlySearchBtn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_bold"
-                    android:padding="6dp"
-                    android:text="@string/btn_return_search"
-                    android:textSize="@dimen/xsmall_text"
-                    app:cornerRadius="18dp" />
+                    android:padding="5dp"
+                    android:text="@string/btn_flight_search"
+                    android:textSize="@dimen/xxsmall_text"
+                    app:cornerRadius="18dp"/>
 
                 <Button
-                    android:id="@+id/oneWaySearchBtn"
+                    android:id="@+id/flightHotelSearchBtn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_bold"
-                    android:padding="6dp"
-                    android:text="@string/btn_one_way_search"
-                    android:textSize="@dimen/xsmall_text"
+                    android:padding="5dp"
+                    android:text="@string/btn_flight_hotel_search"
+                    android:textSize="@dimen/xxsmall_text"
                     app:cornerRadius="18dp" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/onewayDropdownContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/text_dropdown_height"
+                app:hintEnabled="false"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:endIconTint="@color/white"
+                app:layout_constraintTop_toBottomOf="@+id/searchToggleGroup"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/fromContainer">
+
+                <AutoCompleteTextView
+                    android:id="@+id/onewayDropdownInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="0dp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textColor="@color/white"
+                    android:inputType="none"
+                    android:textSize="@dimen/xsmall_text"
+                    android:dropDownVerticalOffset="0dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/fromContainer"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/medium_input"
-                android:layout_marginTop="@dimen/xsmall_margin"
+                android:layout_marginTop="4dp"
                 android:hint="@string/from_search"
                 app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                app:boxStrokeColor="@color/white"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:endIconDrawable="@drawable/ic_location"
                 app:endIconMode="custom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/searchToggleGroup">
+                app:layout_constraintTop_toBottomOf="@+id/onewayDropdownContainer">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fromSearchInput"
@@ -93,6 +121,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/input_text"
                     tools:ignore="TextContrastCheck" />
+
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,7 +136,6 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                app:boxStrokeColor="@color/white"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:endIconDrawable="@drawable/ic_location"
@@ -142,7 +170,6 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                app:boxStrokeColor="@color/white"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:endIconDrawable="@drawable/ic_calendar"
@@ -177,7 +204,6 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                app:boxStrokeColor="@color/white"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:endIconDrawable="@drawable/ic_calendar"
@@ -212,7 +238,6 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                app:boxStrokeColor="@color/white"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:layout_constraintEnd_toEndOf="@+id/departureDateContainer"
@@ -223,6 +248,7 @@
                     android:id="@+id/adultsDropdownInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
                     android:inputType="none"
                     android:textColor="@color/black"
                     android:textSize="@dimen/input_text" />
@@ -242,7 +268,6 @@
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                app:boxStrokeColor="@color/white"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -253,9 +278,76 @@
                     android:id="@+id/bookingClassDropdownInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
                     android:inputType="none"
                     android:textColor="@color/black"
                     android:textSize="@dimen/input_text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/checkInDateContainer"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/medium_input"
+                android:layout_marginTop="@dimen/xsmall_margin"
+                android:hint="@string/check_in_search"
+                android:labelFor="@id/checkInDateInput"
+                app:boxBackgroundColor="@color/white"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="custom"
+                app:layout_constraintEnd_toEndOf="@id/adultDropdownContainer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/adultDropdownContainer">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/checkInDateInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="date"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/input_text"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/checkOutDateContainer"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/medium_input"
+                android:layout_marginTop="@dimen/xsmall_margin"
+                android:hint="@string/check_out_search"
+                android:labelFor="@id/checkOutDateInput"
+                app:boxBackgroundColor="@color/white"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="custom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/classDropdownContainer"
+                app:layout_constraintTop_toBottomOf="@+id/classDropdownContainer">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/checkOutDateInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="date"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/input_text"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -271,7 +363,7 @@
         android:layout_height="wrap_content"
         android:elevation="5dp"
         android:fontFamily="@font/roboto_bold"
-        android:padding="15dp"
+        android:padding="@dimen/default_button_padding"
         android:stateListAnimator="@null"
         android:text="@string/btn_search"
         android:translationZ="5dp"

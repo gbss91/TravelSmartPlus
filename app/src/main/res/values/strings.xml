@@ -68,8 +68,6 @@
     <string name="pd">Premier Inn</string>
     <string name="rd">Radisson Hotel Group</string>
 
-
-
     <!--Booking Search Fragment-->
     <string name="search_fragment">Search fragment</string>
     <string name="from_search">From</string>
@@ -78,13 +76,19 @@
     <string name="return_search">Return</string>
     <string name="adult_search">Adults</string>
     <string name="booking_class">Class</string>
+    <string name="check_in_search">Check-In </string>
+    <string name="check_out_search">Check-Out </string>
     <string name="btn_search">Search</string>
-    <string name="btn_return_search">Return</string>
-    <string name="btn_one_way_search">One-Way</string>
+    <string name="btn_flight_search">Flight Only</string>
+    <string name="btn_flight_hotel_search">Flight + Hotel</string>
     <string name="upcoming_booking_search">Upcoming Trip</string>
 
 
     <!-- Dropdown Menus-->
+    <string-array name="oneway_dropdown">
+        <item>RETURN</item>
+        <item>ONE-WAY</item>
+    </string-array>
     <string-array name="booking_classes_dropdown">
         <item>Economy</item>
         <item>Premium</item>
@@ -94,8 +98,6 @@
     <string-array name="adults_dropdown">
         <item>1 Adult</item>
         <item>2 Adults</item>
-        <item>3 Adults</item>
-        <item>4 Adults</item>
     </string-array>
 
 

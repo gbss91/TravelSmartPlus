@@ -13,14 +13,17 @@
     <dimen name="subtitle_text">20sp</dimen>
     <dimen name="small_text">14sp</dimen>
     <dimen name="xsmall_text">10sp</dimen>
+    <dimen name="xxsmall_text">8sp</dimen>
     <dimen name="input_text">14sp</dimen>
 
 
     <!-- Input heights -->
     <dimen name="medium_input">50dp</dimen>
+    <dimen name="text_dropdown_height">20dp</dimen>
 
     <!-- Buttons -->
     <dimen name="default_button_width">150dp</dimen>
+    <dimen name="default_button_padding">12dp</dimen>
 
     <!-- Booking Card -->
     <dimen name="booking_card">100dp</dimen>
