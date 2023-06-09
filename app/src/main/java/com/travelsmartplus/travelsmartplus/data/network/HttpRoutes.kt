@@ -10,4 +10,6 @@ object HttpRoutes {
     const val USER_URI = "user/{id}"
     const val SETUP_ACCOUNT = "user/{id}/setup"
 
+    const val AIRPORTS_SEARCH = "airports/search"
+
 }

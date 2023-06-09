@@ -111,17 +111,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/onewayDropdownContainer">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:id="@+id/fromSearchInput"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:fontFamily="@font/roboto"
                     android:inputType="text"
-                    android:singleLine="true"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/input_text"
-                    tools:ignore="TextContrastCheck" />
-
+                    android:textSize="@dimen/input_text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -144,16 +141,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fromContainer">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:id="@+id/toSearchInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto"
                     android:inputType="text"
-                    android:singleLine="true"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/input_text"
-                    tools:ignore="TextContrastCheck" />
+                    android:textSize="@dimen/input_text"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -240,7 +235,7 @@
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
-                app:layout_constraintEnd_toEndOf="@+id/departureDateContainer"
+                app:layout_constraintEnd_toStartOf="@+id/classDropdownContainer"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/departureDateContainer">
 
@@ -260,6 +255,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/medium_input"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="@dimen/xsmall_margin"
                 android:hint="@string/booking_class"
                 android:labelFor="@+id/bookingClassDropdownInput"
@@ -270,9 +266,9 @@
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
+                app:layout_constraintStart_toEndOf="@+id/adultDropdownContainer"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/returnDateContainer"
-                app:layout_constraintTop_toBottomOf="@id/returnDateContainer">
+                app:layout_constraintTop_toBottomOf="@id/departureDateContainer">
 
                 <AutoCompleteTextView
                     android:id="@+id/bookingClassDropdownInput"

@@ -35,13 +35,11 @@ class TokenRefreshServiceImpl : TokenRefreshService {
                         objectMapper.registerModule(KotlinModule())
                         objectMapper.readValue(response.body?.string(), AuthResponse::class.java)
                     } else {
-                        // Handle unsuccessful response
                         Log.e("AuthService", "Error response: ${response.code} ${response.message}")
                         null
                     }
                 }
             } catch (e: Exception) {
-                // Handle exception
                 Log.e("AuthService", "Exception: $e")
                 null
             }

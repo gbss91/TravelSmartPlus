@@ -16,7 +16,7 @@ import javax.inject.Inject
  * UserServiceImpl
  * Makes calls to API to handle user requests
  *
- * @property userService The service handling user API calls.
+ * @property userService The service handling user API calls using Retrofit.
  * @property sessionManager The session manager for handling user session data.
  * @author Gabriel Salas
  */
@@ -34,7 +34,7 @@ class UserServiceImpl @Inject constructor(
                 }
                 response
             } catch (e: Exception) {
-                Log.e("UserService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
+                Log.e("UserService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
                     is IllegalStateException -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
@@ -44,7 +44,7 @@ class UserServiceImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateUser(id: String, user: User): Response<Unit> {
+    override suspend fun updateUser(id: String, user: User): Response<User> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = userService.updateUser(id, user)
@@ -53,7 +53,7 @@ class UserServiceImpl @Inject constructor(
                 }
                 response
             } catch (e: Exception) {
-                Log.e("UserService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
+                Log.e("UserService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
                     is IllegalStateException -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
@@ -72,7 +72,7 @@ class UserServiceImpl @Inject constructor(
                 }
                 response
             } catch (e: Exception) {
-                Log.e("UserService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
+                Log.e("UserService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
                     is IllegalStateException -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
@@ -98,7 +98,7 @@ class UserServiceImpl @Inject constructor(
 
                 response
             } catch (e: Exception) {
-                Log.e("UserService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
+                Log.e("UserService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
                     is IllegalStateException -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)

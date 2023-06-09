@@ -6,10 +6,13 @@ import com.travelsmartplus.travelsmartplus.data.network.AuthInterceptor
 import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.BASE_URL
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
 import com.travelsmartplus.travelsmartplus.data.services.AuthServiceImpl
+import com.travelsmartplus.travelsmartplus.data.services.BookingService
+import com.travelsmartplus.travelsmartplus.data.services.BookingServiceImpl
 import com.travelsmartplus.travelsmartplus.data.services.UserService
 import com.travelsmartplus.travelsmartplus.data.services.UserServiceImpl
 import com.travelsmartplus.travelsmartplus.utils.SessionManager
 import com.travelsmartplus.travelsmartplus.utils.SessionManagerImpl
+import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
 import com.travelsmartplus.travelsmartplus.viewModels.SetupViewModel
 import dagger.Module
 import dagger.Provides
@@ -24,6 +27,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    //------------------ UTILS ------------------//
 
     @Provides
     fun provideSharedPreferences(@ApplicationContext appContext: Context): SharedPreferences {
@@ -54,6 +59,9 @@ object AppModule {
             .build()
     }
 
+
+    //------------------ SERVICES ------------------//
+
     @Provides
     @Singleton
     fun provideAuthService(retrofit: Retrofit, sessionManager: SessionManager): AuthService {
@@ -63,16 +71,33 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideBookingService(retrofit: Retrofit, sessionManager: SessionManager): BookingService {
+        val bookingService = retrofit.create(BookingService::class.java)
+        return BookingServiceImpl(bookingService, sessionManager)
+    }
+
+
+    @Provides
+    @Singleton
     fun provideUserService(retrofit: Retrofit, sessionManager: SessionManager): UserService {
         val userService = retrofit.create(UserService::class.java)
         return UserServiceImpl(userService, sessionManager)
     }
+
+
+    //------------------ VIEW-MODELS ------------------//
 
     @Provides
     @Singleton
     fun provideSetupViewModel(authService: AuthService, userService: UserService, sessionManager: SessionManager
     ): SetupViewModel {
         return SetupViewModel(authService, userService, sessionManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookingViewModel(bookingService: BookingService, sessionManager: SessionManager): BookingViewModel {
+        return BookingViewModel(bookingService, sessionManager)
     }
 
 }

@@ -1,28 +1,19 @@
 package com.travelsmartplus.travelsmartplus.fragments
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.databinding.FragmentBookingSearchBinding
+import com.travelsmartplus.travelsmartplus.utils.CustomDatePicker
+import com.travelsmartplus.travelsmartplus.utils.CustomDropdown
 import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 /**
  * BookingSearchFragment
@@ -37,6 +28,18 @@ class BookingSearchFragment : Fragment() {
     private lateinit var binding: FragmentBookingSearchBinding
     private val bookingViewModel: BookingViewModel by viewModels()
 
+    // Custom Dropdowns
+    private val onewayDropdown = CustomDropdown()
+    private val adultsDropdown = CustomDropdown()
+    private val bookingClassesDropdown = CustomDropdown()
+    private val fromAutocomplete = CustomDropdown()
+
+    // Store booking type (searchToggleGroup) selection - True is default selection
+    private var flightOnly = true
+
+    // Store oneWay option - False is default selection
+    private var oneWay = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -45,7 +48,7 @@ class BookingSearchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentBookingSearchBinding.inflate(inflater, container, false)
 
@@ -64,13 +67,11 @@ class BookingSearchFragment : Fragment() {
         binding.checkInDateContainer.visibility = View.GONE
         binding.checkOutDateContainer.visibility = View.GONE
 
-        // Set Dropdown Menus
-        val onewayDropdown = resources.getStringArray(R.array.oneway_dropdown)
-        val adultsDropdown = resources.getStringArray(R.array.adults_dropdown)
-        val bookingClassesDropdown = resources.getStringArray(R.array.booking_classes_dropdown)
-        setDropdownMenu(binding.onewayDropdownInput, onewayDropdown)
-        setDropdownMenu(binding.adultsDropdownInput, adultsDropdown)
-        setDropdownMenu(binding.bookingClassDropdownInput, bookingClassesDropdown)
+        // Set simple Dropdowns
+        val adultsDropdownItems = resources.getStringArray(R.array.adults_dropdown)
+        val bookingClassesDropdownItems = resources.getStringArray(R.array.booking_classes_dropdown)
+        adultsDropdown.setSimpleDropdown(requireContext(), binding.adultsDropdownInput, adultsDropdownItems)
+        bookingClassesDropdown.setSimpleDropdown(requireContext(), binding.bookingClassDropdownInput, bookingClassesDropdownItems)
 
         return binding.root
     }
@@ -78,15 +79,19 @@ class BookingSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val customDatePicker = CustomDatePicker(childFragmentManager)
+
         // Toggle button functionality
         binding.searchToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
                     R.id.flightOnlySearchBtn -> {
+                        flightOnly = true
                         binding.checkInDateContainer.visibility = View.GONE
                         binding.checkOutDateContainer.visibility = View.GONE
                     }
                     R.id.flightHotelSearchBtn -> {
+                        flightOnly = false
                         binding.checkInDateContainer.visibility = View.VISIBLE
                         binding.checkOutDateContainer.visibility = View.VISIBLE
                     }
@@ -94,43 +99,71 @@ class BookingSearchFragment : Fragment() {
             }
         }
 
+        // Set One-way dropdown - uses callback to update UI
+        val onewayDropdownItems = resources.getStringArray(R.array.oneway_dropdown)
+        onewayDropdown.setActionDropdown(requireContext(), binding.onewayDropdownInput, onewayDropdownItems) { selectedItem ->
+            when (selectedItem) {
+                "ONE-WAY" -> {
+                    oneWay = true
+                    binding.returnDateContainer.visibility = View.GONE
+                }
+                "RETURN" -> {
+                    oneWay = false
+                    binding.returnDateContainer.visibility = View.VISIBLE
+                }
+            }
+        }
+
         binding.departureDateSearchInput.setOnClickListener {
-            showDatePicker(binding.departureDateSearchInput)
+            if (oneWay) {
+                customDatePicker.showDatePicker(binding.departureDateSearchInput, "Flight Date")
+            } else {
+                customDatePicker.showDateRangePicker(binding.departureDateSearchInput, binding.returnDateSearchInput,"Flight Dates")
+            }
         }
 
         binding.returnDateSearchInput.setOnClickListener {
-            showDatePicker(binding.returnDateSearchInput)
+            customDatePicker.showDateRangePicker(binding.departureDateSearchInput, binding.returnDateSearchInput, "Flight Dates")
         }
 
         binding.checkInDateInput.setOnClickListener {
-            showDatePicker(binding.checkInDateInput)
+            customDatePicker.showDateRangePicker(binding.checkInDateInput, binding.checkOutDateInput,"Hotel Dates")
         }
 
         binding.checkOutDateInput.setOnClickListener {
-            showDatePicker(binding.checkOutDateInput)
+            customDatePicker.showDateRangePicker(binding.checkOutDateInput, binding.checkOutDateInput,"Hotel Dates")
         }
 
         binding.searchBtn.setOnClickListener {
             bookingSearch()
         }
 
+        // Observers
+        bookingViewModel.airports.observe(viewLifecycleOwner) { airports ->
+            fromAutocomplete.setAirportAutocomplete(requireContext(), binding.fromSearchInput, airports)
+        }
+
+        bookingViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).setAnchorView(R.id.bottomNavigationView).show()
+        }
 
     }
 
-    private fun bookingSearch(): Boolean {
+    private fun bookingSearch() {
 
         val originCity = binding.fromSearchInput
         val destinationCity = binding.toSearchInput
         val departureDate = binding.departureDateSearchInput
         val returnDate = binding.returnDateSearchInput
-        val adultsNumber = binding.adultsDropdownInput
-        val bookingClass = binding.bookingClassDropdownInput
+        val adultsNumber = adultsDropdown.getValueForSelectedItem(resources.getStringArray(R.array.adults_dropdown_values))
+        val bookingClass = bookingClassesDropdown.getValueForSelectedItem(resources.getStringArray(R.array.booking_classes_dropdown_values))
         val checkInDate = binding.checkInDateInput
         val checkOutDate = binding.checkOutDateInput
 
         // Input validation
-        var inputValidation = bookingViewModel.bookingSearchValidation(
-            flightOnly= true,
+        val inputValidation = bookingViewModel.bookingSearchValidation(
+            flightOnly= flightOnly,
+            oneWay = oneWay,
             originCity= originCity,
             destinationCity= destinationCity,
             departureDate= departureDate,
@@ -140,44 +173,23 @@ class BookingSearchFragment : Fragment() {
         )
 
         if (inputValidation) {
-            return false
+
+
+            Toast.makeText(
+                requireContext(),
+                "All good",
+                Toast.LENGTH_SHORT
+            ).show()
+
+
         } else {
-            val snackBar = Snackbar.make(binding.root, "Fields can't be empty." , Snackbar.LENGTH_SHORT)
-            snackBar.setAnchorView(R.id.bottomNavigationView).show()
+            Snackbar.make(binding.root, "Fields can't be empty." , Snackbar.LENGTH_SHORT).setAnchorView(R.id.bottomNavigationView).show()
         }
-        return false
     }
 
 
 
-    private fun showDatePicker(editText: EditText) {
 
-        val constraintsBuilder =
-            CalendarConstraints.Builder()
-                .setValidator(DateValidatorPointForward.now())
 
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Departure date")
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-            .setCalendarConstraints(constraintsBuilder.build())
-            .build()
-
-        datePicker.addOnPositiveButtonClickListener {
-            val selectedDate = Date(it)
-            val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            val formattedDate = simpleDateFormat.format(selectedDate)
-
-            // Update text in text input
-            editText.setText(formattedDate)
-        }
-
-        datePicker.show(childFragmentManager, "tag")
-    }
-
-    private fun setDropdownMenu(autoCompleteTextView: AutoCompleteTextView, items: Array<String>) {
-        val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, items)
-        autoCompleteTextView.setAdapter(adapter)
-        autoCompleteTextView.setText(items[0], false) // Set the first item as preselected
-    }
 
 }

@@ -16,7 +16,7 @@ interface UserService {
     suspend fun getUser(@Path("id") id: String): Response<User>
 
     @POST(USER_URI)
-    suspend fun updateUser(@Path("id") id: String, @Body user: User): Response<Unit>
+    suspend fun updateUser(@Path("id") id: String, @Body user: User): Response<User>
 
     @DELETE(USER_URI)
     suspend fun deleteUser(@Path("id") id: String): Response<Unit>

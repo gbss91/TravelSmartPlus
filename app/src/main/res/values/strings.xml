@@ -89,15 +89,31 @@
         <item>RETURN</item>
         <item>ONE-WAY</item>
     </string-array>
+    <string-array name="oneway_dropdown_values">
+        <item>false</item>
+        <item>true</item>
+    </string-array>
+
     <string-array name="booking_classes_dropdown">
         <item>Economy</item>
         <item>Premium</item>
         <item>Business</item>
-        <item>First Class</item>
+        <item>First</item>
     </string-array>
+    <string-array name="booking_classes_dropdown_values">
+        <item>ECONOMY</item>
+        <item>PREMIUM_ECONOMY</item>
+        <item>BUSINESS</item>
+        <item>FIRST</item>
+    </string-array>
+
     <string-array name="adults_dropdown">
         <item>1 Adult</item>
         <item>2 Adults</item>
+    </string-array>
+    <string-array name="adults_dropdown_values">
+        <item>1</item>
+        <item>2</item>
     </string-array>
 
 

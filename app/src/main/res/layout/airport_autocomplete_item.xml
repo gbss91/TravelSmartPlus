@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/codeCityText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="@dimen/small_text"
+        android:textColor="@color/black"
+        android:text="LHR - London, UK"/>
+
+    <TextView
+        android:id="@+id/airportNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:textSize="@dimen/xsmall_text"
+        android:textColor="@color/dark_grey"
+        android:text="London Heathrow"/>
+</LinearLayout>

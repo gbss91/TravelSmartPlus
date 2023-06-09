@@ -20,7 +20,7 @@ import javax.inject.Inject
  * AuthServiceImpl
  * Makes authentication calls to the API
  *
- * @property authService The service for authentication API requests.
+ * @property authService The service for authentication API requests using Retrofit.
  * @property sessionManager The session manager for handling user session data.
  * @author Gabriel Salas
  */
@@ -29,6 +29,7 @@ class AuthServiceImpl @Inject constructor(
     private val authService: AuthService,
     private val sessionManager: SessionManager
 ) : AuthService {
+
     override suspend fun signUp(signUpRequest: SignUpRequest): Response<Unit> {
         return withContext(Dispatchers.IO) {
             try {
@@ -38,7 +39,7 @@ class AuthServiceImpl @Inject constructor(
                 }
                 response
             } catch (e: Exception) {
-                Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
+                Log.e("AuthService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(NETWORK_ERROR)
                     is IllegalStateException -> throw NetworkException(UNEXPECTED_ERROR)
@@ -73,7 +74,7 @@ class AuthServiceImpl @Inject constructor(
                 response
 
             } catch (e: Exception) {
-                Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
+                Log.e("AuthService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(NETWORK_ERROR)
                     is IllegalStateException -> throw NetworkException(UNEXPECTED_ERROR)
@@ -94,7 +95,7 @@ class AuthServiceImpl @Inject constructor(
                 response
 
             } catch (e: Exception) {
-                Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
+                Log.e("AuthService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(NETWORK_ERROR)
                     is IllegalStateException -> throw NetworkException(UNEXPECTED_ERROR)
