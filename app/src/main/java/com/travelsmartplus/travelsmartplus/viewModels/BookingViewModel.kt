@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputEditText
 import com.travelsmartplus.travelsmartplus.data.models.Airport
+import com.travelsmartplus.travelsmartplus.data.models.Booking
+import com.travelsmartplus.travelsmartplus.data.models.requests.BookingSearchRequest
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.data.services.BookingService
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNKNOWN_ERROR
@@ -21,6 +23,8 @@ import javax.inject.Inject
  * BookingViewModel
  * ViewModel class responsible for managing the booking activities and fragments state and data.
  *
+ * @property BookingService The service for booking API requests using Retrofit.
+ * @property SessionManager The session manager for handling user session data.
  * @author Gabriel Salas
  */
 
@@ -32,8 +36,10 @@ class BookingViewModel @Inject constructor(
 
     // LiveData object to hold the responses and variables
     private val _airports = MutableLiveData<List<Airport>>()
+    private val _predictedBooking = MutableLiveData<Booking?>()
     private val _errorMessage = MutableLiveData<String>()
     val airports: LiveData<List<Airport>> = _airports
+    val predictedBooking: LiveData<Booking?> = _predictedBooking
     val errorMessage: LiveData<String> = _errorMessage
 
     // Initiate airportsAutoComplete
@@ -61,6 +67,28 @@ class BookingViewModel @Inject constructor(
         }
     }
 
+    fun bookingSearch(bookingSearchRequest: BookingSearchRequest) {
+        viewModelScope.launch {
+            try {
+                bookingSearchRequest.userId = sessionManager.currentUser()
+                val response = bookingService.bookingSearch(bookingSearchRequest)
+                if (response.code() == 200 ) {
+                    _predictedBooking.postValue(response.body())
+                } else if (response.code() == 204 ) {
+                    _predictedBooking.postValue(null)
+                } else {
+                    _errorMessage.postValue(response.errorBody().toString())
+                }
+            } catch (e: NetworkException) {
+                e.printStackTrace()
+                _errorMessage.postValue(e.message)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.postValue(UNKNOWN_ERROR)
+            }
+        }
+    }
+
     fun bookingSearchValidation(
         flightOnly: Boolean,
         oneWay: Boolean,
@@ -70,7 +98,6 @@ class BookingViewModel @Inject constructor(
         returnDate: TextInputEditText,
         checkInDate: TextInputEditText?,
         checkOutDate: TextInputEditText?
-
     ): Boolean {
 
         val errorMessages = mutableListOf<String>()

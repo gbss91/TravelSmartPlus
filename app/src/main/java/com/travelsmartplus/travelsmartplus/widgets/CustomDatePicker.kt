@@ -1,4 +1,4 @@
-package com.travelsmartplus.travelsmartplus.utils
+package com.travelsmartplus.travelsmartplus.widgets
 
 import android.widget.EditText
 import androidx.fragment.app.FragmentManager

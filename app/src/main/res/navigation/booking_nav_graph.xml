@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/booking_nav_graph.xml"
+    app:startDestination="@id/predictedBookingFragment">
+    <fragment
+        android:id="@+id/noPredictedBookingFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.NoPredictedBookingFragment"
+        android:label="fragment_no_predicted_booking"
+        tools:layout="@layout/fragment_no_predicted_booking" >
+        <action
+            android:id="@+id/action_noPredictedBookingFragment_to_outboundFlightsFragment"
+            app:destination="@id/outboundFlightsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/predictedBookingFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.PredictedBookingFragment"
+        android:label="fragment_predicted_booking"
+        tools:layout="@layout/fragment_predicted_booking" >
+        <action
+            android:id="@+id/action_predictedBookingFragment_to_outboundFlightsFragment"
+            app:destination="@id/outboundFlightsFragment" />
+        <action
+            android:id="@+id/action_predictedBookingFragment_to_inboundFlightsFragment"
+            app:destination="@id/inboundFlightsFragment" />
+        <action
+            android:id="@+id/action_predictedBookingFragment_to_hotelsFragment"
+            app:destination="@id/hotelsFragment" />
+        <action
+            android:id="@+id/action_predictedBookingFragment_to_bookingConfirmationFragment"
+            app:destination="@id/bookingConfirmationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/outboundFlightsFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.OutboundFlightsFragment"
+        android:label="fragment_outbound_flights"
+        tools:layout="@layout/fragment_outbound_flights" >
+        <action
+            android:id="@+id/action_outboundFlightsFragment_to_inboundFlightsFragment"
+            app:destination="@id/inboundFlightsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/inboundFlightsFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.InboundFlightsFragment"
+        android:label="fragment_inbound_flights"
+        tools:layout="@layout/fragment_inbound_flights" >
+        <action
+            android:id="@+id/action_inboundFlightsFragment_to_hotelsFragment"
+            app:destination="@id/hotelsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hotelsFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.HotelsFragment"
+        android:label="fragment_hotels"
+        tools:layout="@layout/fragment_hotels" >
+        <action
+            android:id="@+id/action_hotelsFragment_to_bookingConfirmationFragment"
+            app:destination="@id/bookingConfirmationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookingConfirmationFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.BookingConfirmationFragment"
+        android:label="fragment_booking_confirmation"
+        tools:layout="@layout/fragment_booking_confirmation" />
+</navigation>

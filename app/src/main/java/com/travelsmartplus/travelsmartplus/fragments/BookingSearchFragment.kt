@@ -4,16 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
+import com.travelsmartplus.travelsmartplus.data.models.requests.BookingSearchRequest
 import com.travelsmartplus.travelsmartplus.databinding.FragmentBookingSearchBinding
-import com.travelsmartplus.travelsmartplus.utils.CustomDatePicker
-import com.travelsmartplus.travelsmartplus.utils.CustomDropdown
 import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
+import com.travelsmartplus.travelsmartplus.widgets.CustomDatePicker
+import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
  * BookingSearchFragment
@@ -26,15 +29,16 @@ import dagger.hilt.android.AndroidEntryPoint
 class BookingSearchFragment : Fragment() {
 
     private lateinit var binding: FragmentBookingSearchBinding
-    private val bookingViewModel: BookingViewModel by viewModels()
+    private val bookingViewModel: BookingViewModel by activityViewModels() // Shared View Model
 
     // Custom Dropdowns
     private val onewayDropdown = CustomDropdown()
     private val adultsDropdown = CustomDropdown()
     private val bookingClassesDropdown = CustomDropdown()
     private val fromAutocomplete = CustomDropdown()
+    private val toAutocomplete = CustomDropdown()
 
-    // Store booking type (searchToggleGroup) selection - True is default selection
+    // Store booking type Flight Only or Flight + Hotel - Flight Only is default (true)
     private var flightOnly = true
 
     // Store oneWay option - False is default selection
@@ -141,6 +145,15 @@ class BookingSearchFragment : Fragment() {
         // Observers
         bookingViewModel.airports.observe(viewLifecycleOwner) { airports ->
             fromAutocomplete.setAirportAutocomplete(requireContext(), binding.fromSearchInput, airports)
+            toAutocomplete.setAirportAutocomplete(requireContext(), binding.toSearchInput, airports)
+        }
+
+        bookingViewModel.predictedBooking.observe(viewLifecycleOwner) {booking ->
+            if (booking == null) {
+                findNavController().navigate(R.id.action_bookingSearchFragment_to_noPredictedBookingFragment)
+            } else {
+                findNavController().navigate(R.id.action_bookingSearchFragment_to_predictedBookingFragment)
+            }
         }
 
         bookingViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
@@ -174,13 +187,23 @@ class BookingSearchFragment : Fragment() {
 
         if (inputValidation) {
 
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
-            Toast.makeText(
-                requireContext(),
-                "All good",
-                Toast.LENGTH_SHORT
-            ).show()
+            val newBookingSearch = BookingSearchRequest(
+                oneWay= oneWay,
+                nonStop= false,
+                origin= fromAutocomplete.getSelectedAirport(),
+                destination=  toAutocomplete.getSelectedAirport(),
+                departureDate= LocalDate.parse(departureDate.text, formatter),
+                returnDate= LocalDate.parse(returnDate.text, formatter),
+                adultsNumber= adultsNumber.toInt(),
+                travelClass= bookingClass,
+                hotel= flightOnly,
+                checkInDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter),
+                checkOutDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter)
+            )
 
+            bookingViewModel.bookingSearch(newBookingSearch)
 
         } else {
             Snackbar.make(binding.root, "Fields can't be empty." , Snackbar.LENGTH_SHORT).setAnchorView(R.id.bottomNavigationView).show()

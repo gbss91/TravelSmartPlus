@@ -71,9 +71,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideBookingService(retrofit: Retrofit, sessionManager: SessionManager): BookingService {
+    fun provideBookingService(retrofit: Retrofit): BookingService {
         val bookingService = retrofit.create(BookingService::class.java)
-        return BookingServiceImpl(bookingService, sessionManager)
+        return BookingServiceImpl(bookingService)
     }
 
 

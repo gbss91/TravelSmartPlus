@@ -7,13 +7,15 @@
     android:background="@color/white"
     tools:context=".activities.MainActivity">
 
-
-    <FrameLayout
-        android:id="@+id/mainFragmentContainer"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mainNavHost"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/main_nav_graph"
         app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"

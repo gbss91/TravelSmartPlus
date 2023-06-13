@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph.xml"
+    app:startDestination="@id/bookingSearchFragment">
+
+    <fragment
+        android:id="@+id/bookingSearchFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.BookingSearchFragment"
+        android:label="fragment_booking_search"
+        tools:layout="@layout/fragment_booking_search" >
+        <action
+            android:id="@+id/action_bookingSearchFragment_to_usersFragment"
+            app:destination="@id/usersFragment" />
+        <action
+            android:id="@+id/action_bookingSearchFragment_to_allBookingsFragment"
+            app:destination="@id/allBookingsFragment" />
+        <action
+            android:id="@+id/action_bookingSearchFragment_to_myBookingsFragment"
+            app:destination="@id/myBookingsFragment" />
+        <action
+            android:id="@+id/action_bookingSearchFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_bookingSearchFragment_to_predictedBookingFragment"
+            app:destination="@id/predictedBookingFragment" />
+        <action
+            android:id="@+id/action_bookingSearchFragment_to_noPredictedBookingFragment"
+            app:destination="@id/noPredictedBookingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.UsersFragment"
+        android:label="fragment_users"
+        tools:layout="@layout/fragment_users" />
+    <fragment
+        android:id="@+id/allBookingsFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.AllBookingsFragment"
+        android:label="fragment_all_bookings"
+        tools:layout="@layout/fragment_all_bookings" />
+    <fragment
+        android:id="@+id/myBookingsFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.MyBookingsFragment"
+        android:label="fragment_my_bookings"
+        tools:layout="@layout/fragment_my_bookings" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <include app:graph="@navigation/booking_nav_graph" />
+</navigation>

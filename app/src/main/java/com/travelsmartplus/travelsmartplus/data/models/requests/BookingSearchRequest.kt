@@ -5,6 +5,7 @@ import com.travelsmartplus.travelsmartplus.data.models.Airport
 import java.time.LocalDate
 
 data class BookingSearchRequest(
+    @JsonProperty("userId") var userId: Int? = 0,
     @JsonProperty("oneWayBooking") val oneWay: Boolean,
     @JsonProperty("nonStop") val nonStop: Boolean,
     @JsonProperty("origin") val origin: Airport,

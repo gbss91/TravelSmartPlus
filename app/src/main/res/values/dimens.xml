@@ -8,9 +8,16 @@
     <dimen name="xsmall_margin">8dp</dimen>
     <dimen name="xxsmall_margin">4dp</dimen>
 
+    <!-- Default screen paddings -->
+    <dimen name="default_padding">32dp</dimen>
+    <dimen name="small_padding">16dp</dimen>
+    <dimen name="xsmall_padding">8dp</dimen>
+    <dimen name="xxsmall_padding">4dp</dimen>
+
     <!-- Font size -->
     <dimen name="title_text">40sp</dimen>
     <dimen name="subtitle_text">20sp</dimen>
+    <dimen name="medium_text">16sp</dimen>
     <dimen name="small_text">14sp</dimen>
     <dimen name="xsmall_text">10sp</dimen>
     <dimen name="xxsmall_text">8sp</dimen>
@@ -27,5 +34,8 @@
 
     <!-- Booking Card -->
     <dimen name="booking_card">100dp</dimen>
+
+    <!-- Custom Airport Item -->
+    <dimen name="airport_name_width">300dp</dimen>
 
 </resources>

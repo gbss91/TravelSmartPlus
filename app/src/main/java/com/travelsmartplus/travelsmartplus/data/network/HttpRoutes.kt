@@ -7,9 +7,18 @@ object HttpRoutes {
     const val SIGN_IN = "signin"
     const val UPDATE_PASSWORD = "update-password"
 
+    // User Routes
     const val USER_URI = "user/{id}"
     const val SETUP_ACCOUNT = "user/{id}/setup"
 
-    const val AIRPORTS_SEARCH = "airports/search"
+    // Booking Routes
+    const val AIRPORTS_SEARCH = "airports/all"
+    const val BOOKING_SEARCH = "bookingSearch"
+    const val GET_ALL_BOOKINGS = "bookings/{orgId}"
+    const val GET_USER_BOOKINGS = "bookings/{userId}"
+    const val ADD_BOOKING = "booking"
+    const val GET_BOOKING = "booking/{userId}"
+    const val DELETE_BOOKING = "booking/{userId}"
+
 
 }

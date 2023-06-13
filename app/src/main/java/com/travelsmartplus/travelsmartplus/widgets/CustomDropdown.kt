@@ -1,4 +1,4 @@
-package com.travelsmartplus.travelsmartplus.utils
+package com.travelsmartplus.travelsmartplus.widgets
 
 import android.content.Context
 import android.widget.ArrayAdapter
@@ -16,6 +16,7 @@ import com.travelsmartplus.travelsmartplus.data.models.Airport
 class CustomDropdown {
 
     private var selectedItemIndex: Int = 0
+    private lateinit var selectedAirport: Airport
 
     // A simple dropdown with preselected option
     fun setSimpleDropdown(
@@ -60,13 +61,13 @@ class CustomDropdown {
         autoCompleteTextView: AutoCompleteTextView,
         airports: List<Airport>
     ) {
-        val adapter = ArrayAdapter(context, R.layout.dropdown_item, airports.map { it.airportName })
+        val adapter = AirportAdapter(context, airports)
         autoCompleteTextView.threshold = 3 // Starts with 3 characters
         autoCompleteTextView.setAdapter(adapter)
 
         // Set selected item index
         autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
-            selectedItemIndex = position
+            selectedAirport = adapter.getItem(position)
         }
     }
 
@@ -74,5 +75,12 @@ class CustomDropdown {
     fun getValueForSelectedItem(values: Array<String>): String {
         return values[selectedItemIndex]
     }
+
+    fun getSelectedAirport(): Airport {
+        return selectedAirport
+    }
+
+
+
 
 }

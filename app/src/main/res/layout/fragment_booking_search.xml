@@ -98,6 +98,7 @@
                 android:layout_height="@dimen/medium_input"
                 android:layout_marginTop="4dp"
                 android:hint="@string/from_search"
+                android:labelFor="@id/fromSearchInput"
                 app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
@@ -116,9 +117,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/roboto"
+                    android:padding="@dimen/small_padding"
                     android:inputType="text"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/input_text" />
+                    android:textSize="@dimen/input_text"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -128,6 +130,7 @@
                 android:layout_height="@dimen/medium_input"
                 android:layout_marginTop="@dimen/xsmall_margin"
                 android:hint="@string/to_search"
+                android:labelFor="@id/toSearchInput"
                 app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
@@ -145,6 +148,7 @@
                     android:id="@+id/toSearchInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="@dimen/small_padding"
                     android:fontFamily="@font/roboto"
                     android:inputType="text"
                     android:textColor="@color/black"

@@ -84,7 +84,9 @@
     <string name="upcoming_booking_search">Upcoming Trip</string>
 
 
-    <!-- Dropdown Menus-->
+    <!-- Dropdown Menus and Autocomplete-->
+    <string name="city_and_country">%1$s, %2$s</string>
+
     <string-array name="oneway_dropdown">
         <item>RETURN</item>
         <item>ONE-WAY</item>
@@ -116,7 +118,6 @@
         <item>2</item>
     </string-array>
 
-
     <!--My Bookings Fragment-->
     <string name="my_bookings_fragment">My Bookings fragment</string>
 
@@ -130,7 +131,6 @@
     <string name="profile_fragment">Profile fragment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
 
 </resources>
