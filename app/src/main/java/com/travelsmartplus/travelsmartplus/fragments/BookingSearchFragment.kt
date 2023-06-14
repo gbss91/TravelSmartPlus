@@ -15,6 +15,7 @@ import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
 import com.travelsmartplus.travelsmartplus.widgets.CustomDatePicker
 import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.datetime.toKotlinLocalDate
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -194,13 +195,13 @@ class BookingSearchFragment : Fragment() {
                 nonStop= false,
                 origin= fromAutocomplete.getSelectedAirport(),
                 destination=  toAutocomplete.getSelectedAirport(),
-                departureDate= LocalDate.parse(departureDate.text, formatter),
-                returnDate= LocalDate.parse(returnDate.text, formatter),
+                departureDate= LocalDate.parse(departureDate.text, formatter).toKotlinLocalDate(),
+                returnDate= LocalDate.parse(returnDate.text, formatter).toKotlinLocalDate(),
                 adultsNumber= adultsNumber.toInt(),
                 travelClass= bookingClass,
                 hotel= flightOnly,
-                checkInDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter),
-                checkOutDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter)
+                checkInDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter).toKotlinLocalDate(),
+                checkOutDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter).toKotlinLocalDate()
             )
 
             bookingViewModel.bookingSearch(newBookingSearch)

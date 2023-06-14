@@ -3,6 +3,7 @@ package com.travelsmartplus.travelsmartplus.data.network
 import android.util.Log
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -32,7 +33,7 @@ class TokenRefreshServiceImpl : TokenRefreshService {
                 response.use {
                     if (response.isSuccessful) {
                         val objectMapper = jacksonObjectMapper()
-                        objectMapper.registerModule(KotlinModule())
+                        objectMapper.registerKotlinModule()
                         objectMapper.readValue(response.body?.string(), AuthResponse::class.java)
                     } else {
                         Log.e("AuthService", "Error response: ${response.code} ${response.message}")

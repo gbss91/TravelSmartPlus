@@ -55,7 +55,8 @@ class BookingViewModel @Inject constructor(
                     val airportsList = response.body() ?: emptyList()
                     _airports.postValue(airportsList)
                 } else {
-                    _errorMessage.postValue(response.errorBody().toString())
+                    val errorBody = response.errorBody()?.string()
+                    _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
                 }
             } catch (e: NetworkException) {
                 e.printStackTrace()
@@ -77,7 +78,8 @@ class BookingViewModel @Inject constructor(
                 } else if (response.code() == 204 ) {
                     _predictedBooking.postValue(null)
                 } else {
-                    _errorMessage.postValue(response.errorBody().toString())
+                    val errorBody = response.errorBody()?.string()
+                    _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
                 }
             } catch (e: NetworkException) {
                 e.printStackTrace()

@@ -2,11 +2,12 @@ package com.travelsmartplus.travelsmartplus.data.models.requests
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.travelsmartplus.travelsmartplus.data.models.Airport
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
+
 
 data class BookingSearchRequest(
     @JsonProperty("userId") var userId: Int? = 0,
-    @JsonProperty("oneWayBooking") val oneWay: Boolean,
+    @JsonProperty("oneWay") val oneWay: Boolean,
     @JsonProperty("nonStop") val nonStop: Boolean,
     @JsonProperty("origin") val origin: Airport,
     @JsonProperty("destination") val destination: Airport,

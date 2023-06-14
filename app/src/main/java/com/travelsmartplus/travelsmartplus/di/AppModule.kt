@@ -2,6 +2,10 @@ package com.travelsmartplus.travelsmartplus.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.travelsmartplus.travelsmartplus.data.network.AuthInterceptor
 import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.BASE_URL
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
@@ -52,10 +56,14 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        val objectMapper: ObjectMapper = jacksonObjectMapper()
+            .registerKotlinModule() // Kotlin data classes
+            .registerModule(JavaTimeModule()) // Enable support for Java 8 date/time types
+
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(JacksonConverterFactory.create())
+            .addConverterFactory(JacksonConverterFactory.create(objectMapper))
             .build()
     }
 
