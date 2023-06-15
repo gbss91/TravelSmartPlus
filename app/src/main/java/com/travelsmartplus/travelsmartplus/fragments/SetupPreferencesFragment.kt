@@ -1,52 +1,65 @@
-package com.travelsmartplus.travelsmartplus.activities
+package com.travelsmartplus.travelsmartplus.fragments
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.GridLayout
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.data.models.requests.SetupAccountRequest
-import com.travelsmartplus.travelsmartplus.databinding.ActivitySetupPreferencesBinding
+import com.travelsmartplus.travelsmartplus.databinding.FragmentSetupPreferencesBinding
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages
 import com.travelsmartplus.travelsmartplus.viewModels.SetupViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * SetupPreferencesActivity
+ * SetupPreferencesFragment
  * Represents the preferences setup activity. Lets a new user to add preferences to their account.
  *
  * @author Gabriel Salas
  */
 
 @AndroidEntryPoint
-class SetupPreferencesActivity : AppCompatActivity() {
+class SetupPreferencesFragment : Fragment() {
 
-    private lateinit var binding: ActivitySetupPreferencesBinding
+    private lateinit var binding: FragmentSetupPreferencesBinding
     private val setupViewModel: SetupViewModel by viewModels()
+    private val args: SetupPreferencesFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySetupPreferencesBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentSetupPreferencesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        // Get password from previous SetupPasswordActivity
-        val newPass = intent.getStringExtra("newPass")!!
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Get password from previous SetupPasswordFragment
+        val newPass = args.newPass
 
         binding.preferencesSetupBtn.setOnClickListener {
             setupAccount(newPass)
         }
 
         // Observer - observes responses and errors from View Model
-        setupViewModel.errorMessage.observe(this) { error ->
+        setupViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
         }
 
-        setupViewModel.setupAccountResponse.observe(this) { response ->
+        setupViewModel.setupAccountResponse.observe(viewLifecycleOwner) { response ->
             if (response != null && response.isSuccessful) {
-                val intent = Intent(this, SetupFinishActivity::class.java)
-                startActivity(intent)
+                findNavController().navigate(R.id.action_setupPreferencesFragment_to_setupFinishFragment)
             } else {
                 val error = response?.errorBody()?.string() ?: ErrorMessages.UNKNOWN_ERROR
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
@@ -84,4 +97,6 @@ class SetupPreferencesActivity : AppCompatActivity() {
         }
 
     }
+
+
 }

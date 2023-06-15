@@ -48,7 +48,7 @@ class SignInActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish() // Avoids returning when pressing back button
                 } else {
-                    val intent = Intent(this, SetupWelcomeActivity::class.java)
+                    val intent = Intent(this, SetupActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     finish() // Avoids returning when pressing back button

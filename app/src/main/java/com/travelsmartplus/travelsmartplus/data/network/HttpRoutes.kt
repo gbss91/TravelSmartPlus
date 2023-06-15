@@ -19,6 +19,8 @@ object HttpRoutes {
     const val ADD_BOOKING = "booking"
     const val GET_BOOKING = "booking/{userId}"
     const val DELETE_BOOKING = "booking/{userId}"
+    const val GET_FLIGHT_OFFERS = "booking/flights"
+    const val GET_HOTEL_OFFERS = "booking/hotels"
 
 
 }

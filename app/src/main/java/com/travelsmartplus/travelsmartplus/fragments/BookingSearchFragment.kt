@@ -15,7 +15,6 @@ import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
 import com.travelsmartplus.travelsmartplus.widgets.CustomDatePicker
 import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.datetime.toKotlinLocalDate
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -44,10 +43,6 @@ class BookingSearchFragment : Fragment() {
 
     // Store oneWay option - False is default selection
     private var oneWay = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -195,16 +190,17 @@ class BookingSearchFragment : Fragment() {
                 nonStop= false,
                 origin= fromAutocomplete.getSelectedAirport(),
                 destination=  toAutocomplete.getSelectedAirport(),
-                departureDate= LocalDate.parse(departureDate.text, formatter).toKotlinLocalDate(),
-                returnDate= LocalDate.parse(returnDate.text, formatter).toKotlinLocalDate(),
+                departureDate= LocalDate.parse(departureDate.text.toString(), formatter).toString(),
+                returnDate= LocalDate.parse(returnDate.text.toString(), formatter).toString(),
                 adultsNumber= adultsNumber.toInt(),
                 travelClass= bookingClass,
                 hotel= flightOnly,
-                checkInDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter).toKotlinLocalDate(),
-                checkOutDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter).toKotlinLocalDate()
+                checkInDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter).toString(),
+                checkOutDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter).toString()
             )
 
-            bookingViewModel.bookingSearch(newBookingSearch)
+            bookingViewModel.setBookingSearchRequest(newBookingSearch)
+            bookingViewModel.bookingSearch()
 
         } else {
             Snackbar.make(binding.root, "Fields can't be empty." , Snackbar.LENGTH_SHORT).setAnchorView(R.id.bottomNavigationView).show()

@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputEditText
 import com.travelsmartplus.travelsmartplus.data.models.Airport
 import com.travelsmartplus.travelsmartplus.data.models.Booking
+import com.travelsmartplus.travelsmartplus.data.models.FlightBooking
+import com.travelsmartplus.travelsmartplus.data.models.HotelBooking
 import com.travelsmartplus.travelsmartplus.data.models.requests.BookingSearchRequest
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.data.services.BookingService
@@ -37,14 +39,28 @@ class BookingViewModel @Inject constructor(
     // LiveData object to hold the responses and variables
     private val _airports = MutableLiveData<List<Airport>>()
     private val _predictedBooking = MutableLiveData<Booking?>()
+    private val _flightOffers = MutableLiveData<List<FlightBooking>>()
+    private val _hotelOffers = MutableLiveData<List<HotelBooking>>()
     private val _errorMessage = MutableLiveData<String>()
     val airports: LiveData<List<Airport>> = _airports
     val predictedBooking: LiveData<Booking?> = _predictedBooking
+    val flightOffers: LiveData<List<FlightBooking>> = _flightOffers
+    val hotelOffers: LiveData<List<HotelBooking>> = _hotelOffers
     val errorMessage: LiveData<String> = _errorMessage
+
+    private var bookingSearchRequest: BookingSearchRequest? = null
 
     // Initiate airportsAutoComplete
     init {
         airportsAutoComplete()
+    }
+
+    fun setBookingSearchRequest(bookingSearchRequest: BookingSearchRequest) {
+        this.bookingSearchRequest = bookingSearchRequest
+    }
+
+    fun getBookingSearchRequest(): BookingSearchRequest? {
+        return bookingSearchRequest
     }
 
     private fun airportsAutoComplete() {
@@ -68,11 +84,11 @@ class BookingViewModel @Inject constructor(
         }
     }
 
-    fun bookingSearch(bookingSearchRequest: BookingSearchRequest) {
+    fun bookingSearch() {
         viewModelScope.launch {
             try {
-                bookingSearchRequest.userId = sessionManager.currentUser()
-                val response = bookingService.bookingSearch(bookingSearchRequest)
+                bookingSearchRequest?.userId = sessionManager.currentUser()
+                val response = bookingService.bookingSearch(bookingSearchRequest!!)
                 if (response.code() == 200 ) {
                     _predictedBooking.postValue(response.body())
                 } else if (response.code() == 204 ) {

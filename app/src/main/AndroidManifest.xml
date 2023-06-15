@@ -25,7 +25,7 @@
             android:name=".activities.SetupPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SetupWelcomeActivity"
+            android:name=".activities.SetupActivity"
             android:exported="false" />
         <activity
             android:name=".activities.LandingPageActivity"

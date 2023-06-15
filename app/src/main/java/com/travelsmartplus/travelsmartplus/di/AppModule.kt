@@ -67,7 +67,6 @@ object AppModule {
             .build()
     }
 
-
     //------------------ SERVICES ------------------//
 
     @Provides

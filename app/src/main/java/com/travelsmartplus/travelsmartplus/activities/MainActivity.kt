@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.databinding.ActivityMainBinding
@@ -35,26 +36,30 @@ class MainActivity : AppCompatActivity() {
         // Clear the selected item using hidden placeholder
         binding.bottomNavigationView.selectedItemId = R.id.bnbPlaceholder
 
+        // Back to booking search
+        val backToBookingSearch = NavOptions.Builder().setPopUpTo(R.id.bookingSearchFragment, false).build()
+
         binding.mainBtn.setOnClickListener {
-            navController.navigate(R.id.bookingSearchFragment)
+            binding.bottomNavigationView.menu.setGroupCheckable(0, false, true)
+            navController.navigate(R.id.action_global_bookingSearchFragment)
         }
 
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.btnMenuBookings -> {
-                    navController.navigate(R.id.myBookingsFragment)
+                    navController.navigate(R.id.myBookingsFragment, null, backToBookingSearch)
                     true
                 }
                 R.id.btnMenuAllBookings -> {
-                    navController.navigate(R.id.allBookingsFragment)
+                    navController.navigate(R.id.allBookingsFragment, null, backToBookingSearch)
                     true
                 }
                 R.id.btnMenuUsers -> {
-                    navController.navigate(R.id.usersFragment)
+                    navController.navigate(R.id.usersFragment, null, backToBookingSearch)
                     true
                 }
                 R.id.btnMenuProfile -> {
-                    navController.navigate(R.id.profileFragment)
+                    navController.navigate(R.id.profileFragment, null, backToBookingSearch)
                     true
                 }
                 else -> false
@@ -66,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             if (signedIn) {
                 mainViewModel.isSetup.observe(this) { isSetup ->
                     if (!isSetup) {
-                        val intent = Intent(this, SetupWelcomeActivity::class.java)
+                        val intent = Intent(this, SetupActivity::class.java)
                         startActivity(intent)
                         finish() // Avoids returning when pressing back button
                     }

@@ -2,7 +2,6 @@ package com.travelsmartplus.travelsmartplus.data.models.requests
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.travelsmartplus.travelsmartplus.data.models.Airport
-import kotlinx.datetime.LocalDate
 
 
 data class BookingSearchRequest(
@@ -11,11 +10,11 @@ data class BookingSearchRequest(
     @JsonProperty("nonStop") val nonStop: Boolean,
     @JsonProperty("origin") val origin: Airport,
     @JsonProperty("destination") val destination: Airport,
-    @JsonProperty("departureDate") val departureDate: LocalDate,
-    @JsonProperty("returnDate") val returnDate: LocalDate?,
+    @JsonProperty("departureDate") val departureDate: String,
+    @JsonProperty("returnDate") val returnDate: String?,
     @JsonProperty("adultsNumber") val adultsNumber: Int,
     @JsonProperty("travelClass") val travelClass: String,
     @JsonProperty("hotel") val hotel: Boolean,
-    @JsonProperty("checkInDate") val checkInDate: LocalDate?,
-    @JsonProperty("checkOutDate") val checkOutDate: LocalDate?
+    @JsonProperty("checkInDate") val checkInDate: String?,
+    @JsonProperty("checkOutDate") val checkOutDate: String?
 )
