@@ -1,0 +1,85 @@
+package com.travelsmartplus.travelsmartplus.fragments
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import com.travelsmartplus.travelsmartplus.R
+import com.travelsmartplus.travelsmartplus.adapters.FlightResultsAdapter
+import com.travelsmartplus.travelsmartplus.databinding.FragmentFlightsBinding
+import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
+import dagger.hilt.android.AndroidEntryPoint
+
+/**
+ * FlightsFragment
+ * Displays flights results. Can be used for manual booking or to modify a predicted booking.
+ *
+ * @author Gabriel Salas
+ */
+
+@AndroidEntryPoint
+class FlightsFragment : Fragment() {
+
+    private lateinit var binding: FragmentFlightsBinding
+    private val bookingViewModel: BookingViewModel by activityViewModels() // Shared View Model
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentFlightsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Get flights
+        bookingViewModel.getFlightOffers()
+
+        val recyclerView = binding.flightResultsView
+        var adapter = FlightResultsAdapter(emptyList())
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Observers
+        bookingViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                binding.flightResultsView.visibility = View.INVISIBLE
+                binding.flightResultsProgress.visibility = View.VISIBLE
+            } else {
+                binding.flightResultsView.visibility = View.VISIBLE
+                binding.flightResultsProgress.visibility = View.INVISIBLE
+            }
+        }
+
+        bookingViewModel.flightOffers.observe(viewLifecycleOwner) { flightOffers ->
+            if (flightOffers.isNotEmpty()) {
+                adapter = FlightResultsAdapter(flightOffers)
+                recyclerView.adapter = adapter
+            } else {
+                recyclerView.adapter = null
+            }
+        }
+
+        bookingViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            if (error != null) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).setAnchorView(R.id.bottomNavigationView).show()
+                bookingViewModel.clearError()
+            }
+        }
+    }
+
+    // Get flight data again when the fragment is resumed
+    override fun onResume() {
+        super.onResume()
+        bookingViewModel.getFlightOffers()
+    }
+}

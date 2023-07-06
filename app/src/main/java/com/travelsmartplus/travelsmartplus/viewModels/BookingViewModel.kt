@@ -1,6 +1,5 @@
 package com.travelsmartplus.travelsmartplus.viewModels
 
-import android.widget.AutoCompleteTextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -41,18 +40,30 @@ class BookingViewModel @Inject constructor(
     private val _predictedBooking = MutableLiveData<Booking?>()
     private val _flightOffers = MutableLiveData<List<FlightBooking>>()
     private val _hotelOffers = MutableLiveData<List<HotelBooking>>()
-    private val _errorMessage = MutableLiveData<String>()
+    private val _allBookings = MutableLiveData<List<Booking>>()
+    private val _myBookings = MutableLiveData<List<Booking>>()
+    private val _errorMessage = MutableLiveData<String?>()
+    private val _isLoading = MutableLiveData<Boolean>()
+    private val _newSearch = MutableLiveData<Boolean>()
     val airports: LiveData<List<Airport>> = _airports
     val predictedBooking: LiveData<Booking?> = _predictedBooking
     val flightOffers: LiveData<List<FlightBooking>> = _flightOffers
     val hotelOffers: LiveData<List<HotelBooking>> = _hotelOffers
-    val errorMessage: LiveData<String> = _errorMessage
+    val allBookings: LiveData<List<Booking>> = _allBookings
+    val myBookings: LiveData<List<Booking>> = _myBookings
+    val errorMessage: LiveData<String?> = _errorMessage
+    val isLoading: LiveData<Boolean> = _isLoading
+    val newSearch: LiveData<Boolean> = _newSearch
 
     private var bookingSearchRequest: BookingSearchRequest? = null
 
     // Initiate airportsAutoComplete
     init {
         airportsAutoComplete()
+    }
+
+    fun clearError() {
+        _errorMessage.value = null
     }
 
     fun setBookingSearchRequest(bookingSearchRequest: BookingSearchRequest) {
@@ -63,7 +74,12 @@ class BookingViewModel @Inject constructor(
         return bookingSearchRequest
     }
 
-    private fun airportsAutoComplete() {
+    fun setNewSearch(boolean: Boolean) {
+        _newSearch.value = boolean
+    }
+
+    // Get all airport for autocomplete search
+    fun airportsAutoComplete() {
         viewModelScope.launch {
             try {
                 val response = bookingService.getAllAirports()
@@ -85,14 +101,15 @@ class BookingViewModel @Inject constructor(
     }
 
     fun bookingSearch() {
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 bookingSearchRequest?.userId = sessionManager.currentUser()
                 val response = bookingService.bookingSearch(bookingSearchRequest!!)
-                if (response.code() == 200 ) {
+                if (response.isSuccessful) {
                     _predictedBooking.postValue(response.body())
-                } else if (response.code() == 204 ) {
-                    _predictedBooking.postValue(null)
+                } else if (response.code() == 204) {
+                    _errorMessage.postValue(UNKNOWN_ERROR)
                 } else {
                     val errorBody = response.errorBody()?.string()
                     _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
@@ -103,15 +120,126 @@ class BookingViewModel @Inject constructor(
             } catch (e: Exception) {
                 e.printStackTrace()
                 _errorMessage.postValue(UNKNOWN_ERROR)
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
+    // Get flight offers for manual selection
+    fun getFlightOffers() {
+        _isLoading.value = true
+        viewModelScope.launch {
+            try {
+                bookingSearchRequest?.userId = sessionManager.currentUser()
+                val response = bookingService.getFlightOffers(bookingSearchRequest!!)
+                if (response.isSuccessful)  {
+                    val offers = response.body() ?: emptyList()
+                    _flightOffers.postValue(offers)
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
+                }
+            } catch (e: NetworkException) {
+                e.printStackTrace()
+                _errorMessage.postValue(e.message)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.postValue(UNKNOWN_ERROR)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    // Get hotel offers for manual selection
+    fun getHotelOffers() {
+        _isLoading.value = true
+        viewModelScope.launch {
+            try {
+                bookingSearchRequest?.userId = sessionManager.currentUser()
+                val response = bookingService.getHotelOffers(bookingSearchRequest!!)
+                if (response.isSuccessful) {
+                    val offers = response.body() ?: emptyList()
+                    _hotelOffers.postValue(offers)
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
+                }
+            } catch (e: NetworkException) {
+                e.printStackTrace()
+                _errorMessage.postValue(e.message)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.postValue(UNKNOWN_ERROR)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    // Get current user bookings
+    fun getUserBookings() {
+        _isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val userId = sessionManager.currentUser()
+                val response = bookingService.getAllBookings(userId.toString())
+                if (response.isSuccessful) {
+                    val myBookings = response.body() ?: emptyList()
+                    _myBookings.postValue(myBookings)
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
+                }
+            } catch (e: NetworkException) {
+                e.printStackTrace()
+                _errorMessage.postValue(e.message)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.postValue(UNKNOWN_ERROR)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    // Add new bookings
+
+    // Get booking using booking ID
+
+    // Delete booking
+
+    // Get all company bookings
+    fun getAllBookings() {
+        _isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val orgId = sessionManager.getOrgId()
+                val response = bookingService.getAllBookings(orgId.toString())
+                if (response.isSuccessful) {
+                    val allBookings = response.body() ?: emptyList()
+                    _allBookings.postValue(allBookings)
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
+                }
+            } catch (e: NetworkException) {
+                e.printStackTrace()
+                _errorMessage.postValue(e.message)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.postValue(UNKNOWN_ERROR)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+
     fun bookingSearchValidation(
-        flightOnly: Boolean,
+        flightHotel: Boolean,
         oneWay: Boolean,
-        originCity: AutoCompleteTextView,
-        destinationCity: AutoCompleteTextView,
         departureDate: TextInputEditText,
         returnDate: TextInputEditText,
         checkInDate: TextInputEditText?,
@@ -121,10 +249,8 @@ class BookingViewModel @Inject constructor(
         val errorMessages = mutableListOf<String>()
 
         return try {
-            originCity.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { errorMessages.add(it) }.check()
-            destinationCity.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { errorMessages.add(it) }.check()
 
-            if (flightOnly) {
+            if (!flightHotel) {
                 departureDate.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { errorMessages.add(it) }.check()
                 if (!oneWay) {
                     returnDate.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { errorMessages.add(it) }.check()
@@ -138,7 +264,6 @@ class BookingViewModel @Inject constructor(
                 checkOutDate?.validator()?.nonEmpty()?.addRule(NotBlankRule())?.addErrorCallback { errorMessages.add(it) }?.check()
             }
 
-            // Display single toast if any validation errors
             if (errorMessages.isNotEmpty()) {
                 return false
             }

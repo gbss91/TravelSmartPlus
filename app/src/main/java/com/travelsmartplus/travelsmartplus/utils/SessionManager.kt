@@ -7,6 +7,8 @@ interface SessionManager {
     fun saveRefreshToken(refreshToken: String)
     fun currentUser(): Int?
     fun saveCurrentUser(userId: Int)
+    fun getOrgId(): Int?
+    fun saveOrgId(orgId: Int)
     fun isSetup(): Boolean
     fun saveSetup(isSetup: Boolean)
     fun clearSession()

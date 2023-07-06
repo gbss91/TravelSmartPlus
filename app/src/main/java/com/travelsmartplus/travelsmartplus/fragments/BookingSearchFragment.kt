@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
+import com.travelsmartplus.travelsmartplus.data.models.Airport
 import com.travelsmartplus.travelsmartplus.data.models.requests.BookingSearchRequest
 import com.travelsmartplus.travelsmartplus.databinding.FragmentBookingSearchBinding
 import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
@@ -38,11 +39,11 @@ class BookingSearchFragment : Fragment() {
     private val fromAutocomplete = CustomDropdown()
     private val toAutocomplete = CustomDropdown()
 
-    // Store booking type Flight Only or Flight + Hotel - Flight Only is default (true)
-    private var flightOnly = true
-
-    // Store oneWay option - False is default selection
+    // Store booking options and selected airports
+    private var flightHotel = false
     private var oneWay = false
+    private var originCity: Airport? = null
+    private var destinationCity: Airport? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -86,12 +87,12 @@ class BookingSearchFragment : Fragment() {
             if (isChecked) {
                 when (checkedId) {
                     R.id.flightOnlySearchBtn -> {
-                        flightOnly = true
+                        flightHotel = false
                         binding.checkInDateContainer.visibility = View.GONE
                         binding.checkOutDateContainer.visibility = View.GONE
                     }
                     R.id.flightHotelSearchBtn -> {
-                        flightOnly = false
+                        flightHotel = true
                         binding.checkInDateContainer.visibility = View.VISIBLE
                         binding.checkOutDateContainer.visibility = View.VISIBLE
                     }
@@ -144,24 +145,25 @@ class BookingSearchFragment : Fragment() {
             toAutocomplete.setAirportAutocomplete(requireContext(), binding.toSearchInput, airports)
         }
 
-        bookingViewModel.predictedBooking.observe(viewLifecycleOwner) {booking ->
-            if (booking == null) {
-                findNavController().navigate(R.id.action_bookingSearchFragment_to_noPredictedBookingFragment)
-            } else {
-                findNavController().navigate(R.id.action_bookingSearchFragment_to_predictedBookingFragment)
-            }
-        }
-
         bookingViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
-            Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).setAnchorView(R.id.bottomNavigationView).show()
+            if (error != null) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).setAnchorView(R.id.bottomNavigationView).show()
+                bookingViewModel.clearError()
+            }
         }
 
     }
 
+    // Get airport data on resume
+    override fun onResume() {
+        super.onResume()
+        bookingViewModel.airportsAutoComplete()
+    }
+
     private fun bookingSearch() {
 
-        val originCity = binding.fromSearchInput
-        val destinationCity = binding.toSearchInput
+        originCity = fromAutocomplete.getSelectedAirport()
+        destinationCity = toAutocomplete.getSelectedAirport()
         val departureDate = binding.departureDateSearchInput
         val returnDate = binding.returnDateSearchInput
         val adultsNumber = adultsDropdown.getValueForSelectedItem(resources.getStringArray(R.array.adults_dropdown_values))
@@ -171,45 +173,40 @@ class BookingSearchFragment : Fragment() {
 
         // Input validation
         val inputValidation = bookingViewModel.bookingSearchValidation(
-            flightOnly= flightOnly,
+            flightHotel= flightHotel,
             oneWay = oneWay,
-            originCity= originCity,
-            destinationCity= destinationCity,
             departureDate= departureDate,
             returnDate= returnDate,
             checkInDate= checkInDate,
             checkOutDate= checkOutDate
         )
 
-        if (inputValidation) {
+        val airportSelectionValidation = (originCity != null) && (destinationCity != null)
+
+        if (inputValidation && airportSelectionValidation) {
 
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
             val newBookingSearch = BookingSearchRequest(
                 oneWay= oneWay,
                 nonStop= false,
-                origin= fromAutocomplete.getSelectedAirport(),
-                destination=  toAutocomplete.getSelectedAirport(),
+                origin= originCity!!,
+                destination=  destinationCity!!,
                 departureDate= LocalDate.parse(departureDate.text.toString(), formatter).toString(),
                 returnDate= LocalDate.parse(returnDate.text.toString(), formatter).toString(),
                 adultsNumber= adultsNumber.toInt(),
                 travelClass= bookingClass,
-                hotel= flightOnly,
+                hotel= flightHotel,
                 checkInDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter).toString(),
-                checkOutDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter).toString()
+                checkOutDate = if (checkOutDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter).toString()
             )
 
             bookingViewModel.setBookingSearchRequest(newBookingSearch)
-            bookingViewModel.bookingSearch()
+            bookingViewModel.setNewSearch(true)
+            findNavController().navigate(R.id.action_bookingSearchFragment_to_predictedBookingFragment)
 
         } else {
             Snackbar.make(binding.root, "Fields can't be empty." , Snackbar.LENGTH_SHORT).setAnchorView(R.id.bottomNavigationView).show()
         }
     }
-
-
-
-
-
-
 }

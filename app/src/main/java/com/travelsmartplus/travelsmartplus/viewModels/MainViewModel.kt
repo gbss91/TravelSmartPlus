@@ -32,4 +32,9 @@ class MainViewModel @Inject constructor(
         _isSetup.value = sessionManager.isSetup()
     }
 
+    // Clear session data - Used when deleting account
+    fun clearSession() {
+        sessionManager.clearSession()
+    }
+
 }

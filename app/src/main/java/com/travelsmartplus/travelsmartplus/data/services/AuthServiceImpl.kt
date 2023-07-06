@@ -42,8 +42,7 @@ class AuthServiceImpl @Inject constructor(
                 Log.e("AuthService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(NETWORK_ERROR)
-                    is IllegalStateException -> throw NetworkException(UNEXPECTED_ERROR)
-                    else -> throw e
+                    else -> throw NetworkException(UNEXPECTED_ERROR)
                 }
             }
         }
@@ -67,6 +66,7 @@ class AuthServiceImpl @Inject constructor(
                         sessionManager.saveRefreshToken(responseBody.refreshToken)
                         sessionManager.saveCurrentUser(userId)
                         sessionManager.saveSetup(responseBody.accountSetup)
+                        sessionManager.saveOrgId(responseBody.orgId!!)
                     }
                 } else {
                     Log.e("AuthService", "Error response: ${response.code()} ${response.message()}")
@@ -98,8 +98,7 @@ class AuthServiceImpl @Inject constructor(
                 Log.e("AuthService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(NETWORK_ERROR)
-                    is IllegalStateException -> throw NetworkException(UNEXPECTED_ERROR)
-                    else -> throw e
+                    else -> throw NetworkException(UNEXPECTED_ERROR)
                 }
             }
         }

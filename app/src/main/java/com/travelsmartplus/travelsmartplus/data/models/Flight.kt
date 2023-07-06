@@ -9,5 +9,6 @@ data class Flight(
     @JsonProperty("departureTime") val departureTime: LocalDateTime,
     @JsonProperty("arrivalAirport") val arrivalAirport: Airport,
     @JsonProperty("arrivalTime") val arrivalTime: LocalDateTime,
-    @JsonProperty("carrierIataCode") val carrierIataCode: String
+    @JsonProperty("carrierIataCode") val carrierIataCode: String,
+    @JsonProperty("carrierName") val carrierName: String
 )

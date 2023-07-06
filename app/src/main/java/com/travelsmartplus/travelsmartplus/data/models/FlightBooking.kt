@@ -3,7 +3,6 @@ package com.travelsmartplus.travelsmartplus.data.models
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal
 
-
 data class FlightBooking(
     @JsonProperty("id") val id: Int? = 0,
     @JsonProperty("bookingReference") val bookingReference: String,

@@ -39,34 +39,14 @@
     <string name="preferences_setup_title">Preferences</string>
     <string name="preferences_setup_text">This will help us improve our recommendations. You can always update this later.</string>
     <string name="airlines_setup">Airlines</string>
-    <string name="airlines_setup_text">Choose at least 1</string>
+    <string name="airlines_setup_text">Choose your preferred airlines</string>
     <string name="hotels_setup">Hotel Chains</string>
-    <string name="hotels_setup_text">Choose at least 1</string>
+    <string name="hotels_setup_text">Choose your preferred airlines</string>
     <string name="finish_setup_title">You\'re Ready!</string>
     <string name="finish_setup_text">We will suggest itineraries based on your preferences and previous bookings.</string>
     <string name="btn_setup_start">Start</string>
     <string name="btn_setup_next">Next</string>
     <string name="btn_setup_finish">Finish</string>
-
-    <!--Airline List-->
-    <string name="ei">Aer Lingus</string>
-    <string name="aa">American Airlines</string>
-    <string name="af">Air France</string>
-    <string name="dl">Delta Airlines</string>
-    <string name="ek">Emirates</string>
-    <string name="ey">Etihad Airways</string>
-    <string name="lh">Lufthansa</string>
-    <string name="fr">Ryanair</string>
-
-    <!--Hotel List-->
-    <string name="rt">Accor</string>
-    <string name="bw">Best Western Hotels</string>
-    <string name="fs">Four Seasons Hotels</string>
-    <string name="hh">Hilton Hotels</string>
-    <string name="ic">InterContinental Hotels Group (IHG)</string>
-    <string name="mc">Marriott International</string>
-    <string name="pd">Premier Inn</string>
-    <string name="rd">Radisson Hotel Group</string>
 
     <!--Booking Search Fragment-->
     <string name="search_fragment">Search fragment</string>
@@ -83,21 +63,66 @@
     <string name="btn_flight_hotel_search">Flight + Hotel</string>
     <string name="upcoming_booking_search">Upcoming Trip</string>
 
-
-    <!--No Predicted Booking Fragment-->
-    <string name="no_predicted_title">Missing Data</string>
-    <string name="no_predicted_text">We don\'t have enough data yet. Book your trip manually and our algorithms will do the magic!</string>
-    <string name="btn_no_predicted">Continue</string>
-
     <!--Predicted Booking Fragment-->
-    <!--Outbound Flights Fragment-->
-    <!--Inbound Flights Fragment-->
-    <!--Hotels Fragment-->
-    <!--Booking Confirmation Fragment-->
+    <string name="predicted_flight_title">Flights</string>
+    <string name="predicted_hotel_title">Hotel</string>
+    <string name="btn_flight_edit">Edit Flight</string>
+    <string name="btn_hotel_edit">Edit Hotel</string>
+    <string name="predicted_flight_total">Flight Total</string>
+    <string name="predicted_hotel_total">Hotel Total</string>
+    <string name="predicted_hotel_price">(%1$s x €%2$s) €%3$s</string>
+    <string name="btn_predicted_price">Price Breakdown</string>
+    <string name="predicted_disclaimer">*Trip suggestion based on your preferences and history</string>
+    <string name="btn_predicted_book">Book</string>
 
+    <!--Flight & Hotel Fragments-->
+    <string name="flight_fragment_title">Flights</string>
+    <string name="hotel_fragment_title">Hotels</string>
+
+    <!--Booking Confirmation Fragment-->
+    <string name="confirmation_fragment_title">Hotels</string>
+
+    <!--My Bookings Fragment-->
+    <string name="my_bookings_fragment_title">My Bookings</string>
+
+    <!--All Bookings Fragment-->
+    <string name="all_bookings_fragment">Bookings</string>
+    <string name="id_table_header">ID</string>
+    <string name="destination_table_header">Destination</string>
+    <string name="date_table_header">Date</string>
+    <string name="price_table_header">Total</string>
+
+    <!--Users Fragment-->
+    <string name="users_fragment_title">All Users</string>
+    <string name="users_fragment_name">Employee Name</string>
+    <string name="btn_add_user">Add User</string>
+    <string name="users_row_name">%1$s %2$s</string>
+
+    <!--Profile Fragment-->
+    <string name="profile_fragment_title">%1$s %2$s</string>
+    <string name="profile_fragment_details">Basic Details</string>
+    <string name="profile_fragment_name">%1$s %2$s</string>
+    <string name="profile_fragment_masked_data">************</string>
+    <string name="profile_fragment_travel">Travel Details</string>
+    <string name="profile_fragment_travel_info">Personal information required to process a booking.</string>
+    <string name="profile_fragment_preferences">Preferences</string>
+    <string name="profile_fragment_preferences_airlines">%1$s\n%2$s</string>
+    <string name="profile_fragment_preferences_hotels">%1$s\n%2$s</string>
+    <string name="btn_profile_details_edit">Edit Basic Details</string>
+    <string name="btn_profile_travel_edit">Edit Travel Details</string>
+    <string name="btn_profile_preferences_edit">Edit Preferences</string>
+    <string name="btn_profile_delete">Delete Account</string>
+    <string name="btn_profile_sign_out">Sign Out</string>
+
+
+    <!--Formatted Data -->
+    <string name="formatted_duration">%1$dh %2$dm</string>
+    <string name="currency_price">€%1$s</string>
 
     <!-- Dropdown Menus and Autocomplete-->
     <string name="city_and_country">%1$s, %2$s</string>
+    <string name="top_1">Top 1</string>
+    <string name="top_2">Top 2</string>
 
     <string-array name="oneway_dropdown">
         <item>RETURN</item>
@@ -129,20 +154,7 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-
-    <!--My Bookings Fragment-->
-    <string name="my_bookings_fragment">My Bookings fragment</string>
-
-    <!--All Bookings Fragment-->
-    <string name="all_bookings_fragment">All Bookings fragment</string>
-
-    <!--Users Fragment-->
-    <string name="users_fragment">Users fragment</string>
-
-    <!--Profile Fragment-->
-    <string name="profile_fragment">Profile fragment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
 </resources>

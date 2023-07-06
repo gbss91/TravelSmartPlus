@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.databinding.FragmentSetupPasswordBinding
 import com.travelsmartplus.travelsmartplus.viewModels.SetupViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SetupPasswordFragment : Fragment() {
 
     private lateinit var binding: FragmentSetupPasswordBinding
-    private val setupViewModel: SetupViewModel by viewModels()
+    private val setupViewModel: SetupViewModel by activityViewModels() // Shared View Model
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +44,10 @@ class SetupPasswordFragment : Fragment() {
 
         // Observer - observes errors from View Model
         setupViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
-            Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+            if(error != null) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+                setupViewModel.clearError()
+            }
         }
     }
 
@@ -57,8 +61,8 @@ class SetupPasswordFragment : Fragment() {
 
         // If valid go to next fragment and pass newPass arg
         if (inputValidation) {
-            val action = SetupPasswordFragmentDirections.actionSetupPasswordFragmentToSetupPreferencesFragment(password.text.toString())
-            findNavController().navigate(action)
+            setupViewModel.setPassword(password.toString())
+            findNavController().navigate(R.id.action_setupPasswordFragment_to_setupPreferencesFragment)
         }
     }
 

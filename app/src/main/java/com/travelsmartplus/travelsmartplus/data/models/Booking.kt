@@ -15,5 +15,6 @@ data class Booking(
     @JsonProperty("hotelBooking") var hotelBooking: HotelBooking?,
     @JsonProperty("adultsNumber") val adultsNumber: Int,
     @JsonProperty("status") val status: String,
-    @JsonProperty("totalPrice") var totalPrice: BigDecimal
+    @JsonProperty("totalPrice") var totalPrice: BigDecimal,
+    @JsonProperty("imageUrl") var imageUrl: String? = null
 )

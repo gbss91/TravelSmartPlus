@@ -5,56 +5,82 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.travelsmartplus.travelsmartplus.adapters.BookingsAdapter
+import com.travelsmartplus.travelsmartplus.databinding.FragmentMyBookingsBinding
+import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * A simple [Fragment] subclass.
- * Use the [MyBookingsFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * MyBookingsFragment.
+ * Displays current user's bookings.
+ *
+ * @author Gabriel Salas
  */
-class MyBookingsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+@AndroidEntryPoint
+class MyBookingsFragment : Fragment() {
+
+    private lateinit var binding: FragmentMyBookingsBinding
+    private val bookingViewModel: BookingViewModel by activityViewModels() // Shared View Model
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_bookings, container, false)
+        binding = FragmentMyBookingsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyBookingsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyBookingsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Get bookings for current user
+        bookingViewModel.getUserBookings()
+
+        val recyclerView = binding.myBookingsListView
+        var adapter = BookingsAdapter(emptyList())
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Observers
+        bookingViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                binding.myBookingsListView.visibility = View.INVISIBLE
+                binding.myBookingsProgress.visibility = View.VISIBLE
+            } else {
+                binding.myBookingsListView.visibility = View.VISIBLE
+                binding.myBookingsProgress.visibility = View.INVISIBLE
             }
+        }
+
+        bookingViewModel.myBookings.observe(viewLifecycleOwner) { myBookings ->
+            if (myBookings.isNotEmpty()) {
+                adapter = BookingsAdapter(myBookings)
+                recyclerView.adapter = adapter
+            } else {
+                recyclerView.adapter = null
+            }
+        }
+
+        bookingViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            if (error != null) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).setAnchorView(R.id.bottomNavigationView).show()
+                bookingViewModel.clearError()
+            }
+        }
+
     }
+
+    // Get user bookings data again when the fragment is resumed
+    override fun onResume() {
+        super.onResume()
+        bookingViewModel.getUserBookings()
+    }
+
+
 }

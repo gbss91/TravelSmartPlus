@@ -35,10 +35,14 @@ class AuthViewModel @Inject constructor(
     // LiveData objects to hold the responses and variables - Public val are readOnly
     private val _signUpResponse = MutableLiveData<Response<Unit>>()
     private val _signInResponse = MutableLiveData<Response<AuthResponse>>()
-    private val _errorMessage = MutableLiveData<String>()
+    private val _errorMessage = MutableLiveData<String?>()
     val signUpResponse: LiveData<Response<Unit>> = _signUpResponse
     val signInResponse: LiveData<Response<AuthResponse>> = _signInResponse
-    val errorMessage: LiveData<String> = _errorMessage
+    val errorMessage: LiveData<String?> = _errorMessage
+
+    fun clearError() {
+        _errorMessage.value = null
+    }
 
     // Sign in using coroutine
     fun signIn(signInRequest: SignInRequest) {

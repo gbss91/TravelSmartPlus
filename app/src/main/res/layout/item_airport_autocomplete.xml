@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -20,7 +21,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
             android:textColor="@color/black"
-            android:textSize="@dimen/small_text" />
+            android:textSize="@dimen/small_text"
+            tools:text="Dublin"/>
 
         <TextView
             android:id="@+id/airportItemName"
@@ -28,7 +30,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
             android:textColor="@color/dark_grey"
-            android:textSize="@dimen/xsmall_text" />
+            android:textSize="@dimen/xsmall_text"
+            tools:text="Dublin Airport"/>
 
     </LinearLayout>
 
@@ -41,6 +44,7 @@
         android:textSize="@dimen/medium_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="DUB"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,8 +37,7 @@ class UserServiceImpl @Inject constructor(
                 Log.e("UserService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
-                    is IllegalStateException -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
-                    else -> throw e
+                    else -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
                 }
             }
         }
@@ -56,8 +55,7 @@ class UserServiceImpl @Inject constructor(
                 Log.e("UserService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
-                    is IllegalStateException -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
-                    else -> throw e
+                    else -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
                 }
             }
         }
@@ -75,21 +73,16 @@ class UserServiceImpl @Inject constructor(
                 Log.e("UserService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
-                    is IllegalStateException -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
-                    else -> throw e
+                    else -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
                 }
             }
         }
     }
 
-    override suspend fun setupAccount(
-        id: String,
-        setupAccountRequest: SetupAccountRequest
-    ): Response<Unit> {
+    override suspend fun setupAccount(id: String, setupAccountRequest: SetupAccountRequest): Response<Unit> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = userService.setupAccount(id, setupAccountRequest)
-
                 if (response.isSuccessful) {
                     sessionManager.saveSetup(true)
                 } else {
@@ -101,12 +94,46 @@ class UserServiceImpl @Inject constructor(
                 Log.e("UserService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
-                    is IllegalStateException -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
-                    else -> throw e
+                    else -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
                 }
             }
         }
     }
 
+    override suspend fun getAllUsers(orgId: String): Response<List<User>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = userService.getAllUsers(orgId)
+                if (!response.isSuccessful) {
+                    Log.e("UserService", "Error response: ${response.code()} ${response.message()}")
+                }
+                response
+            } catch (e: Exception) {
+                Log.e("UserService", "Exception: ${e.printStackTrace()}")
+                when (e) {
+                    is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
+                    else -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
+                }
+            }
+        }
+    }
+
+    override suspend fun addUser(newUser: User): Response<User> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = userService.addUser(newUser)
+                if (!response.isSuccessful) {
+                    Log.e("UserService", "Error response: ${response.code()} ${response.message()}")
+                }
+                response
+            } catch (e: Exception) {
+                Log.e("UserService", "Exception: ${e.printStackTrace()}")
+                when (e) {
+                    is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
+                    else -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
+                }
+            }
+        }
+    }
 
 }

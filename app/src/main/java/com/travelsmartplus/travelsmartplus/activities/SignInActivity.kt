@@ -60,7 +60,10 @@ class SignInActivity : AppCompatActivity() {
         }
 
         authViewModel.errorMessage.observe(this) { error ->
-            Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+            if (error != null) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+                authViewModel.clearError()
+            }
         }
     }
 

@@ -20,6 +20,7 @@ class SessionManagerImpl @Inject constructor(private val sharedPreferences: Shar
         private const val ACCESS_TOKEN = "token"
         private const val REFRESH_TOKEN = "refreshToken"
         private const val USER_ID_COOKIE = "userId"
+        private const val ORG_ID = "orgId"
         private const val SETUP = "isSetup"
     }
 
@@ -47,6 +48,14 @@ class SessionManagerImpl @Inject constructor(private val sharedPreferences: Shar
         sharedPreferences.edit().putInt(USER_ID_COOKIE, userId).apply()
     }
 
+    override fun getOrgId(): Int? {
+        return sharedPreferences.getInt(ORG_ID, -1)
+    }
+
+    override fun saveOrgId(orgId: Int) {
+        sharedPreferences.edit().putInt(ORG_ID, orgId).apply()
+    }
+
     override fun isSetup(): Boolean {
         return sharedPreferences.getBoolean(SETUP, false)
     }
@@ -58,6 +67,5 @@ class SessionManagerImpl @Inject constructor(private val sharedPreferences: Shar
     override fun clearSession() {
         sharedPreferences.edit().clear().apply()
     }
-
 
 }

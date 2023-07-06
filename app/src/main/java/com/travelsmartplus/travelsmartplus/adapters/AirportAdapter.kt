@@ -1,4 +1,4 @@
-package com.travelsmartplus.travelsmartplus.widgets
+package com.travelsmartplus.travelsmartplus.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -13,7 +13,7 @@ import com.travelsmartplus.travelsmartplus.data.models.Airport
 
 /**
  * AirportAdapter
- * Customer adapter for displaying airports in an AutoCompleteTextView and filter them. Extends [ArrayAdapter]
+ * Custom adapter for displaying airports in an AutoCompleteTextView and filter them. Extends [ArrayAdapter]
  *
  * @param context The context.
  * @param airports The list of airports to display.
@@ -21,7 +21,7 @@ import com.travelsmartplus.travelsmartplus.data.models.Airport
  */
 
 class AirportAdapter(context: Context, airports: List<Airport>) :
-    ArrayAdapter<Airport>(context, R.layout.airport_autocomplete_item, airports), Filterable {
+    ArrayAdapter<Airport>(context, R.layout.item_airport_autocomplete, airports), Filterable {
 
     private val originalAirports: List<Airport> = airports.toList()
     private var filteredAirports: List<Airport> = originalAirports
@@ -39,7 +39,7 @@ class AirportAdapter(context: Context, airports: List<Airport>) :
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.airport_autocomplete_item, parent, false)
+        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_airport_autocomplete, parent, false)
         val airport = getItem(position)
 
         // Set the airport information in the TextViews
@@ -60,6 +60,7 @@ class AirportAdapter(context: Context, airports: List<Airport>) :
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val filterResults = FilterResults()
 
+                // Filter patterns
                 val filterPattern = constraint?.toString()?.lowercase()?.trim() ?: ""
                 filteredAirports = originalAirports.filter { airport ->
                             airport.iataCode.lowercase().contains(filterPattern) ||

@@ -41,6 +41,7 @@
             android:fontFamily="@font/roboto_bold"
             android:padding="@dimen/default_button_padding"
             android:text="@string/btn_setup_finish"
+            android:textColor="@color/white"
             app:cornerRadius="25dp"
             tools:ignore="DuplicateSpeakableTextCheck" />
 

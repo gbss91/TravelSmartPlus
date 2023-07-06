@@ -11,6 +11,7 @@ data class HotelBooking(
     @JsonProperty("address") val address: String,
     @JsonProperty("checkInDate") val checkInDate: LocalDate,
     @JsonProperty("checkOutDate") val checkOutDate: LocalDate,
+    @JsonProperty("roomType") val roomType: String? = null,
     @JsonProperty("rate") val rate: BigDecimal,
     @JsonProperty("totalPrice") val totalPrice: BigDecimal,
     @JsonProperty("latitude") val latitude: Double,

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TableRow
+        android:paddingHorizontal="@dimen/default_padding"
+        android:paddingVertical="@dimen/small_padding">
+        <TextView
+            android:id="@+id/userRowName"
+            android:layout_weight="1"
+            android:text="@string/id_table_header"
+            android:textSize="@dimen/small_text"
+            android:textColor="@color/black"
+            android:fontFamily="@font/roboto"
+            android:layout_column="0"
+            tools:text="John Smith"/>
+    </TableRow>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/row_line"
+        android:background="@color/light_grey"/>
+
+</TableLayout>

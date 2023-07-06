@@ -4,9 +4,9 @@ import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.UpdatePasswordRequest
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
-import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.SIGN_IN
-import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.SIGN_UP
-import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.UPDATE_PASSWORD
+import com.travelsmartplus.travelsmartplus.data.network.Endpoints.SIGN_IN
+import com.travelsmartplus.travelsmartplus.data.network.Endpoints.SIGN_UP
+import com.travelsmartplus.travelsmartplus.data.network.Endpoints.UPDATE_PASSWORD
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

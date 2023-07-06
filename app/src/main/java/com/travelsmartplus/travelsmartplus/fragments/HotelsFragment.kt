@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
+import com.travelsmartplus.travelsmartplus.adapters.HotelResultsAdapter
 import com.travelsmartplus.travelsmartplus.databinding.FragmentHotelsBinding
-import com.travelsmartplus.travelsmartplus.databinding.FragmentInboundFlightsBinding
 import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * HotelsFragment
@@ -18,14 +21,11 @@ import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
  * @author Gabriel Salas
  */
 
+@AndroidEntryPoint
 class HotelsFragment : Fragment() {
 
     private lateinit var binding: FragmentHotelsBinding
     private val bookingViewModel: BookingViewModel by activityViewModels() // Shared View Model
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,5 +39,47 @@ class HotelsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Get hotels
+        bookingViewModel.getHotelOffers()
+
+        val recyclerView = binding.hotelResultsView
+        var adapter = HotelResultsAdapter(emptyList())
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+
+        // Observers
+        bookingViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                binding.hotelResultsView.visibility = View.INVISIBLE
+                binding.hotelResultsProgress.visibility = View.VISIBLE
+            } else {
+                binding.hotelResultsView.visibility = View.VISIBLE
+                binding.hotelResultsProgress.visibility = View.INVISIBLE
+            }
+        }
+
+        bookingViewModel.hotelOffers.observe(viewLifecycleOwner) { hotelOffers ->
+            if (hotelOffers.isNotEmpty()) {
+                adapter = HotelResultsAdapter(hotelOffers)
+                recyclerView.adapter = adapter
+            } else {
+                recyclerView.adapter = null
+            }
+        }
+
+        bookingViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            if (error != null) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).setAnchorView(R.id.bottomNavigationView).show()
+                bookingViewModel.clearError()
+            }
+        }
+    }
+
+    // Get flight data again when the fragment is resumed
+    override fun onResume() {
+        super.onResume()
+        bookingViewModel.getHotelOffers()
     }
 }

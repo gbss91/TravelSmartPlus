@@ -7,6 +7,7 @@
     android:background="@color/white"
     tools:context=".fragments.BookingSearchFragment">
 
+    <!-- Booking Search Card -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/bookingSearchContainer"
         android:layout_width="0dp"
@@ -16,7 +17,7 @@
         android:layout_marginEnd="@dimen/default_margin"
         android:backgroundTint="@color/secondary"
         app:cardCornerRadius="20dp"
-        app:cardElevation="3dp"
+        app:cardElevation="@dimen/booking_card_elevation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,6 +71,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/text_dropdown_height"
+                android:labelFor="@id/onewayDropdownInput"
                 app:hintEnabled="false"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
@@ -117,7 +119,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/roboto"
-                    android:padding="@dimen/small_padding"
+                    android:paddingStart="@dimen/small_padding"
                     android:inputType="text"
                     android:textColor="@color/black"
                     android:textSize="@dimen/input_text"/>
@@ -148,7 +150,7 @@
                     android:id="@+id/toSearchInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/small_padding"
+                    android:paddingStart="@dimen/small_padding"
                     android:fontFamily="@font/roboto"
                     android:inputType="text"
                     android:textColor="@color/black"
@@ -366,6 +368,7 @@
         android:padding="@dimen/default_button_padding"
         android:stateListAnimator="@null"
         android:text="@string/btn_search"
+        android:textColor="@color/white"
         android:translationZ="5dp"
         app:cornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="@+id/bookingSearchContainer"
@@ -373,6 +376,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bookingSearchContainer" />
 
+    <!-- Upcoming Booking -->
     <TextView
         android:id="@+id/upcomingTripSearch"
         android:layout_width="match_parent"
@@ -389,17 +393,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchBtn" />
 
-    <com.google.android.material.card.MaterialCardView
+    <!-- Upcoming Booking Card -->
+    <include
         android:id="@+id/upcomingTripCard"
+        layout="@layout/item_booking"
         android:layout_width="0dp"
         android:layout_height="@dimen/booking_card"
-        android:layout_margin="@dimen/default_margin"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="3dp"
+        android:layout_marginVertical="@dimen/small_margin"
+        android:layout_marginHorizontal="@dimen/default_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upcomingTripSearch">
-
-    </com.google.android.material.card.MaterialCardView>
+        app:layout_constraintTop_toBottomOf="@id/upcomingTripSearch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

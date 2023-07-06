@@ -34,7 +34,9 @@ android {
     }
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
+
     namespace 'com.travelsmartplus.travelsmartplus'
 }
 
@@ -72,12 +74,21 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
 
     // Jackson Serialization
+    implementation "com.fasterxml.jackson.core:jackson-core:2.15.2"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:2.15.2"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.15.2"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2"
 
-    //Dagger - Hilt
+    // Dagger - Hilt
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.45"
 
+    // Images
+    implementation 'com.squareup.picasso:picasso:2.8'
+
+    // Dependencies Vulnerability Checks - Reference: https://owasp.org/www-project-dependency-check/
+    implementation("org.owasp:dependency-check-gradle:8.3.1")
 
 }
+

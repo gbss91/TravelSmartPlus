@@ -4,10 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.travelsmartplus.travelsmartplus.data.network.AuthInterceptor
-import com.travelsmartplus.travelsmartplus.data.network.HttpRoutes.BASE_URL
+import com.travelsmartplus.travelsmartplus.data.network.Endpoints.BASE_URL
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
 import com.travelsmartplus.travelsmartplus.data.services.AuthServiceImpl
 import com.travelsmartplus.travelsmartplus.data.services.BookingService
@@ -16,8 +15,6 @@ import com.travelsmartplus.travelsmartplus.data.services.UserService
 import com.travelsmartplus.travelsmartplus.data.services.UserServiceImpl
 import com.travelsmartplus.travelsmartplus.utils.SessionManager
 import com.travelsmartplus.travelsmartplus.utils.SessionManagerImpl
-import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
-import com.travelsmartplus.travelsmartplus.viewModels.SetupViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,6 +23,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -50,15 +48,19 @@ object AppModule {
     fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(1, TimeUnit.MINUTES)
+            .writeTimeout(1, TimeUnit.MINUTES)
             .build()
     }
 
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        val objectMapper: ObjectMapper = jacksonObjectMapper()
-            .registerKotlinModule() // Kotlin data classes
-            .registerModule(JavaTimeModule()) // Enable support for Java 8 date/time types
+        val objectMapper = ObjectMapper()
+            .registerKotlinModule() // Enable support for Kotlin data classes
+            .registerModule(JavaTimeModule())// Enable support for Java 8 date/time types
+
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -91,20 +93,5 @@ object AppModule {
         return UserServiceImpl(userService, sessionManager)
     }
 
-
-    //------------------ VIEW-MODELS ------------------//
-
-    @Provides
-    @Singleton
-    fun provideSetupViewModel(authService: AuthService, userService: UserService, sessionManager: SessionManager
-    ): SetupViewModel {
-        return SetupViewModel(authService, userService, sessionManager)
-    }
-
-    @Provides
-    @Singleton
-    fun provideBookingViewModel(bookingService: BookingService, sessionManager: SessionManager): BookingViewModel {
-        return BookingViewModel(bookingService, sessionManager)
-    }
 
 }

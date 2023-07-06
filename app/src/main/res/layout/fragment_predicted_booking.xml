@@ -1,14 +1,347 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/default_margin"
+    android:background="@color/white"
+    android:scrollbars="none"
     tools:context=".fragments.PredictedBookingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        <!-- Predicted Booking Title -->
+        <TextView
+            android:id="@+id/predictedBookingTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:paddingTop="@dimen/small_margin"
+            android:fontFamily="@font/roboto_bold"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="@dimen/title_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="London" />
 
-</FrameLayout>
+
+        <!-- Predicted Booking Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/predictedBookingCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/default_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/predictedBookingTitle">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                        <!-- Flight Booking Container -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/predictedBookingFlightContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/small_margin">
+
+                                <TextView
+                                    android:id="@+id/predictedFlightSubtitle"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/roboto_bold"
+                                    android:text="@string/predicted_flight_title"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/subtitle_text"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@id/flightEditBtn" />
+
+                                <ImageButton
+                                    android:id="@+id/flightEditBtn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="?attr/selectableItemBackground"
+                                    android:clickable="true"
+                                    android:contentDescription="@string/btn_flight_edit"
+                                    android:src="@drawable/ic_edit"
+                                    app:layout_constraintBottom_toBottomOf="@id/predictedFlightSubtitle"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@id/predictedFlightSubtitle"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:ignore="TouchTargetSizeCheck" />
+
+                                <!-- Predicted Outbound -->
+                                <include
+                                    android:id="@+id/predictedOutboundFlight"
+                                    layout="@layout/item_flight_template"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginVertical="@dimen/small_margin"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/predictedFlightSubtitle" />
+
+                                <!-- Predicted Inbound (optional) -->
+                                <include
+                                    android:id="@+id/predictedInboundFlight"
+                                    layout="@layout/item_flight_template"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginVertical="@dimen/small_margin"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/predictedOutboundFlight" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <!-- Predicted Booking Line -->
+                        <ImageView
+                            android:id="@+id/predictedBookingLine"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/booking_card_line"
+                            android:scaleType="center"
+                            android:src="@drawable/dashed_line" />
+
+                        <!-- Hotel Booking Container -->
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/predictedBookingHotelContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/small_margin">
+
+                                <TextView
+                                    android:id="@+id/predictedHotelSubtitle"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/roboto_bold"
+                                    android:text="@string/predicted_hotel_title"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/subtitle_text"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@id/hotelEditBtn" />
+
+                                <ImageButton
+                                    android:id="@+id/hotelEditBtn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="?attr/selectableItemBackground"
+                                    android:clickable="true"
+                                    android:contentDescription="@string/btn_hotel_edit"
+                                    android:src="@drawable/ic_edit"
+                                    app:layout_constraintBottom_toBottomOf="@id/predictedHotelSubtitle"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@id/predictedHotelSubtitle"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:ignore="TouchTargetSizeCheck" />
+
+                                <!-- Predicted Hotel -->
+                                <TextView
+                                    android:id="@+id/predictedHotelName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/small_margin"
+                                    android:fontFamily="@font/roboto_bold"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/subtitle_text"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/predictedHotelSubtitle"
+                                    tools:text="Premier Inn London" />
+
+                                <TextView
+                                    android:id="@+id/predictedHotelAddress"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/roboto"
+                                    android:textAlignment="textStart"
+                                    android:textColor="?android:attr/textColorSecondary"
+                                    android:textSize="@dimen/xsmall_text"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/predictedHotelName"
+                                    tools:text="159 Tower Bridge Rd, London SE1 3LP, United Kingdom" />
+
+                                <TextView
+                                    android:id="@+id/predictedHotelRoomType"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/small_margin"
+                                    android:fontFamily="@font/roboto_bold"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/xsmall_text"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/predictedHotelAddress"
+                                    tools:text="Standard Room" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <!-- Price Breakdown -->
+                        <ImageView
+                            android:id="@+id/predictedBookingPriceBreakdownLine"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/booking_card_line"
+                            android:scaleType="center"
+                            android:src="@drawable/dashed_line" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/predictedBookingPriceBreakdownContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/small_margin">
+
+                                <TableLayout
+                                    android:id="@+id/priceBreakdownTable"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                        <TableRow>
+                                                <TextView
+                                                    android:layout_column="0"
+                                                    android:layout_weight="4"
+                                                    android:fontFamily="@font/roboto_bold"
+                                                    android:text="@string/predicted_flight_total"
+                                                    android:textColor="@color/black"
+                                                    android:textSize="@dimen/xsmall_text" />
+
+                                                <TextView
+                                                    android:id="@+id/predictedFlightTotal"
+                                                    android:layout_column="1"
+                                                    android:layout_weight="1"
+                                                    android:fontFamily="@font/roboto_bold"
+                                                    android:textAlignment="textEnd"
+                                                    android:textColor="@color/black"
+                                                    android:textSize="@dimen/xsmall_text"
+                                                    tools:text="€120" />
+                                        </TableRow>
+
+                                        <TableRow
+                                            android:id="@+id/predictedHotelPriceRow">
+                                                <TextView
+                                                    android:layout_column="0"
+                                                    android:layout_weight="4"
+                                                    android:fontFamily="@font/roboto_bold"
+                                                    android:text="@string/predicted_hotel_total"
+                                                    android:textColor="@color/black"
+                                                    android:textSize="@dimen/xsmall_text" />
+
+                                                <TextView
+                                                    android:id="@+id/predictedHotelTotal"
+                                                    android:layout_column="1"
+                                                    android:layout_weight="1"
+                                                    android:fontFamily="@font/roboto_bold"
+                                                    android:textAlignment="textEnd"
+                                                    android:textColor="@color/black"
+                                                    android:textSize="@dimen/xsmall_text"
+                                                    tools:text="€630" />
+                                        </TableRow>
+
+                                </TableLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <!-- Predicted Booking Total Price -->
+                        <RelativeLayout
+                            android:id="@+id/predictedBookingFooter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/secondary"
+                            android:paddingHorizontal="@dimen/small_margin"
+                            android:paddingVertical="@dimen/xxsmall_padding">
+
+                                <TextView
+                                    android:id="@+id/predictedBookingPriceText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:fontFamily="@font/roboto_bold"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/subtitle_text"
+                                    tools:text="€750" />
+
+                                <ImageButton
+                                    android:id="@+id/predictedBookingPriceBtn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:background="@color/secondary"
+                                    android:contentDescription="@string/btn_predicted_price"
+                                    android:clickable="true"
+                                    android:scaleType="center"
+                                    android:src="@drawable/ic_arrow_down"
+                                    tools:ignore="TouchTargetSizeCheck" />
+                        </RelativeLayout>
+
+                </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/predictedBookingDisclaimerText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/default_margin"
+            android:layout_marginTop="@dimen/xsmall_margin"
+            android:fontFamily="@font/roboto_light"
+            android:paddingHorizontal="@dimen/small_margin"
+            android:text="@string/predicted_disclaimer"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="@dimen/xxsmall_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/predictedBookingCard" />
+
+        <Button
+            android:id="@+id/predictedBookingBtn"
+            android:layout_width="@dimen/default_button_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
+            android:elevation="5dp"
+            android:fontFamily="@font/roboto_bold"
+            android:padding="@dimen/default_button_padding"
+            android:stateListAnimator="@null"
+            android:text="@string/btn_predicted_book"
+            android:textColor="@color/white"
+            android:translationZ="5dp"
+            app:cornerRadius="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/predictedBookingDisclaimerText" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/predictedBookingGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="predictedBookingCard,predictedBookingDisclaimerText,predictedBookingBtn" />
+
+        <!-- Progress indicator -->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/predictedBookingProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,7 @@ data class User(
     @JsonProperty("password") var password: String,
     @JsonProperty("salt") var salt: String,
     @JsonProperty("accountSetup") var accountSetup: Boolean,
-    @JsonProperty("preferredAirlines") var preferredAirlines: Set<String>? = null,
-    @JsonProperty("preferredHotelChains") var preferredHotelChains: Set<String>? = null
+    @JsonProperty("preferredAirlines") var preferredAirlines: List<String>? = null,
+    @JsonProperty("preferredHotelChains") var preferredHotelChains: List<String>? = null,
+    @JsonProperty("travelData") var travelData: TravelData? = null
 )

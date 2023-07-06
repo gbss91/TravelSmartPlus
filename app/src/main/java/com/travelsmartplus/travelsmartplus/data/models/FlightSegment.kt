@@ -1,7 +1,7 @@
 package com.travelsmartplus.travelsmartplus.data.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import kotlin.time.Duration
+import java.time.Duration
 
 
 data class FlightSegment(

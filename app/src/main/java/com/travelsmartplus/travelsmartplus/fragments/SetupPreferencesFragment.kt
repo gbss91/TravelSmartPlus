@@ -4,18 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.GridLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.data.models.requests.SetupAccountRequest
 import com.travelsmartplus.travelsmartplus.databinding.FragmentSetupPreferencesBinding
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages
 import com.travelsmartplus.travelsmartplus.viewModels.SetupViewModel
+import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -29,14 +27,20 @@ import dagger.hilt.android.AndroidEntryPoint
 class SetupPreferencesFragment : Fragment() {
 
     private lateinit var binding: FragmentSetupPreferencesBinding
-    private val setupViewModel: SetupViewModel by viewModels()
-    private val args: SetupPreferencesFragmentArgs by navArgs()
+    private val setupViewModel: SetupViewModel by activityViewModels() // Shared View Model
+
+    // Custom Dropdowns
+    private val airlineOneDropdown = CustomDropdown()
+    private val airlineTwoDropdown = CustomDropdown()
+    private val hotelOneDropdown = CustomDropdown()
+    private val hotelTwoDropdown = CustomDropdown()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentSetupPreferencesBinding.inflate(inflater, container, false)
         return binding.root
@@ -45,18 +49,11 @@ class SetupPreferencesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Get password from previous SetupPasswordFragment
-        val newPass = args.newPass
-
         binding.preferencesSetupBtn.setOnClickListener {
-            setupAccount(newPass)
+            setupAccount()
         }
 
         // Observer - observes responses and errors from View Model
-        setupViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
-            Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
-        }
-
         setupViewModel.setupAccountResponse.observe(viewLifecycleOwner) { response ->
             if (response != null && response.isSuccessful) {
                 findNavController().navigate(R.id.action_setupPreferencesFragment_to_setupFinishFragment)
@@ -65,35 +62,49 @@ class SetupPreferencesFragment : Fragment() {
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
             }
         }
-    }
 
-    private fun selectedCheckboxes(gridLayout: GridLayout): Set<String> {
-        val selectedCheckboxes = mutableSetOf<CheckBox>()
-        for (i in 0 until gridLayout.childCount) {
-            val childView = gridLayout.getChildAt(i)
-            if (childView is CheckBox && childView.isChecked) {
-                selectedCheckboxes.add(childView)
-            }
+        setupViewModel.airlines.observe(viewLifecycleOwner) { airlines ->
+            airlineOneDropdown.setAirlineAutoComplete(requireContext(), binding.firstAirline, airlines)
+            airlineTwoDropdown.setAirlineAutoComplete(requireContext(), binding.secondAirline, airlines)
         }
 
-        return selectedCheckboxes.map { it.tag as String }.toSet()
+        setupViewModel.hotels.observe(viewLifecycleOwner) { hotels ->
+            hotelOneDropdown.setHotelAutoComplete(requireContext(), binding.firstHotel, hotels)
+            hotelTwoDropdown.setHotelAutoComplete(requireContext(), binding.secondHotel, hotels)
+        }
+
+        setupViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            if(error != null) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+                setupViewModel.clearError()
+            }
+        }
     }
 
-    private fun setupAccount(newPassword: String) {
-        // Get selected checkboxes
-        val preferredAirlines = selectedCheckboxes(binding.airlineCheckboxes)
-        val preferredHotels = selectedCheckboxes(binding.hotelCheckboxes)
+    private fun setupAccount() {
+        // Get selected airlines
+        val airlineOne = airlineOneDropdown.getSelectedAirline()
+        val airlineTwo = airlineTwoDropdown.getSelectedAirline()
+        val hotelOne = hotelOneDropdown.getSelectedHotel()
+        val hotelTwo = hotelTwoDropdown.getSelectedHotel()
 
-        // Validate selected boxes - At least one must be selected
-        val airlineCheckboxesValid = setupViewModel.checkBoxValidation(preferredAirlines)
-        val hotelCheckboxesValid = setupViewModel.checkBoxValidation(preferredHotels)
+        // Validate selections
+        val airlineSelectionValidation = (airlineOne != null) && (airlineTwo != null)
+        val hotelSelectionValidation = (hotelOne != null) && (hotelTwo != null)
 
-        if (airlineCheckboxesValid && hotelCheckboxesValid) {
+        if (airlineSelectionValidation && hotelSelectionValidation) {
+
             // Create setup request
-            val setupAccountRequest = SetupAccountRequest(newPassword, preferredAirlines, preferredHotels)
+            val password = setupViewModel.getPassword()
+            val preferredAirlines = setOf(airlineOne!!.airlineName, airlineTwo!!.airlineName)
+            val preferredHotels = setOf(hotelOne!!.hotelChain, hotelTwo!!.hotelChain)
+
+            val setupAccountRequest = SetupAccountRequest(password!!, preferredAirlines, preferredHotels)
+
             setupViewModel.setupAccount(setupAccountRequest)
+
         } else {
-            Snackbar.make(binding.root, "Please select at least one airline and hotel", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.root, "Fields can't be empty", Snackbar.LENGTH_LONG).show()
         }
 
     }

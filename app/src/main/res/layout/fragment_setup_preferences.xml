@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:paddingTop="@dimen/small_margin"
             android:fontFamily="@font/roboto_bold"
             android:text="@string/preferences_setup_title"
             android:textAlignment="textStart"
@@ -36,6 +36,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/small_text" />
 
+        <!-- Preferred Airlines -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,79 +57,54 @@
             android:textColor="@color/black"
             android:textSize="@dimen/small_text" />
 
-        <!--Airlines Checkboxes -->
-        <GridLayout
-            android:id="@+id/airlineCheckboxes"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/firstPreferredAirlineContainer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin"
-            android:columnCount="2">
+            android:layout_height="@dimen/large_input"
+            android:layout_marginTop="@dimen/xxsmall_margin"
+            android:hint="@string/top_1"
+            android:labelFor="@id/firstAirline"
+            app:boxBackgroundColor="@android:color/transparent"
+            app:boxStrokeColor="@color/black"
+            app:boxStrokeWidth="2dp">
 
-            <CheckBox
-                android:id="@+id/airline_ei"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/ei"
-                android:tag="EI"/>
+            <AutoCompleteTextView
+                android:id="@+id/firstAirline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/input_text"/>
 
-            <CheckBox
-                android:id="@+id/airline_aa"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/aa"
-                android:tag="AA"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <CheckBox
-                android:id="@+id/airline_af"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/af"
-                android:tag="AF"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/secondPreferredAirlineContainer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/large_input"
+            android:layout_marginTop="@dimen/xxsmall_margin"
+            android:hint="@string/top_2"
+            android:labelFor="@id/secondAirline"
+            app:boxBackgroundColor="@android:color/transparent"
+            app:boxStrokeColor="@color/black"
+            app:boxStrokeWidth="2dp">
 
-            <CheckBox
-                android:id="@+id/airline_dl"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/dl"
-                android:tag="DL"/>
+            <AutoCompleteTextView
+                android:id="@+id/secondAirline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/input_text"/>
 
-            <CheckBox
-                android:id="@+id/airline_ek"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/ek"
-                android:tag="EK"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <CheckBox
-                android:id="@+id/airline_ey"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/ey"
-                android:tag="EY"/>
 
-            <CheckBox
-                android:id="@+id/airline_lh"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/lh"
-                android:tag="LH"/>
-
-            <CheckBox
-                android:id="@+id/airline_fr"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/fr"
-                android:tag="FR"/>
-        </GridLayout>
-
+        <!-- Preferred Hotels -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -138,8 +114,6 @@
             android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="@dimen/subtitle_text" />
-
-
 
         <TextView
             android:layout_width="match_parent"
@@ -151,78 +125,53 @@
             android:textColor="@color/black"
             android:textSize="@dimen/small_text" />
 
-        <!--Hotel Checkboxes -->
-        <GridLayout
-            android:id="@+id/hotelCheckboxes"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/firstPreferredHotelContainer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_margin"
-            android:columnCount="2">
+            android:layout_height="@dimen/large_input"
+            android:layout_marginTop="@dimen/xxsmall_margin"
+            android:hint="@string/top_1"
+            android:labelFor="@id/firstHotel"
+            app:boxBackgroundColor="@android:color/transparent"
+            app:boxStrokeColor="@color/black"
+            app:boxStrokeWidth="2dp">
 
-            <CheckBox
-                android:id="@+id/hotel_rt"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/rt"
-                android:tag="RT"/>
+            <AutoCompleteTextView
+                android:id="@+id/firstHotel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/input_text"/>
 
-            <CheckBox
-                android:id="@+id/hotel_bw"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/bw"
-                android:tag="BW"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <CheckBox
-                android:id="@+id/hotel_fs"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/fs"
-                android:tag="FS"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/secondPreferredHotelContainer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/large_input"
+            android:layout_marginTop="@dimen/xxsmall_margin"
+            android:hint="@string/top_2"
+            android:labelFor="@id/secondHotel"
+            app:boxBackgroundColor="@android:color/transparent"
+            app:boxStrokeColor="@color/black"
+            app:boxStrokeWidth="2dp">
 
-            <CheckBox
-                android:id="@+id/hotel_hh"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/hh"
-                android:tag="HH"/>
+            <AutoCompleteTextView
+                android:id="@+id/secondHotel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/input_text"/>
 
-            <CheckBox
-                android:id="@+id/hotel_ic"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/ic"
-                android:tag="IC"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <CheckBox
-                android:id="@+id/hotel_mc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/mc"
-                android:tag="MC"/>
 
-            <CheckBox
-                android:id="@+id/hotel_pd"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/pd"
-                android:tag="PD"/>
-
-            <CheckBox
-                android:id="@+id/hotel_rd"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="@string/rd"
-                android:tag="RD"/>
-        </GridLayout>
 
         <Button
             android:id="@+id/preferencesSetupBtn"
@@ -233,6 +182,7 @@
             android:fontFamily="@font/roboto_bold"
             android:padding="@dimen/default_button_padding"
             android:text="@string/btn_setup_next"
+            android:textColor="@color/white"
             app:cornerRadius="25dp"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
