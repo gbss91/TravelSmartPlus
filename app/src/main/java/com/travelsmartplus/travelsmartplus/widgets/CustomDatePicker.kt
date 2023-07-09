@@ -73,4 +73,26 @@ class CustomDatePicker(private val fragmentManager: FragmentManager) {
 
         datePicker.show(fragmentManager, "tag")
     }
+
+    // Unconstrained date picker - Allows past dates
+    fun showPastDatePicker(
+        dateEditText: EditText,
+        title: String
+    ) {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(title)
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            val selectedDate = Date(selection)
+            val formattedDate = dateFormat.format(selectedDate)
+
+            // Update text in departure date input
+            dateEditText.setText(formattedDate)
+        }
+
+        datePicker.show(fragmentManager, "tag")
+    }
 }

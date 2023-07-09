@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TravelSmartPlus</string>
+    <string name="app_name" translatable="false">TravelSmartPlus</string>
     <string name="title_allBookings">All Bookings</string>
     <string name="title_myBookings">My Bookings</string>
     <string name="title_users">Users</string>
@@ -70,9 +70,11 @@
     <string name="btn_hotel_edit">Edit Hotel</string>
     <string name="predicted_flight_total">Flight Total</string>
     <string name="predicted_hotel_total">Hotel Total</string>
-    <string name="predicted_hotel_price">(%1$s x €%2$s) €%3$s</string>
+    <string name="predicted_hotel_price" translatable="false">(%1$s x €%2$s) €%3$s</string>
     <string name="btn_predicted_price">Price Breakdown</string>
     <string name="predicted_disclaimer">*Trip suggestion based on your preferences and history</string>
+    <string name="no_results_text">No Results</string>
+    <string name="no_results_subtext">Please try a different date or airport</string>
     <string name="btn_predicted_book">Book</string>
 
     <!--Flight & Hotel Fragments-->
@@ -80,7 +82,10 @@
     <string name="hotel_fragment_title">Hotels</string>
 
     <!--Booking Confirmation Fragment-->
-    <string name="confirmation_fragment_title">Hotels</string>
+    <string name="confirmation_fragment_title">All Set!</string>
+    <string name="confirmation_fragment_id">Your Booking ID %1$s is confirmed</string>
+    <string name="confirmation_fragment_btn">View Booking</string>
+    <string name="confirmation_fragment_close_btn">Close</string>
 
     <!--My Bookings Fragment-->
     <string name="my_bookings_fragment_title">My Bookings</string>
@@ -91,6 +96,14 @@
     <string name="destination_table_header">Destination</string>
     <string name="date_table_header">Date</string>
     <string name="price_table_header">Total</string>
+
+    <!--User Hints-->
+    <string name="user_hint_first_name">First Name</string>
+    <string name="user_hint_last_name">Last Name</string>
+    <string name="user_hint_email">Email</string>
+    <string name="user_hint_pass">Password</string>
+    <string name="user_hint_confirm_pass">Confirm Password</string>
+    <string name="user_hint_role">Role</string>
 
     <!--Users Fragment-->
     <string name="users_fragment_title">All Users</string>
@@ -106,14 +119,37 @@
     <string name="profile_fragment_travel">Travel Details</string>
     <string name="profile_fragment_travel_info">Personal information required to process a booking.</string>
     <string name="profile_fragment_preferences">Preferences</string>
-    <string name="profile_fragment_preferences_airlines">%1$s\n%2$s</string>
-    <string name="profile_fragment_preferences_hotels">%1$s\n%2$s</string>
+    <string name="profile_fragment_preferences_airlines" translatable="false">%1$s\n%2$s</string>
+    <string name="profile_fragment_preferences_hotels" translatable="false">%1$s\n%2$s</string>
     <string name="btn_profile_details_edit">Edit Basic Details</string>
     <string name="btn_profile_travel_edit">Edit Travel Details</string>
     <string name="btn_profile_preferences_edit">Edit Preferences</string>
     <string name="btn_profile_delete">Delete Account</string>
     <string name="btn_profile_sign_out">Sign Out</string>
 
+    <!--Edit Details-->
+    <string name="edit_details_fragment_title">Basic Details</string>
+    <string name="edit_save_btn">Save</string>
+    <string name="edit_cancel_btn">Cancel</string>
+
+    <!--Edit Travel Details-->
+    <string name="edit_travel_fragment_title">Travel Details</string>
+    <string name="edit_travel_fragment_passport">Passport Number</string>
+    <string name="edit_travel_fragment_expiry">Passport Expiry Date</string>
+    <string name="edit_travel_fragment_nationality">Nationality</string>
+    <string name="edit_travel_fragment_dob">Date of Birth</string>
+
+    <!--Edit Preferences-->
+    <string name="edit_preferences_fragment_title">Preferences</string>
+
+    <!--Add User-->
+    <string name="add_user_fragment_title">Add User</string>
+    <string name="add_user_fragment_temporary_pass">Please enter a temporary password for this user</string>
+
+
+    <!--Confirmation Toasts-->
+    <string name="user_added_toast">User Added</string>
+    <string name="user_updated_toast">Updated</string>
 
     <!--Formatted Data -->
     <string name="formatted_duration">%1$dh %2$dm</string>
@@ -154,6 +190,19 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+
+    <string-array name="role_dropdown">
+        <item>Staff</item>
+        <item>Administrator</item>
+    </string-array>
+    <string-array name="role_dropdown_values">
+        <item>false</item>
+        <item>true</item>
+    </string-array>
+
+
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

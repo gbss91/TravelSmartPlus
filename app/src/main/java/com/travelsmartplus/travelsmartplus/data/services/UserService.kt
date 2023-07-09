@@ -1,9 +1,12 @@
 package com.travelsmartplus.travelsmartplus.data.services
 
 import com.travelsmartplus.travelsmartplus.data.models.User
+import com.travelsmartplus.travelsmartplus.data.models.requests.AddUserRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.SetupAccountRequest
+import com.travelsmartplus.travelsmartplus.data.models.responses.CountriesResponse
 import com.travelsmartplus.travelsmartplus.data.network.Endpoints.ADD_USER
 import com.travelsmartplus.travelsmartplus.data.network.Endpoints.GET_ALL_USERS
+import com.travelsmartplus.travelsmartplus.data.network.Endpoints.GET_COUNTRIES
 import com.travelsmartplus.travelsmartplus.data.network.Endpoints.SETUP_ACCOUNT
 import com.travelsmartplus.travelsmartplus.data.network.Endpoints.USER_URI
 import retrofit2.Response
@@ -31,6 +34,9 @@ interface UserService {
     suspend fun getAllUsers(@Path("orgId") orgId: String): Response<List<User>>
 
     @POST(ADD_USER)
-    suspend fun addUser(@Body newUser: User): Response<User>
+    suspend fun addUser(@Body newUser: AddUserRequest): Response<User>
+
+    @GET(GET_COUNTRIES)
+    suspend fun getCountries(): Response<CountriesResponse>
 
 }

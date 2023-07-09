@@ -53,16 +53,6 @@ class BookingSearchFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentBookingSearchBinding.inflate(inflater, container, false)
 
-        // Disable date fields - Can only be updated via date picker
-        binding.departureDateSearchInput.isFocusable = false
-        binding.departureDateSearchInput.isFocusableInTouchMode = false
-        binding.returnDateSearchInput.isFocusable = false
-        binding.returnDateSearchInput.isFocusableInTouchMode = false
-        binding.checkInDateInput.isFocusable = false
-        binding.checkInDateInput.isFocusableInTouchMode = false
-        binding.checkOutDateInput.isFocusable = false
-        binding.checkOutDateInput.isFocusableInTouchMode = false
-
         // Set flight only button checked and remove hotel fields as default state
         binding.searchToggleGroup.check(R.id.flightOnlySearchBtn)
         binding.checkInDateContainer.visibility = View.GONE
@@ -198,7 +188,7 @@ class BookingSearchFragment : Fragment() {
                 travelClass= bookingClass,
                 hotel= flightHotel,
                 checkInDate = if (checkInDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter).toString(),
-                checkOutDate = if (checkOutDate.text.isNullOrBlank()) null else LocalDate.parse(checkInDate.text, formatter).toString()
+                checkOutDate = if (checkOutDate.text.isNullOrBlank()) null else LocalDate.parse(checkOutDate.text, formatter).toString()
             )
 
             bookingViewModel.setBookingSearchRequest(newBookingSearch)

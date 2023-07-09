@@ -47,7 +47,7 @@ interface BookingService {
     suspend fun getHotelOffers(@Body bookingSearchRequest: BookingSearchRequest): Response<List<HotelBooking>>
 
     @GET(GET_USER_BOOKINGS)
-    suspend fun getUserBookings(@Path("userId") userId: String): Response<User>
+    suspend fun getUserBookings(@Path("userId") userId: String): Response<List<Booking>>
 
     @POST(ADD_BOOKING)
     suspend fun newBooking(@Body booking: Booking): Response<Booking>

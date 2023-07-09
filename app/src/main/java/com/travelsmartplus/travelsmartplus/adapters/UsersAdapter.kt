@@ -2,6 +2,7 @@ package com.travelsmartplus.travelsmartplus.adapters
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -15,13 +16,29 @@ import com.travelsmartplus.travelsmartplus.data.models.User
  * @author Gabriel Salas
  */
 
-class UsersAdapter(private val users: List<User>) :
+class UsersAdapter(
+    private val users: List<User>,
+    private val listener: OnItemClickListener<Int>
+) :
     RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
 
     // Reference to the type of views
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+    OnClickListener{
 
         val name: TextView = itemView.findViewById(R.id.userRowName)
+
+        // Set OnClick listener
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(users[position].id!!)
+            }
+        }
 
     }
 

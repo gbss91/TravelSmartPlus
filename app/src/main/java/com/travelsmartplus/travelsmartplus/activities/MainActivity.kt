@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val currentUser = mainViewModel.getCurrentUser()
+        val isAdmin = mainViewModel.isAdmin()
+
         // Set up the NavController with the NavHostFragment
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
         val navController = navHostFragment.navController
@@ -59,12 +62,18 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.btnMenuProfile -> {
-                    navController.navigate(R.id.profileFragment, null, backToBookingSearch)
+                    val args = Bundle()
+                    args.putInt("userId", currentUser ?: -1)
+                    navController.navigate(R.id.profileFragment, args, backToBookingSearch)
                     true
                 }
                 else -> false
             }
         }
+
+        // Show buttons if admin
+        binding.bottomNavigationView.menu.findItem(R.id.btnMenuUsers)?.isVisible = isAdmin
+        binding.bottomNavigationView.menu.findItem(R.id.btnMenuAllBookings)?.isVisible = isAdmin
 
         // Observers - observes responses and errors
         mainViewModel.isSignedIn.observe(this) { signedIn ->

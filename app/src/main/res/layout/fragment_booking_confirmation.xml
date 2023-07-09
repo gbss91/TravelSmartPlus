@@ -1,14 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.BookingConfirmationFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/bookingConfirmationContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_margin="@dimen/default_margin"
+        android:gravity="center"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/bookingConfirmationIcon"
+            android:layout_width="@dimen/gif_width"
+            android:layout_height="@dimen/gif_height"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/plane_window"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/confirmation_fragment_title"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/title_text" />
+
+        <TextView
+            android:id="@+id/bookingConfirmationText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:fontFamily="@font/roboto"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/small_text"
+            tools:text="Your Booking ID 9879834 is confirmed"/>
+
+
+        <Button
+            android:id="@+id/bookingConfirmationDoneBtn"
+            android:layout_width="@dimen/default_button_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:fontFamily="@font/roboto_bold"
+            android:padding="@dimen/default_button_padding"
+            android:text="@string/confirmation_fragment_btn"
+            android:textColor="@color/white"
+            app:cornerRadius="25dp"
+            tools:ignore="DuplicateSpeakableTextCheck" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!-- Progress indicator -->
+    <ImageView
+        android:id="@+id/bookingConfirmationProgress"
+        android:layout_width="@dimen/gif_progress_width"
+        android:layout_height="@dimen/gif_progress_height"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/load"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

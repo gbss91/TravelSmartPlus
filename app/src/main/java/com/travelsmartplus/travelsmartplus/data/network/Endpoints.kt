@@ -17,6 +17,7 @@ object Endpoints {
     // User Endpoints
     const val USER_URI = "user/{id}"
     const val SETUP_ACCOUNT = "user/{id}/setup"
+    const val GET_COUNTRIES = "https://countriesnow.space/api/v0.1/countries" // Reference: [https://countriesnow.space/api/v0.1/countries]
 
     // Booking Endpoints
     const val AIRPORTS_SEARCH = "airports/all"

@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.activities.MainActivity
 import com.travelsmartplus.travelsmartplus.databinding.FragmentSetupFinishBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +42,13 @@ class SetupFinishFragment : Fragment() {
             val intent = Intent(requireContext(), MainActivity::class.java)
             startActivity(intent)
         }
+
+        // Set GIF image
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.check)
+            .into(binding.finishSetupIcon)
+
     }
 
 

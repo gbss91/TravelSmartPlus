@@ -1,14 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:layout_margin="@dimen/default_margin"
+android:gravity="center|top"
+tools:context=".fragments.EditTravelDetailsFragment">
+
+<TextView
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.EditTravelDetailsFragment">
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/small_margin"
+    android:fontFamily="@font/roboto_bold"
+    android:text="@string/edit_travel_fragment_title"
+    android:textAlignment="textStart"
+    android:textColor="@color/black"
+    android:textSize="@dimen/title_text" />
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editDobContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        app:endIconDrawable="@drawable/ic_calendar"
+        app:endIconMode="custom"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="2dp"
+        android:hint="@string/edit_travel_fragment_dob">
 
-</FrameLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editDobInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:inputType="date"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            tools:ignore="TextContrastCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editNationalityContainer"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        android:labelFor="@id/editNationality"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="2dp"
+        android:hint="@string/edit_travel_fragment_nationality"
+        >
+
+        <AutoCompleteTextView
+            android:id="@+id/editNationality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:inputType="none"
+            android:textColor="@color/black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editPassportNumberContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="2dp"
+        android:hint="@string/edit_travel_fragment_passport"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editPassportNumberInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:inputType="textCapWords"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/input_text"
+            tools:ignore="TextContrastCheck"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editExpiryDateContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        app:endIconDrawable="@drawable/ic_calendar"
+        app:endIconMode="custom"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="2dp"
+        android:hint="@string/edit_travel_fragment_expiry">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editExpiryDateInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:inputType="date"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            tools:ignore="TextContrastCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Save Button -->
+    <Button
+        android:id="@+id/editSaveBtn"
+        android:layout_width="@dimen/default_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/medium_margin"
+        android:fontFamily="@font/roboto_bold"
+        android:padding="@dimen/default_button_padding"
+        android:text="@string/edit_save_btn"
+        android:textColor="@color/white"
+        app:cornerRadius="25dp"/>
+
+    <!-- Cancel Button -->
+    <TextView
+        android:id="@+id/editCancelBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/edit_cancel_btn"
+        android:textColor="@color/red"
+        android:textSize="@dimen/small_text" />
+
+</LinearLayout>

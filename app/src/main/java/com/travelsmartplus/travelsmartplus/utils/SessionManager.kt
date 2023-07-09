@@ -5,9 +5,11 @@ interface SessionManager {
     fun saveToken(token: String)
     fun getRefreshToken(): String?
     fun saveRefreshToken(refreshToken: String)
-    fun currentUser(): Int?
+    fun currentUser(): Int
     fun saveCurrentUser(userId: Int)
-    fun getOrgId(): Int?
+    fun admin(): Boolean
+    fun saveAdmin(admin: Boolean)
+    fun getOrgId(): Int
     fun saveOrgId(orgId: Int)
     fun isSetup(): Boolean
     fun saveSetup(isSetup: Boolean)

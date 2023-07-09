@@ -96,8 +96,8 @@ class SetupPreferencesFragment : Fragment() {
 
             // Create setup request
             val password = setupViewModel.getPassword()
-            val preferredAirlines = setOf(airlineOne!!.airlineName, airlineTwo!!.airlineName)
-            val preferredHotels = setOf(hotelOne!!.hotelChain, hotelTwo!!.hotelChain)
+            val preferredAirlines = listOf(airlineOne!!.airlineName, airlineTwo!!.airlineName)
+            val preferredHotels = listOf(hotelOne!!.hotelChain, hotelTwo!!.hotelChain)
 
             val setupAccountRequest = SetupAccountRequest(password!!, preferredAirlines, preferredHotels)
 

@@ -65,6 +65,7 @@ class AuthServiceImpl @Inject constructor(
                         sessionManager.saveToken(responseBody.token)
                         sessionManager.saveRefreshToken(responseBody.refreshToken)
                         sessionManager.saveCurrentUser(userId)
+                        sessionManager.saveAdmin(responseBody.admin)
                         sessionManager.saveSetup(responseBody.accountSetup)
                         sessionManager.saveOrgId(responseBody.orgId!!)
                     }

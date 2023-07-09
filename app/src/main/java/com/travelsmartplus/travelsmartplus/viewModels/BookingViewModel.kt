@@ -1,5 +1,6 @@
 package com.travelsmartplus.travelsmartplus.viewModels
 
+import android.content.res.Resources.NotFoundException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,8 @@ import com.travelsmartplus.travelsmartplus.data.models.HotelBooking
 import com.travelsmartplus.travelsmartplus.data.models.requests.BookingSearchRequest
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.data.services.BookingService
+import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.NOT_FOUND_ERROR
+import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNEXPECTED_ERROR
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNKNOWN_ERROR
 import com.travelsmartplus.travelsmartplus.utils.NotBlankRule
 import com.travelsmartplus.travelsmartplus.utils.SessionManager
@@ -37,7 +40,7 @@ class BookingViewModel @Inject constructor(
 
     // LiveData object to hold the responses and variables
     private val _airports = MutableLiveData<List<Airport>>()
-    private val _predictedBooking = MutableLiveData<Booking?>()
+    private val _booking = MutableLiveData<Booking?>()
     private val _flightOffers = MutableLiveData<List<FlightBooking>>()
     private val _hotelOffers = MutableLiveData<List<HotelBooking>>()
     private val _allBookings = MutableLiveData<List<Booking>>()
@@ -46,7 +49,7 @@ class BookingViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     private val _newSearch = MutableLiveData<Boolean>()
     val airports: LiveData<List<Airport>> = _airports
-    val predictedBooking: LiveData<Booking?> = _predictedBooking
+    val booking: LiveData<Booking?> = _booking
     val flightOffers: LiveData<List<FlightBooking>> = _flightOffers
     val hotelOffers: LiveData<List<HotelBooking>> = _hotelOffers
     val allBookings: LiveData<List<Booking>> = _allBookings
@@ -78,6 +81,10 @@ class BookingViewModel @Inject constructor(
         _newSearch.value = boolean
     }
 
+    fun setBooking(predictedBooking: Booking) {
+        _booking.value = predictedBooking
+    }
+
     // Get all airport for autocomplete search
     fun airportsAutoComplete() {
         viewModelScope.launch {
@@ -106,10 +113,10 @@ class BookingViewModel @Inject constructor(
             try {
                 bookingSearchRequest?.userId = sessionManager.currentUser()
                 val response = bookingService.bookingSearch(bookingSearchRequest!!)
-                if (response.isSuccessful) {
-                    _predictedBooking.postValue(response.body())
+                if (response.code() == 200) {
+                    _booking.postValue(response.body())
                 } else if (response.code() == 204) {
-                    _errorMessage.postValue(UNKNOWN_ERROR)
+                    _booking.postValue(null)
                 } else {
                     val errorBody = response.errorBody()?.string()
                     _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
@@ -184,7 +191,7 @@ class BookingViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val userId = sessionManager.currentUser()
-                val response = bookingService.getAllBookings(userId.toString())
+                val response = bookingService.getUserBookings(userId.toString())
                 if (response.isSuccessful) {
                     val myBookings = response.body() ?: emptyList()
                     _myBookings.postValue(myBookings)
@@ -204,7 +211,35 @@ class BookingViewModel @Inject constructor(
         }
     }
 
-    // Add new bookings
+    // Add new booking
+    fun addBooking() {
+        _isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val booking = _booking.value ?: throw NotFoundException()
+                val response = bookingService.newBooking(booking)
+                if (response.isSuccessful) {
+                    val newBooking = response.body()
+                    _booking.postValue(newBooking)
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
+                }
+            } catch (e: NotFoundException) {
+                e.printStackTrace()
+                _errorMessage.postValue(UNEXPECTED_ERROR)
+            } catch (e: NetworkException) {
+                e.printStackTrace()
+                _errorMessage.postValue(e.message)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.postValue(UNKNOWN_ERROR)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
 
     // Get booking using booking ID
 

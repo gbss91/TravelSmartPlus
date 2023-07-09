@@ -37,4 +37,12 @@ class MainViewModel @Inject constructor(
         sessionManager.clearSession()
     }
 
+    fun getCurrentUser(): Int? {
+        return sessionManager.currentUser()
+    }
+
+    fun isAdmin(): Boolean {
+        return sessionManager.admin()
+    }
+
 }

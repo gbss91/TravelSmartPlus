@@ -6,10 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.adapters.HotelResultsAdapter
+import com.travelsmartplus.travelsmartplus.adapters.OnItemClickListener
+import com.travelsmartplus.travelsmartplus.data.models.Booking
+import com.travelsmartplus.travelsmartplus.data.models.HotelBooking
 import com.travelsmartplus.travelsmartplus.databinding.FragmentHotelsBinding
 import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,10 +27,11 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 
 @AndroidEntryPoint
-class HotelsFragment : Fragment() {
+class HotelsFragment : Fragment(), OnItemClickListener<HotelBooking> {
 
     private lateinit var binding: FragmentHotelsBinding
     private val bookingViewModel: BookingViewModel by activityViewModels() // Shared View Model
+    private lateinit var updatedBooking: Booking
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,11 +46,14 @@ class HotelsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Get hotels
-        bookingViewModel.getHotelOffers()
+        // Set Loading GIF image
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.load)
+            .into(binding.hotelResultsProgress)
 
         val recyclerView = binding.hotelResultsView
-        var adapter = HotelResultsAdapter(emptyList())
+        var adapter = HotelResultsAdapter(emptyList(), this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -62,11 +71,15 @@ class HotelsFragment : Fragment() {
 
         bookingViewModel.hotelOffers.observe(viewLifecycleOwner) { hotelOffers ->
             if (hotelOffers.isNotEmpty()) {
-                adapter = HotelResultsAdapter(hotelOffers)
+                adapter = HotelResultsAdapter(hotelOffers, this)
                 recyclerView.adapter = adapter
             } else {
                 recyclerView.adapter = null
             }
+        }
+
+        bookingViewModel.booking.observe(viewLifecycleOwner) { booking ->
+            this.updatedBooking = booking!!
         }
 
         bookingViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
@@ -77,9 +90,20 @@ class HotelsFragment : Fragment() {
         }
     }
 
-    // Get flight data again when the fragment is resumed
+    // Get flight data again when the fragment is resumed or it becomes visible
     override fun onResume() {
         super.onResume()
         bookingViewModel.getHotelOffers()
+    }
+
+    override fun onItemClick(item: HotelBooking) {
+
+        // Update hotel for predicted booking
+        val newTotal = updatedBooking.totalPrice - updatedBooking.hotelBooking!!.totalPrice
+        updatedBooking.hotelBooking = item
+        updatedBooking.totalPrice = newTotal + item.totalPrice
+        bookingViewModel.setBooking(updatedBooking)
+
+        findNavController().navigate(R.id.action_hotelsFragment_to_predictedBookingFragment)
     }
 }

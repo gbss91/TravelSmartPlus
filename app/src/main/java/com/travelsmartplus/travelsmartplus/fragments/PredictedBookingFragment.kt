@@ -10,10 +10,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.databinding.FragmentPredictedBookingBinding
 import com.travelsmartplus.travelsmartplus.databinding.ItemFlightTemplateBinding
+import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedArrivalTime
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedDuration
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedStops
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedTime
@@ -41,17 +43,17 @@ class PredictedBookingFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentPredictedBookingBinding.inflate(inflater, container, false)
 
-        // Inflate flight layouts and assign to views
-        val predictedOutboundFlightBinding = ItemFlightTemplateBinding.inflate(inflater, container, false)
-        val predictedInboundFlightBinding = ItemFlightTemplateBinding.inflate(inflater, container, false)
-        binding.predictedOutboundFlight.root.addView(predictedOutboundFlightBinding.root)
-        binding.predictedInboundFlight.root.addView(predictedInboundFlightBinding.root)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Set Loading GIF image
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.load)
+            .into(binding.predictedBookingProgress)
 
         // Set title to destination
         binding.predictedBookingTitle.text = bookingViewModel.getBookingSearchRequest()!!.destination.city
@@ -85,17 +87,20 @@ class PredictedBookingFragment : Fragment() {
         }
 
         binding.predictedBookingBtn.setOnClickListener {
-
+            findNavController().navigate(R.id.action_predictedBookingFragment_to_bookingConfirmationFragment)
         }
 
         // Observers
 
         // Only search when new search. Avoids searching again when only making changes.
-        bookingViewModel.newSearch.observe(viewLifecycleOwner) {newSearch ->
-            if(newSearch) bookingViewModel.bookingSearch()
+        bookingViewModel.newSearch.observe(viewLifecycleOwner) { newSearch ->
+            if(newSearch) {
+                bookingViewModel.bookingSearch()
+                bookingViewModel.setNewSearch(false) // Avoids searching again if back from flight/hotel selection
+            }
         }
 
-        bookingViewModel.predictedBooking.observe(viewLifecycleOwner) { booking ->
+        bookingViewModel.booking.observe(viewLifecycleOwner) { booking ->
             if (booking != null) {
 
                 // Assign data to flights
@@ -105,7 +110,7 @@ class PredictedBookingFragment : Fragment() {
                 binding.predictedOutboundFlight.flightItemOriginIataText.text = outbound.flights[0].departureAirport.iataCode
                 binding.predictedOutboundFlight.flightItemDuration.text = formattedDuration(outbound.duration, requireContext())
                 binding.predictedOutboundFlight.flightItemStops.text = formattedStops(outbound)
-                binding.predictedOutboundFlight.flightItemArrivalTimeText.text = formattedTime(outbound.flights.last().arrivalTime)
+                binding.predictedOutboundFlight.flightItemArrivalTimeText.text = formattedArrivalTime(outbound.flights[0].departureTime, outbound.flights.last().arrivalTime)
                 binding.predictedOutboundFlight.flightItemDestinationIataText.text = outbound.flights.last().arrivalAirport.iataCode
 
                 // Assign and show return only when needed
@@ -118,7 +123,7 @@ class PredictedBookingFragment : Fragment() {
                     binding.predictedInboundFlight.flightItemOriginIataText.text = inbound.flights[0].departureAirport.iataCode
                     binding.predictedInboundFlight.flightItemDuration.text = formattedDuration(inbound.duration, requireContext())
                     binding.predictedInboundFlight.flightItemStops.text = formattedStops(inbound)
-                    binding.predictedInboundFlight.flightItemArrivalTimeText.text = formattedTime(inbound.flights.last().arrivalTime)
+                    binding.predictedInboundFlight.flightItemArrivalTimeText.text = formattedArrivalTime(inbound.flights[0].departureTime, inbound.flights.last().arrivalTime)
                     binding.predictedInboundFlight.flightItemDestinationIataText.text = inbound.flights.last().arrivalAirport.iataCode
 
                 } else {
@@ -145,12 +150,16 @@ class PredictedBookingFragment : Fragment() {
                 binding.predictedFlightTotal.text = requireContext().getString(R.string.currency_price, booking.flightBooking.totalPrice.toInt().toString())
                 binding.predictedBookingPriceText.text = requireContext().getString(R.string.currency_price, booking.totalPrice.toInt().toString())
 
+            } else {
+                binding.predictedBookingGroup.visibility = GONE
+                binding.predictedBookingNoResults.visibility = VISIBLE
             }
 
         }
 
         bookingViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
             if (loading) {
+                binding.predictedBookingNoResults.visibility = GONE
                 binding.predictedBookingGroup.visibility = GONE
                 binding.predictedBookingProgress.visibility = VISIBLE
             } else {
@@ -167,4 +176,5 @@ class PredictedBookingFragment : Fragment() {
         }
 
     }
+
 }

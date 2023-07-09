@@ -333,15 +333,52 @@
             app:constraint_referenced_ids="predictedBookingCard,predictedBookingDisclaimerText,predictedBookingBtn" />
 
         <!-- Progress indicator -->
-        <com.google.android.material.progressindicator.CircularProgressIndicator
+        <ImageView
             android:id="@+id/predictedBookingProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
+            android:layout_width="@dimen/gif_progress_width"
+            android:layout_height="@dimen/gif_progress_height"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/load" />
+
+        <!-- No Results indicator -->
+        <LinearLayout
+            android:id="@+id/predictedBookingNoResults"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/default_margin"
+                    android:layout_marginVertical="@dimen/xsmall_margin"
+                    android:fontFamily="@font/roboto_bold"
+                    android:paddingHorizontal="@dimen/small_margin"
+                    android:text="@string/no_results_text"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/subtitle_text" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/default_margin"
+                    android:fontFamily="@font/roboto"
+                    android:paddingHorizontal="@dimen/small_margin"
+                    android:text="@string/no_results_subtext"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/small_text" />
+        </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

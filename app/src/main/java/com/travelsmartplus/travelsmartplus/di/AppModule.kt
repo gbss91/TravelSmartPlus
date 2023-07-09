@@ -3,6 +3,8 @@ package com.travelsmartplus.travelsmartplus.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.util.StdDateFormat
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.travelsmartplus.travelsmartplus.data.network.AuthInterceptor
@@ -61,6 +63,9 @@ object AppModule {
             .registerKotlinModule() // Enable support for Kotlin data classes
             .registerModule(JavaTimeModule())// Enable support for Java 8 date/time types
 
+        // Configure the ObjectMapper to serialize LocalDate as a string in ISO-8601 format
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+        objectMapper.dateFormat = StdDateFormat()
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)

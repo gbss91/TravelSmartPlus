@@ -2,6 +2,7 @@ package com.travelsmartplus.travelsmartplus.adapters
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -16,14 +17,30 @@ import com.travelsmartplus.travelsmartplus.data.models.HotelBooking
  * @author Gabriel Salas
  */
 
-class HotelResultsAdapter(private val hotels: List<HotelBooking>) :
+class HotelResultsAdapter(
+    private val hotels: List<HotelBooking>,
+    private val listener: OnItemClickListener<HotelBooking>
+    ) :
     RecyclerView.Adapter<HotelResultsAdapter.ViewHolder>() {
 
     // Reference to the type of views
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        OnClickListener {
 
-        val hotelRate: TextView = itemView.findViewById(R.id.hotelItemHeader)
+        val hotelRate: TextView = itemView.findViewById(R.id.hotelItemPriceText)
         val hotelDetails: ConstraintLayout = itemView.findViewById(R.id.hotelItemDetails)
+
+        // Set OnClick listener
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(hotels[position])
+            }
+        }
     }
 
     // Create new views

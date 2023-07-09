@@ -4,57 +4,118 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.travelsmartplus.travelsmartplus.data.models.User
+import com.travelsmartplus.travelsmartplus.databinding.FragmentEditPreferencesBinding
+import com.travelsmartplus.travelsmartplus.viewModels.SetupViewModel
+import com.travelsmartplus.travelsmartplus.viewModels.UserViewModel
+import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
 
 /**
- * A simple [Fragment] subclass.
- * Use the [EditPreferencesFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * EditPreferencesFragment
+ * Allows user to edit their preferences.
+ *
+ * @author Gabriel Salas
  */
-class EditPreferencesFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+class EditPreferencesFragment : Fragment() {
+
+    private lateinit var binding: FragmentEditPreferencesBinding
+    private val userViewModel: UserViewModel by activityViewModels() // Shared View Model
+    private val setupViewModel: SetupViewModel by activityViewModels() // Shared View Model
+    private lateinit var user: User
+
+    // Custom Dropdowns
+    private val airlineOneDropdown = CustomDropdown()
+    private val airlineTwoDropdown = CustomDropdown()
+    private val hotelOneDropdown = CustomDropdown()
+    private val hotelTwoDropdown = CustomDropdown()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_preferences, container, false)
+        binding = FragmentEditPreferencesBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditPreferencesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EditPreferencesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Set click listeners
+        binding.editSaveBtn.setOnClickListener {
+            savePreferences()
+        }
+
+        // Observers
+        userViewModel.userData.observe(viewLifecycleOwner) { user ->
+            this.user = user
+
+            binding.editCancelBtn.setOnClickListener {
+                val action = EditPreferencesFragmentDirections.actionEditPreferencesFragmentToProfileFragment(user.id!!)
+                findNavController().navigate(action)
+            }
+        }
+
+        setupViewModel.airlines.observe(viewLifecycleOwner) { airlines ->
+            airlineOneDropdown.setAirlineAutoComplete(requireContext(), binding.editPreferencesFirstAirline, airlines)
+            airlineTwoDropdown.setAirlineAutoComplete(requireContext(), binding.editPreferencesSecondAirline, airlines)
+        }
+
+        setupViewModel.hotels.observe(viewLifecycleOwner) { hotels ->
+            hotelOneDropdown.setHotelAutoComplete(requireContext(), binding.editPreferencesFirstHotel, hotels)
+            hotelTwoDropdown.setHotelAutoComplete(requireContext(), binding.editPreferencesSecondHotel, hotels)
+        }
+
+        userViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            if (error != null) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).setAnchorView(R.id.bottomNavigationView).show()
+                userViewModel.clearError()
+            }
+        }
+
+    }
+
+    private fun savePreferences() {
+
+        // Get selected airlines
+        val airlineOne = airlineOneDropdown.getSelectedAirline()
+        val airlineTwo = airlineTwoDropdown.getSelectedAirline()
+        val hotelOne = hotelOneDropdown.getSelectedHotel()
+        val hotelTwo = hotelTwoDropdown.getSelectedHotel()
+        val updatedUser = user
+
+        // Validate selections
+        val airlineSelectionValidation = (airlineOne != null) && (airlineTwo != null)
+        val hotelSelectionValidation = (hotelOne != null) && (hotelTwo != null)
+
+        if (airlineSelectionValidation && hotelSelectionValidation) {
+
+            // Save updated user
+            updatedUser.preferredAirlines = listOf(airlineOne!!.airlineName, airlineTwo!!.airlineName)
+            updatedUser.preferredHotelChains = listOf(hotelOne!!.hotelChain, hotelTwo!!.hotelChain)
+
+            userViewModel.updateUser(updatedUser.id.toString(), updatedUser)
+            userViewModel.addEditSuccessful.observe(viewLifecycleOwner) {
+                if (it) {
+                    Toast.makeText(requireContext(), "Changes Saved!", Toast.LENGTH_SHORT).show()
                 }
             }
+            val action = EditPreferencesFragmentDirections.actionEditPreferencesFragmentToProfileFragment(updatedUser.id!!)
+            findNavController().navigate(action)
+
+        } else {
+            Snackbar.make(binding.root, "Fields can't be empty." , Snackbar.LENGTH_SHORT).setAnchorView(R.id.bottomNavigationView).show()
+        }
+
     }
+
+
 }

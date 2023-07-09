@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.adapters.BookingsAdapter
@@ -39,8 +40,11 @@ class MyBookingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Get bookings for current user
-        bookingViewModel.getUserBookings()
+        // Set Loading GIF image
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.load)
+            .into(binding.myBookingsProgress)
 
         val recyclerView = binding.myBookingsListView
         var adapter = BookingsAdapter(emptyList())

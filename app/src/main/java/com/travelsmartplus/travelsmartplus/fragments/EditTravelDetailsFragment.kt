@@ -4,57 +4,146 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.travelsmartplus.travelsmartplus.data.models.TravelData
+import com.travelsmartplus.travelsmartplus.data.models.User
+import com.travelsmartplus.travelsmartplus.databinding.FragmentEditTravelDetailsBinding
+import com.travelsmartplus.travelsmartplus.utils.Formatters
+import com.travelsmartplus.travelsmartplus.viewModels.UserViewModel
+import com.travelsmartplus.travelsmartplus.widgets.CustomDatePicker
+import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
- * A simple [Fragment] subclass.
- * Use the [EditTravelDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * EditTravelDetailsFragment
+ * Allows user to edit their travel details. These details are used to book trips.
+ *
+ * @author Gabriel Salas
  */
-class EditTravelDetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+class EditTravelDetailsFragment : Fragment() {
+
+    private lateinit var binding: FragmentEditTravelDetailsBinding
+    private val userViewModel: UserViewModel by activityViewModels() // Shared View Model
+    private lateinit var user: User
+
+    // Countries Dropdown
+    private val countriesDropdown = CustomDropdown()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_travel_details, container, false)
+        binding = FragmentEditTravelDetailsBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditTravelDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EditTravelDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val customDatePicker = CustomDatePicker(childFragmentManager)
+        userViewModel.getCountries()
+
+        // Set click listeners
+        binding.editDobInput.setOnClickListener {
+            customDatePicker.showPastDatePicker(binding.editDobInput, "Date of Birth")
+        }
+
+        binding.editExpiryDateInput.setOnClickListener {
+            customDatePicker.showDatePicker(binding.editExpiryDateInput, "Passport Expiry Date")
+        }
+
+        binding.editSaveBtn.setOnClickListener {
+            saveTravelDetails()
+        }
+
+        // Observers
+        userViewModel.userData.observe(viewLifecycleOwner) { user ->
+            this.user = user
+
+            // Update UI with existing user data
+            val userTravelData = user.travelData
+            if (userTravelData != null ) {
+                binding.editDobInput.setText(Formatters.formattedDateShort(userTravelData.dob))
+                binding.editPassportNumberInput.setText(userTravelData.passportNumber)
+                binding.editExpiryDateInput.setText(Formatters.formattedDateShort(userTravelData.passportExpiryDate))
+            }
+
+            binding.editCancelBtn.setOnClickListener {
+                val action = EditTravelDetailsFragmentDirections.actionEditTravelDetailsFragmentToProfileFragment(user.id!!)
+                findNavController().navigate(action)
+            }
+        }
+
+        userViewModel.countries.observe(viewLifecycleOwner) { countries ->
+            countriesDropdown.setCountriesAutoComplete(requireContext(), binding.editNationality, countries)
+        }
+
+        userViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            if (error != null) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).setAnchorView(R.id.bottomNavigationView).show()
+                userViewModel.clearError()
+            }
+        }
+
+    }
+
+    // Get countries data on resume
+    override fun onResume() {
+        super.onResume()
+        userViewModel.getCountries()
+    }
+
+    private fun saveTravelDetails() {
+
+        val updatedUser = user
+
+        // Get input
+        val dob = binding.editDobInput
+        val nationality = countriesDropdown.getSelectedCountry()
+        val passportNumber = binding.editPassportNumberInput
+        val expiryDate = binding.editExpiryDateInput
+
+        // Input validation
+        val inputValidation = userViewModel.editTravelDetailsValidation(dob, passportNumber, expiryDate)
+        val nationalityValidation = nationality != null
+
+        if (inputValidation && nationalityValidation) {
+
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+            val travelData = TravelData(
+                userId = user.id!!,
+                dob = LocalDate.parse(dob.text.toString(), formatter),
+                nationality = nationality!!,
+                passportNumber = passportNumber.text.toString(),
+                passportExpiryDate = LocalDate.parse(expiryDate.text.toString(), formatter)
+            )
+
+            // Update user
+            updatedUser.travelData = travelData
+            userViewModel.updateUser(updatedUser.id.toString(), updatedUser)
+            userViewModel.addEditSuccessful.observe(viewLifecycleOwner) {
+                if (it) {
+                    Toast.makeText(requireContext(), "Changes Saved!", Toast.LENGTH_SHORT).show()
                 }
             }
+            val action = EditTravelDetailsFragmentDirections.actionEditTravelDetailsFragmentToProfileFragment(updatedUser.id!!)
+            findNavController().navigate(action)
+
+        } else {
+            Snackbar.make(binding.root, "Fields can't be empty." , Snackbar.LENGTH_SHORT).setAnchorView(R.id.bottomNavigationView).show()
+        }
+
     }
+
 }

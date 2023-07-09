@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
+import com.travelsmartplus.travelsmartplus.adapters.OnItemClickListener
 import com.travelsmartplus.travelsmartplus.adapters.UsersAdapter
 import com.travelsmartplus.travelsmartplus.databinding.FragmentUsersBinding
 import com.travelsmartplus.travelsmartplus.viewModels.UserViewModel
@@ -22,13 +26,14 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 
 @AndroidEntryPoint
-class UsersFragment : Fragment() {
+class UsersFragment : Fragment(), OnItemClickListener<Int> {
 
     private lateinit var binding: FragmentUsersBinding
     private val userViewModel: UserViewModel by activityViewModels() // Shared View Model
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
@@ -39,13 +44,21 @@ class UsersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Get user data
-        userViewModel.getAllUsers()
+        // Set Loading GIF image
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.load)
+            .into(binding.usersProgress)
 
         val recyclerView = binding.usersListView
-        var adapter = UsersAdapter(emptyList())
+        var adapter = UsersAdapter(emptyList(), this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Set click listeners
+        binding.addUserBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_usersFragment_to_addUserFragment)
+        }
 
         // Observers
         userViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
@@ -60,10 +73,17 @@ class UsersFragment : Fragment() {
 
         userViewModel.users.observe(viewLifecycleOwner) { users ->
             if (users.isNotEmpty()) {
-                adapter = UsersAdapter(users)
+                adapter = UsersAdapter(users, this)
                 recyclerView.adapter = adapter
             } else {
                 recyclerView.adapter = null
+            }
+        }
+
+        userViewModel.addEditSuccessful.observe(viewLifecycleOwner) { successful ->
+            if (successful) {
+                userViewModel.getAllUsers() // Update users again
+                Toast.makeText(requireContext(), "User Added", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -75,10 +95,15 @@ class UsersFragment : Fragment() {
         }
     }
 
-    // Get user data again when the fragment is resumed
+    // Get user data when the fragment is resumed or becomes visible
     override fun onResume() {
         super.onResume()
         userViewModel.getAllUsers()
+    }
+
+    override fun onItemClick(item: Int) {
+        val action = UsersFragmentDirections.actionUsersFragmentToProfileFragment(item)
+        findNavController().navigate(action)
     }
 
 }

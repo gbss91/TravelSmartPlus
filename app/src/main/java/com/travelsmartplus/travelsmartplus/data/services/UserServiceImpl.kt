@@ -2,7 +2,9 @@ package com.travelsmartplus.travelsmartplus.data.services
 
 import android.util.Log
 import com.travelsmartplus.travelsmartplus.data.models.User
+import com.travelsmartplus.travelsmartplus.data.models.requests.AddUserRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.SetupAccountRequest
+import com.travelsmartplus.travelsmartplus.data.models.responses.CountriesResponse
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages
 import com.travelsmartplus.travelsmartplus.utils.SessionManager
@@ -118,10 +120,28 @@ class UserServiceImpl @Inject constructor(
         }
     }
 
-    override suspend fun addUser(newUser: User): Response<User> {
+    override suspend fun addUser(newUser: AddUserRequest): Response<User> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = userService.addUser(newUser)
+                if (!response.isSuccessful) {
+                    Log.e("UserService", "Error response: ${response.code()} ${response.message()}")
+                }
+                response
+            } catch (e: Exception) {
+                Log.e("UserService", "Exception: ${e.printStackTrace()}")
+                when (e) {
+                    is IOException -> throw NetworkException(ErrorMessages.NETWORK_ERROR)
+                    else -> throw NetworkException(ErrorMessages.UNEXPECTED_ERROR)
+                }
+            }
+        }
+    }
+
+    override suspend fun getCountries(): Response<CountriesResponse> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = userService.getCountries()
                 if (!response.isSuccessful) {
                     Log.e("UserService", "Error response: ${response.code()} ${response.message()}")
                 }

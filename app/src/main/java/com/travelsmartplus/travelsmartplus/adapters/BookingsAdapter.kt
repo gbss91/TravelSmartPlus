@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.data.models.Booking
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedDateLong
@@ -44,8 +44,8 @@ class BookingsAdapter(private val bookings: List<Booking>) :
         viewHolder.destination.text = booking.destination.city
         viewHolder.date.text = formattedDateLong(booking.departureDate)
 
-        // Load the image using Picasso
-        Picasso.get()
+        // Load the image using Glide
+        Glide.with(viewHolder.itemView)
             .load(booking.imageUrl)
             .placeholder(R.drawable.timetable)
             .error(R.drawable.timetable)

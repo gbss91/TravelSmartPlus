@@ -139,7 +139,7 @@ class BookingServiceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserBookings(userId: String): Response<User> {
+    override suspend fun getUserBookings(userId: String): Response<List<Booking>> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = bookingService.getUserBookings(userId)

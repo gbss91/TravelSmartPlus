@@ -6,5 +6,7 @@ data class AuthResponse(
     @JsonProperty("token") val token: String,
     @JsonProperty("refreshToken") val refreshToken: String,
     @JsonProperty("accountSetup") val accountSetup: Boolean,
+    @JsonProperty("admin") val admin: Boolean,
     @JsonProperty("orgId") val orgId: Int? = null,
+
 )

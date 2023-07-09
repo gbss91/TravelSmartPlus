@@ -8,6 +8,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.time.temporal.ChronoUnit
 
 /**
  * Formatters
@@ -28,6 +29,17 @@ object Formatters {
 
     fun formattedTime(time: LocalDateTime): String {
         return time.format(DateTimeFormatter.ofPattern("HH:mm"))
+    }
+
+    fun formattedArrivalTime(departureTime: LocalDateTime, arrivalTime: LocalDateTime): String {
+        val formattedArrival = arrivalTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+        val daysDifference = ChronoUnit.DAYS.between(departureTime.toLocalDate(), arrivalTime.toLocalDate())
+
+        return when {
+            daysDifference > 0 -> formattedArrival +  "\u207A"
+            daysDifference < 0 -> formattedArrival +  "\u207B"
+            else -> formattedArrival
+        }
     }
 
     fun formattedDuration(duration: Duration, context: Context): String {

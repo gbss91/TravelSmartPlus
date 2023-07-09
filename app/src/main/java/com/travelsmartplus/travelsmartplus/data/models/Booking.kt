@@ -11,7 +11,7 @@ data class Booking(
     @JsonProperty("destination") val destination: Airport,
     @JsonProperty("departureDate") val departureDate: LocalDate,
     @JsonProperty("returnDate") val returnDate: LocalDate?,
-    @JsonProperty("flightBooking") val flightBooking: FlightBooking,
+    @JsonProperty("flightBooking") var flightBooking: FlightBooking,
     @JsonProperty("hotelBooking") var hotelBooking: HotelBooking?,
     @JsonProperty("adultsNumber") val adultsNumber: Int,
     @JsonProperty("status") val status: String,

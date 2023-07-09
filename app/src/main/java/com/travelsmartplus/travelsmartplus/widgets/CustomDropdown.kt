@@ -6,6 +6,7 @@ import android.widget.AutoCompleteTextView
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.adapters.AirlinePreferencesAdapter
 import com.travelsmartplus.travelsmartplus.adapters.AirportAdapter
+import com.travelsmartplus.travelsmartplus.adapters.CountriesAdapter
 import com.travelsmartplus.travelsmartplus.adapters.HotelPreferencesAdapter
 import com.travelsmartplus.travelsmartplus.data.models.Airline
 import com.travelsmartplus.travelsmartplus.data.models.Airport
@@ -24,6 +25,7 @@ class CustomDropdown {
     private var selectedAirport: Airport? = null
     private var selectedHotel: Hotel? = null
     private var selectedAirline: Airline? = null
+    private var selectedCountry: String? = null
 
     // A simple dropdown with preselected option
     fun setSimpleDropdown(
@@ -112,9 +114,30 @@ class CustomDropdown {
 
     }
 
+    // Countries Autocomplete dropdown
+    fun setCountriesAutoComplete(
+        context: Context,
+        autoCompleteTextView: AutoCompleteTextView,
+        countries: List<String>
+    ) {
+
+        val adapter = CountriesAdapter(context, countries)
+        autoCompleteTextView.setAdapter(adapter)
+
+        // Set selected item index
+        autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
+            selectedCountry = adapter.getItem(position)
+        }
+    }
+
     // Gets the corresponding value for the selected item - Allows item text and value to be different
     fun getValueForSelectedItem(values: Array<String>): String {
         return values[selectedItemIndex]
+    }
+
+    // Sets selected item
+    fun setSelectedItem(position: Int) {
+        selectedItemIndex = position
     }
 
     fun getSelectedAirport(): Airport? {
@@ -127,6 +150,10 @@ class CustomDropdown {
 
     fun getSelectedHotel(): Hotel? {
         return selectedHotel
+    }
+
+    fun getSelectedCountry(): String? {
+        return selectedCountry
     }
 
 
