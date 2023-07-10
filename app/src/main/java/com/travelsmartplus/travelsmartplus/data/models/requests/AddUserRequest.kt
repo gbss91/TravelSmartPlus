@@ -1,11 +1,12 @@
 package com.travelsmartplus.travelsmartplus.data.models.requests
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class AddUserRequest(
-    @JsonProperty("firstName") var firstName: String,
-    @JsonProperty("lastName") var lastName: String,
-    @JsonProperty("email") var email: String,
-    @JsonProperty("admin") var admin: Boolean,
-    @JsonProperty("password") var password: String
+    var firstName: String,
+    var lastName: String,
+    var email: String,
+    var admin: Boolean,
+    var password: String
 )

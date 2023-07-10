@@ -1,7 +1,6 @@
 package com.travelsmartplus.travelsmartplus.fragments
 
 import android.os.Bundle
-import android.text.BoringLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -19,6 +18,7 @@ import com.travelsmartplus.travelsmartplus.databinding.FragmentEditDetailsBindin
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages
 import com.travelsmartplus.travelsmartplus.viewModels.UserViewModel
 import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * EditDetailsFragment
@@ -27,6 +27,7 @@ import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
  * @author Gabriel Salas
  */
 
+@AndroidEntryPoint
 class EditDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentEditDetailsBinding

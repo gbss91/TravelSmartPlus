@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
-import android.webkit.RenderProcessGoneDetail
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -19,11 +18,10 @@ import com.travelsmartplus.travelsmartplus.activities.LandingPageActivity
 import com.travelsmartplus.travelsmartplus.databinding.FragmentProfileBinding
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedDateShort
-import com.travelsmartplus.travelsmartplus.utils.SessionManager
 import com.travelsmartplus.travelsmartplus.viewModels.MainViewModel
 import com.travelsmartplus.travelsmartplus.viewModels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.properties.Delegates
+import kotlinx.datetime.toJavaLocalDate
 
 /**
  * ProfileFragment
@@ -53,7 +51,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Get user data
+        // Get user data - Either from Main Activity (bundle) or other Fragment (safeArgs)
         val userId = arguments?.getInt("userId") ?: args.userId
         userViewModel.getUser(userId.toString())
 
@@ -73,6 +71,11 @@ class ProfileFragment : Fragment() {
 
         binding.profileFragmentPreferencesBtn.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_editPreferencesFragment)
+        }
+
+        // Set the delete button with the userID
+        binding.deleteAccountLink.setOnClickListener {
+            deleteAccount(userId.toString())
         }
 
         // Observers
@@ -96,7 +99,7 @@ class ProfileFragment : Fragment() {
             // Update travel data if available
             val travelData = user.travelData
             if (travelData != null) {
-                binding.profileTravelDetailsDob.text = formattedDateShort(user.travelData!!.dob)
+                binding.profileTravelDetailsDob.text = formattedDateShort(user.travelData!!.dob.toJavaLocalDate())
                 binding.profileTravelDetailsInfo.text = getString(R.string.profile_fragment_masked_data)
             } else {
                 binding.profileTravelDetailsInfo.text = "N/A"
@@ -117,11 +120,6 @@ class ProfileFragment : Fragment() {
                 binding.profilePreferencesHotels.text = preferredHotels.joinToString()
             } else {
                 binding.profilePreferencesHotels.text = "N/A"
-            }
-
-            // Set the delete button with the userID
-            binding.deleteAccountLink.setOnClickListener {
-                deleteAccount(user.id.toString())
             }
 
         }

@@ -7,7 +7,6 @@ import com.travelsmartplus.travelsmartplus.data.models.Booking
 import com.travelsmartplus.travelsmartplus.data.models.FlightBooking
 import com.travelsmartplus.travelsmartplus.data.models.Hotel
 import com.travelsmartplus.travelsmartplus.data.models.HotelBooking
-import com.travelsmartplus.travelsmartplus.data.models.User
 import com.travelsmartplus.travelsmartplus.data.models.requests.BookingSearchRequest
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.NETWORK_ERROR

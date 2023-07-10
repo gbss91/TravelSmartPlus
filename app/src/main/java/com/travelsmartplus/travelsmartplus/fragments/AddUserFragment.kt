@@ -1,22 +1,19 @@
 package com.travelsmartplus.travelsmartplus.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
-import com.travelsmartplus.travelsmartplus.adapters.UsersAdapter
-import com.travelsmartplus.travelsmartplus.data.models.User
 import com.travelsmartplus.travelsmartplus.data.models.requests.AddUserRequest
 import com.travelsmartplus.travelsmartplus.databinding.FragmentAddUserBinding
-import com.travelsmartplus.travelsmartplus.databinding.FragmentUsersBinding
 import com.travelsmartplus.travelsmartplus.viewModels.UserViewModel
 import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * AddUserFragment.
@@ -24,6 +21,8 @@ import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
  *
  * @author Gabriel Salas
  */
+
+@AndroidEntryPoint
 class AddUserFragment : Fragment() {
 
     private lateinit var binding: FragmentAddUserBinding

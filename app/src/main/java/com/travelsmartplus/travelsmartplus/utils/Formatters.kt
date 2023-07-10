@@ -3,12 +3,13 @@ package com.travelsmartplus.travelsmartplus.utils
 import android.content.Context
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.data.models.FlightSegment
-import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.time.temporal.ChronoUnit
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
 
 /**
  * Formatters
@@ -43,9 +44,9 @@ object Formatters {
     }
 
     fun formattedDuration(duration: Duration, context: Context): String {
-        val hours = duration.toHours();
-        val minutes = duration.toMinutes() % 60;
-        return  context.getString(R.string.formatted_duration, hours, minutes)
+        val hours = duration.inWholeHours
+        val minutes = (duration - hours.hours).inWholeMinutes
+        return context.getString(R.string.formatted_duration, hours, minutes)
     }
 
     fun formattedDateLong(date: LocalDate): String {

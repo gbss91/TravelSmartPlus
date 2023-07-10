@@ -20,7 +20,8 @@ class UsersAdapter(
     private val users: List<User>,
     private val listener: OnItemClickListener<Int>
 ) :
-    RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
+    RecyclerView.Adapter<UsersAdapter.ViewHolder>()
+{
 
     // Reference to the type of views
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),

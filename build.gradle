@@ -13,6 +13,7 @@ buildscript {
         // Dependencies Vulnerability Checks - Reference: https://owasp.org/www-project-dependency-check/
         classpath("org.owasp:dependency-check-gradle:8.3.1")
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
     }
 }
 

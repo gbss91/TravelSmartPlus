@@ -51,8 +51,6 @@ class UsersFragment : Fragment(), OnItemClickListener<Int> {
             .into(binding.usersProgress)
 
         val recyclerView = binding.usersListView
-        var adapter = UsersAdapter(emptyList(), this)
-        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // Set click listeners
@@ -73,7 +71,8 @@ class UsersFragment : Fragment(), OnItemClickListener<Int> {
 
         userViewModel.users.observe(viewLifecycleOwner) { users ->
             if (users.isNotEmpty()) {
-                adapter = UsersAdapter(users, this)
+                val sortedUsers = users.sortedBy { it.firstName }
+                val adapter = UsersAdapter(sortedUsers, this)
                 recyclerView.adapter = adapter
             } else {
                 recyclerView.adapter = null
@@ -101,6 +100,7 @@ class UsersFragment : Fragment(), OnItemClickListener<Int> {
         userViewModel.getAllUsers()
     }
 
+    // Handle clicking user row
     override fun onItemClick(item: Int) {
         val action = UsersFragmentDirections.actionUsersFragmentToProfileFragment(item)
         findNavController().navigate(action)

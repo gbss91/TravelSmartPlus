@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.adapters.BookingsAdapter
+import com.travelsmartplus.travelsmartplus.adapters.OnItemClickListener
 import com.travelsmartplus.travelsmartplus.databinding.FragmentMyBookingsBinding
 import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 
 @AndroidEntryPoint
-class MyBookingsFragment : Fragment() {
+class MyBookingsFragment : Fragment(), OnItemClickListener<Int> {
 
     private lateinit var binding: FragmentMyBookingsBinding
     private val bookingViewModel: BookingViewModel by activityViewModels() // Shared View Model
@@ -47,8 +49,6 @@ class MyBookingsFragment : Fragment() {
             .into(binding.myBookingsProgress)
 
         val recyclerView = binding.myBookingsListView
-        var adapter = BookingsAdapter(emptyList())
-        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // Observers
@@ -63,8 +63,9 @@ class MyBookingsFragment : Fragment() {
         }
 
         bookingViewModel.myBookings.observe(viewLifecycleOwner) { myBookings ->
+            val sortedBookings = myBookings.sortedBy { it.departureDate }
             if (myBookings.isNotEmpty()) {
-                adapter = BookingsAdapter(myBookings)
+                val adapter = BookingsAdapter(sortedBookings, this)
                 recyclerView.adapter = adapter
             } else {
                 recyclerView.adapter = null
@@ -84,6 +85,11 @@ class MyBookingsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         bookingViewModel.getUserBookings()
+    }
+
+    override fun onItemClick(item: Int) {
+        val action = MyBookingsFragmentDirections.actionMyBookingsFragmentToBookingFragment(item)
+        findNavController().navigate(action)
     }
 
 

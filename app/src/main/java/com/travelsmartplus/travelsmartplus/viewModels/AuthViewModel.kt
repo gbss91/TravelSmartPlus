@@ -141,7 +141,7 @@ class AuthViewModel @Inject constructor(
             email.error == null && password.error == null
         } catch (e: Exception) {
             e.printStackTrace()
-            _errorMessage.postValue(ErrorMessages.UNKNOWN_ERROR)
+            _errorMessage.postValue(UNKNOWN_ERROR)
             false
         }
     }

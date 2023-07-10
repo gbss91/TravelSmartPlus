@@ -1,20 +1,24 @@
 package com.travelsmartplus.travelsmartplus.data.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.travelsmartplus.utils.BigDecimalSerializer
+import kotlinx.datetime.LocalDate
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
-import java.time.LocalDate
 
+
+@Serializable
 data class Booking(
-    @JsonProperty("id") val id: Int? = 0,
-    @JsonProperty("user") val user: User,
-    @JsonProperty("origin") val origin: Airport,
-    @JsonProperty("destination") val destination: Airport,
-    @JsonProperty("departureDate") val departureDate: LocalDate,
-    @JsonProperty("returnDate") val returnDate: LocalDate?,
-    @JsonProperty("flightBooking") var flightBooking: FlightBooking,
-    @JsonProperty("hotelBooking") var hotelBooking: HotelBooking?,
-    @JsonProperty("adultsNumber") val adultsNumber: Int,
-    @JsonProperty("status") val status: String,
-    @JsonProperty("totalPrice") var totalPrice: BigDecimal,
-    @JsonProperty("imageUrl") var imageUrl: String? = null
+    val id: Int? = 0,
+    val user: User,
+    val origin: Airport,
+    val destination: Airport,
+    val departureDate: LocalDate,
+    val returnDate: LocalDate?,
+    var flightBooking: FlightBooking,
+    var hotelBooking: HotelBooking?,
+    val adultsNumber: Int,
+    var status: String,
+    @Serializable(with = BigDecimalSerializer::class)
+    var totalPrice: BigDecimal,
+    var imageUrl: String? = null
 )

@@ -2,37 +2,35 @@ package com.travelsmartplus.travelsmartplus.adapters
 
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.data.models.Booking
-import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedDateLong
+import com.travelsmartplus.travelsmartplus.utils.Formatters
 import kotlinx.datetime.toJavaLocalDate
 
 /**
- * BookingsAdapter
- * Custom adapter to display current user's bookings in [RecyclerView]
+ * AllBookingsAdapter
+ * Custom adapter to display bookings in [RecyclerView]
  *
  * @author Gabriel Salas
  */
 
-class BookingsAdapter(
+class AllBookingsAdapter(
     private val bookings: List<Booking>,
     private val listener: OnItemClickListener<Int>
-    ) :
-    RecyclerView.Adapter<BookingsAdapter.ViewHolder>() {
-
+) :
+    RecyclerView.Adapter<AllBookingsAdapter.ViewHolder>()
+{
     // Reference to the type of views
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        OnClickListener {
+        View.OnClickListener {
 
-        val destination: TextView = itemView.findViewById(R.id.bookingItemDestination)
-        val date: TextView = itemView.findViewById(R.id.bookingItemDate)
-        val image: ImageView = itemView.findViewById(R.id.bookingItemImage)
+        val bookingId: TextView = itemView.findViewById(R.id.bookingRowId)
+        val destination: TextView = itemView.findViewById(R.id.bookingRowDestination)
+        val departureDate: TextView = itemView.findViewById(R.id.bookingRowDepartureDate)
+        val totalPrice: TextView = itemView.findViewById(R.id.bookingRowTotal)
 
         // Set OnClick listener
         init {
@@ -45,13 +43,12 @@ class BookingsAdapter(
                 listener.onItemClick(bookings[position].id!!)
             }
         }
-
     }
 
-    // Create new views
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): BookingsAdapter.ViewHolder {
+    // Inflate the view
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): AllBookingsAdapter.ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_booking, viewGroup, false)
+            .inflate(R.layout.item_booking_row, viewGroup, false)
         return ViewHolder(view)
     }
 
@@ -59,18 +56,14 @@ class BookingsAdapter(
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val booking = bookings[position]
 
+        viewHolder.bookingId.text = booking.id.toString()
         viewHolder.destination.text = booking.destination.city
-        viewHolder.date.text = formattedDateLong(booking.departureDate.toJavaLocalDate())
-
-        // Load the image using Glide
-        Glide.with(viewHolder.itemView)
-            .load(booking.imageUrl)
-            .placeholder(R.drawable.timetable)
-            .error(R.drawable.timetable)
-            .into(viewHolder.image)
+        viewHolder.departureDate.text = Formatters.formattedDateShort(booking.departureDate.toJavaLocalDate())
+        viewHolder.totalPrice.text = viewHolder.itemView.context.getString(R.string.currency_price, booking.totalPrice)
     }
 
     // Return the size the dataset
     override fun getItemCount() = bookings.size
+
 
 }

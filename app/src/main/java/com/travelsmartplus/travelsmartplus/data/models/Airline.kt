@@ -1,10 +1,11 @@
 package com.travelsmartplus.travelsmartplus.data.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Airline(
-    @JsonProperty("id") val id: Int,
-    @JsonProperty("airlineName") val airlineName: String,
-    @JsonProperty("iataCode") val iataCode: String,
-    @JsonProperty("icaoCode") val icaoCode: String
+    val id: Int,
+    val airlineName: String,
+    val iataCode: String,
+    val icaoCode: String
 )

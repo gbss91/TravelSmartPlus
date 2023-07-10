@@ -1,9 +1,10 @@
 package com.travelsmartplus.travelsmartplus.data.models.requests
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class SetupAccountRequest(
-    @JsonProperty("newPassword") var newPassword: String,
-    @JsonProperty("preferredAirlines") var preferredAirlines: List<String>,
-    @JsonProperty("preferredHotelChains") var preferredHotelChains: List<String>
+    var newPassword: String,
+    var preferredAirlines: List<String>,
+    var preferredHotelChains: List<String>
 )

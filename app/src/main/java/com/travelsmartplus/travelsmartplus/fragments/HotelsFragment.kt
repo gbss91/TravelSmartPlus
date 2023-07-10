@@ -37,7 +37,7 @@ class HotelsFragment : Fragment(), OnItemClickListener<HotelBooking> {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentHotelsBinding.inflate(inflater, container, false)
         return binding.root
@@ -53,8 +53,6 @@ class HotelsFragment : Fragment(), OnItemClickListener<HotelBooking> {
             .into(binding.hotelResultsProgress)
 
         val recyclerView = binding.hotelResultsView
-        var adapter = HotelResultsAdapter(emptyList(), this)
-        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
 
@@ -71,7 +69,7 @@ class HotelsFragment : Fragment(), OnItemClickListener<HotelBooking> {
 
         bookingViewModel.hotelOffers.observe(viewLifecycleOwner) { hotelOffers ->
             if (hotelOffers.isNotEmpty()) {
-                adapter = HotelResultsAdapter(hotelOffers, this)
+                val adapter = HotelResultsAdapter(hotelOffers, this)
                 recyclerView.adapter = adapter
             } else {
                 recyclerView.adapter = null

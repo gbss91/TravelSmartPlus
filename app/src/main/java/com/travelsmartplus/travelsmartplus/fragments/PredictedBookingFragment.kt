@@ -14,13 +14,13 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.databinding.FragmentPredictedBookingBinding
-import com.travelsmartplus.travelsmartplus.databinding.ItemFlightTemplateBinding
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedArrivalTime
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedDuration
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedStops
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedTime
 import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.datetime.toJavaLocalDateTime
 
 /**
  * PredictedBookingFragment.
@@ -106,11 +106,11 @@ class PredictedBookingFragment : Fragment() {
                 // Assign data to flights
                 val outbound = booking.flightBooking.segments[0]
                 binding.predictedOutboundFlight.flightItemAirline.text = outbound.flights[0].carrierName
-                binding.predictedOutboundFlight.flightItemDepartureTimeText.text = formattedTime(outbound.flights[0].departureTime)
+                binding.predictedOutboundFlight.flightItemDepartureTimeText.text = formattedTime(outbound.flights[0].departureTime.toJavaLocalDateTime())
                 binding.predictedOutboundFlight.flightItemOriginIataText.text = outbound.flights[0].departureAirport.iataCode
                 binding.predictedOutboundFlight.flightItemDuration.text = formattedDuration(outbound.duration, requireContext())
                 binding.predictedOutboundFlight.flightItemStops.text = formattedStops(outbound)
-                binding.predictedOutboundFlight.flightItemArrivalTimeText.text = formattedArrivalTime(outbound.flights[0].departureTime, outbound.flights.last().arrivalTime)
+                binding.predictedOutboundFlight.flightItemArrivalTimeText.text = formattedArrivalTime(outbound.flights[0].departureTime.toJavaLocalDateTime(), outbound.flights.last().arrivalTime.toJavaLocalDateTime())
                 binding.predictedOutboundFlight.flightItemDestinationIataText.text = outbound.flights.last().arrivalAirport.iataCode
 
                 // Assign and show return only when needed
@@ -119,11 +119,11 @@ class PredictedBookingFragment : Fragment() {
 
                     val inbound = booking.flightBooking.segments[1]
                     binding.predictedInboundFlight.flightItemAirline.text = inbound.flights[0].carrierName
-                    binding.predictedInboundFlight.flightItemDepartureTimeText.text = formattedTime(inbound.flights[0].departureTime)
+                    binding.predictedInboundFlight.flightItemDepartureTimeText.text = formattedTime(inbound.flights[0].departureTime.toJavaLocalDateTime())
                     binding.predictedInboundFlight.flightItemOriginIataText.text = inbound.flights[0].departureAirport.iataCode
                     binding.predictedInboundFlight.flightItemDuration.text = formattedDuration(inbound.duration, requireContext())
                     binding.predictedInboundFlight.flightItemStops.text = formattedStops(inbound)
-                    binding.predictedInboundFlight.flightItemArrivalTimeText.text = formattedArrivalTime(inbound.flights[0].departureTime, inbound.flights.last().arrivalTime)
+                    binding.predictedInboundFlight.flightItemArrivalTimeText.text = formattedArrivalTime(inbound.flights[0].departureTime.toJavaLocalDateTime(), inbound.flights.last().arrivalTime.toJavaLocalDateTime())
                     binding.predictedInboundFlight.flightItemDestinationIataText.text = inbound.flights.last().arrivalAirport.iataCode
 
                 } else {

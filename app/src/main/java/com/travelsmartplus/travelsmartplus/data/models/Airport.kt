@@ -1,16 +1,17 @@
 package com.travelsmartplus.travelsmartplus.data.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Airport(
-    @JsonProperty("id") val id: Int,
-    @JsonProperty("airportName")val airportName: String,
-    @JsonProperty("city") val city: String,
-    @JsonProperty("country") val country: String,
-    @JsonProperty("iataCode") val iataCode: String,
-    @JsonProperty("icaoCode") val icaoCode: String,
-    @JsonProperty("latitude") val latitude: Double,
-    @JsonProperty("longitude") val longitude: Double
+    val id: Int,
+    val airportName: String,
+    val city: String,
+    val country: String,
+    val iataCode: String,
+    val icaoCode: String,
+    val latitude: Double,
+    val longitude: Double
 )
 
 

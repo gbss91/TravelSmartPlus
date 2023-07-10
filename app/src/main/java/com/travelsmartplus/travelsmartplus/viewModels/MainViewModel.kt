@@ -37,7 +37,7 @@ class MainViewModel @Inject constructor(
         sessionManager.clearSession()
     }
 
-    fun getCurrentUser(): Int? {
+    fun getCurrentUser(): Int {
         return sessionManager.currentUser()
     }
 

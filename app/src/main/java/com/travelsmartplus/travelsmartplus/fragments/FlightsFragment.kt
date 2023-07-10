@@ -48,8 +48,6 @@ class FlightsFragment : Fragment(), OnItemClickListener<FlightBooking> {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerView = binding.flightResultsView
-        var adapter = FlightResultsAdapter(emptyList(), this)
-        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // Set GIF image
@@ -71,7 +69,7 @@ class FlightsFragment : Fragment(), OnItemClickListener<FlightBooking> {
 
         bookingViewModel.flightOffers.observe(viewLifecycleOwner) { flightOffers ->
             if (flightOffers.isNotEmpty()) {
-                adapter = FlightResultsAdapter(flightOffers, this)
+                val adapter = FlightResultsAdapter(flightOffers, this)
                 recyclerView.adapter = adapter
             } else {
                 recyclerView.adapter = null

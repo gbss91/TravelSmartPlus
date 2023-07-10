@@ -17,6 +17,9 @@ import com.travelsmartplus.travelsmartplus.utils.Formatters
 import com.travelsmartplus.travelsmartplus.viewModels.UserViewModel
 import com.travelsmartplus.travelsmartplus.widgets.CustomDatePicker
 import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toKotlinLocalDate
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -27,6 +30,7 @@ import java.time.format.DateTimeFormatter
  * @author Gabriel Salas
  */
 
+@AndroidEntryPoint
 class EditTravelDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentEditTravelDetailsBinding
@@ -73,9 +77,9 @@ class EditTravelDetailsFragment : Fragment() {
             // Update UI with existing user data
             val userTravelData = user.travelData
             if (userTravelData != null ) {
-                binding.editDobInput.setText(Formatters.formattedDateShort(userTravelData.dob))
+                binding.editDobInput.setText(Formatters.formattedDateShort(userTravelData.dob.toJavaLocalDate()))
                 binding.editPassportNumberInput.setText(userTravelData.passportNumber)
-                binding.editExpiryDateInput.setText(Formatters.formattedDateShort(userTravelData.passportExpiryDate))
+                binding.editExpiryDateInput.setText(Formatters.formattedDateShort(userTravelData.passportExpiryDate.toJavaLocalDate()))
             }
 
             binding.editCancelBtn.setOnClickListener {
@@ -123,10 +127,10 @@ class EditTravelDetailsFragment : Fragment() {
 
             val travelData = TravelData(
                 userId = user.id!!,
-                dob = LocalDate.parse(dob.text.toString(), formatter),
+                dob = LocalDate.parse(dob.text.toString(), formatter).toKotlinLocalDate(),
                 nationality = nationality!!,
                 passportNumber = passportNumber.text.toString(),
-                passportExpiryDate = LocalDate.parse(expiryDate.text.toString(), formatter)
+                passportExpiryDate = LocalDate.parse(expiryDate.text.toString(), formatter).toKotlinLocalDate()
             )
 
             // Update user

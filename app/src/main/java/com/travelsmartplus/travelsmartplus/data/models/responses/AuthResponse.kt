@@ -1,12 +1,13 @@
 package com.travelsmartplus.travelsmartplus.data.models.responses
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class AuthResponse(
-    @JsonProperty("token") val token: String,
-    @JsonProperty("refreshToken") val refreshToken: String,
-    @JsonProperty("accountSetup") val accountSetup: Boolean,
-    @JsonProperty("admin") val admin: Boolean,
-    @JsonProperty("orgId") val orgId: Int? = null,
+    val token: String,
+    val refreshToken: String,
+    val accountSetup: Boolean,
+    val admin: Boolean,
+    val orgId: Int? = null,
 
 )

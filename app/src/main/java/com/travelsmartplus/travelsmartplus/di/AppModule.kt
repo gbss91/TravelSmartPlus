@@ -2,11 +2,7 @@ package com.travelsmartplus.travelsmartplus.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.databind.util.StdDateFormat
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.travelsmartplus.travelsmartplus.data.network.AuthInterceptor
 import com.travelsmartplus.travelsmartplus.data.network.Endpoints.BASE_URL
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
@@ -22,9 +18,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -59,18 +56,12 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        val objectMapper = ObjectMapper()
-            .registerKotlinModule() // Enable support for Kotlin data classes
-            .registerModule(JavaTimeModule())// Enable support for Java 8 date/time types
 
-        // Configure the ObjectMapper to serialize LocalDate as a string in ISO-8601 format
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-        objectMapper.dateFormat = StdDateFormat()
-
+        val contentType = "application/json".toMediaType()
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .addConverterFactory(Json.asConverterFactory(contentType))
             .client(okHttpClient)
-            .addConverterFactory(JacksonConverterFactory.create(objectMapper))
             .build()
     }
 

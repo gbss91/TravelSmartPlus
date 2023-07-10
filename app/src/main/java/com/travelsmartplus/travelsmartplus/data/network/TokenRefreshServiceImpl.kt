@@ -1,10 +1,10 @@
 package com.travelsmartplus.travelsmartplus.data.network
 
 import android.util.Log
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import okhttp3.Cookie
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -39,8 +39,8 @@ class TokenRefreshServiceImpl : TokenRefreshService {
                 val response = client.newCall(request).execute()
                 response.use {
                     if (response.isSuccessful) {
-                        val objectMapper = jacksonObjectMapper()
-                        objectMapper.readValue(response.body?.string(), AuthResponse::class.java)
+                        val json = response.body?.string()
+                        json?.let { Json.decodeFromString<AuthResponse>(it) }
                     } else {
                         Log.e("TokenRefreshService", "Unable to refresh token. Error response: ${response.code} ${response.message}")
                         null

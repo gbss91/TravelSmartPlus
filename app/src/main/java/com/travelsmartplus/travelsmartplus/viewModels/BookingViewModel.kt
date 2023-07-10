@@ -13,7 +13,6 @@ import com.travelsmartplus.travelsmartplus.data.models.HotelBooking
 import com.travelsmartplus.travelsmartplus.data.models.requests.BookingSearchRequest
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.data.services.BookingService
-import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.NOT_FOUND_ERROR
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNEXPECTED_ERROR
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNKNOWN_ERROR
 import com.travelsmartplus.travelsmartplus.utils.NotBlankRule
@@ -21,6 +20,7 @@ import com.travelsmartplus.travelsmartplus.utils.SessionManager
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import javax.inject.Inject
 
 /**
@@ -45,6 +45,7 @@ class BookingViewModel @Inject constructor(
     private val _hotelOffers = MutableLiveData<List<HotelBooking>>()
     private val _allBookings = MutableLiveData<List<Booking>>()
     private val _myBookings = MutableLiveData<List<Booking>>()
+    private val _deleteBookingResponse = MutableLiveData<Response<Unit>>()
     private val _errorMessage = MutableLiveData<String?>()
     private val _isLoading = MutableLiveData<Boolean>()
     private val _newSearch = MutableLiveData<Boolean>()
@@ -54,6 +55,7 @@ class BookingViewModel @Inject constructor(
     val hotelOffers: LiveData<List<HotelBooking>> = _hotelOffers
     val allBookings: LiveData<List<Booking>> = _allBookings
     val myBookings: LiveData<List<Booking>> = _myBookings
+    val deleteBookingResponse: LiveData<Response<Unit>> = _deleteBookingResponse
     val errorMessage: LiveData<String?> = _errorMessage
     val isLoading: LiveData<Boolean> = _isLoading
     val newSearch: LiveData<Boolean> = _newSearch
@@ -109,14 +111,13 @@ class BookingViewModel @Inject constructor(
 
     fun bookingSearch() {
         _isLoading.value = true
+        _booking.value = null // Clears previous data
         viewModelScope.launch {
             try {
                 bookingSearchRequest?.userId = sessionManager.currentUser()
                 val response = bookingService.bookingSearch(bookingSearchRequest!!)
                 if (response.code() == 200) {
                     _booking.postValue(response.body())
-                } else if (response.code() == 204) {
-                    _booking.postValue(null)
                 } else {
                     val errorBody = response.errorBody()?.string()
                     _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
@@ -222,6 +223,7 @@ class BookingViewModel @Inject constructor(
                     val newBooking = response.body()
                     _booking.postValue(newBooking)
                 } else {
+                    _booking.postValue(null)
                     val errorBody = response.errorBody()?.string()
                     _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
                 }
@@ -240,10 +242,53 @@ class BookingViewModel @Inject constructor(
         }
     }
 
-
     // Get booking using booking ID
+    fun getBooking(id: String) {
+        _isLoading.value = true
+        _booking.value = null // Clears previous data
+        viewModelScope.launch {
+            try {
+                val response = bookingService.getBooking(id)
+                if (response.isSuccessful) {
+                    val booking = response.body()
+                    _booking.postValue(booking)
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _errorMessage.postValue(errorBody ?: UNKNOWN_ERROR)
+                }
+            } catch (e: NetworkException) {
+                e.printStackTrace()
+                _errorMessage.postValue(e.message)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.postValue(UNKNOWN_ERROR)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 
     // Delete booking
+    fun deleteBooking(id: String) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val response = bookingService.deleteBooking(id)
+                _deleteBookingResponse.postValue(response)
+
+            } catch (e: NetworkException) {
+                e.printStackTrace()
+                _errorMessage.postValue(e.message)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.postValue(UNKNOWN_ERROR)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+
+    }
+
 
     // Get all company bookings
     fun getAllBookings() {

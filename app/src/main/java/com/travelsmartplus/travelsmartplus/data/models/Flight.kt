@@ -1,14 +1,15 @@
 package com.travelsmartplus.travelsmartplus.data.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Flight(
-    @JsonProperty("id") val id: Int? = 0,
-    @JsonProperty("departureAirport") val departureAirport: Airport,
-    @JsonProperty("departureTime") val departureTime: LocalDateTime,
-    @JsonProperty("arrivalAirport") val arrivalAirport: Airport,
-    @JsonProperty("arrivalTime") val arrivalTime: LocalDateTime,
-    @JsonProperty("carrierIataCode") val carrierIataCode: String,
-    @JsonProperty("carrierName") val carrierName: String
+    val id: Int? = 0,
+    val departureAirport: Airport,
+    val departureTime: LocalDateTime,
+    val arrivalAirport: Airport,
+    val arrivalTime: LocalDateTime,
+    val carrierIataCode: String,
+    val carrierName: String
 )

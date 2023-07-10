@@ -28,7 +28,7 @@ class SetupFinishFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentSetupFinishBinding.inflate(inflater, container, false)
         return binding.root

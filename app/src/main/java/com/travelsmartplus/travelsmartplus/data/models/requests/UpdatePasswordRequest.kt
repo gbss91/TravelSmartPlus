@@ -1,8 +1,9 @@
 package com.travelsmartplus.travelsmartplus.data.models.requests
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class UpdatePasswordRequest(
-    @JsonProperty("userId") val userId: Int,
-    @JsonProperty("newPassword") val newPassword: String
+    val userId: Int,
+    val newPassword: String
 )

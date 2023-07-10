@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.btnMenuProfile -> {
                     val args = Bundle()
-                    args.putInt("userId", currentUser ?: -1)
+                    args.putInt("userId", currentUser)
                     navController.navigate(R.id.profileFragment, args, backToBookingSearch)
                     true
                 }

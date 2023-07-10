@@ -6,7 +6,6 @@ import com.travelsmartplus.travelsmartplus.data.models.Booking
 import com.travelsmartplus.travelsmartplus.data.models.FlightBooking
 import com.travelsmartplus.travelsmartplus.data.models.Hotel
 import com.travelsmartplus.travelsmartplus.data.models.HotelBooking
-import com.travelsmartplus.travelsmartplus.data.models.User
 import com.travelsmartplus.travelsmartplus.data.models.requests.BookingSearchRequest
 import com.travelsmartplus.travelsmartplus.data.network.Endpoints.ADD_BOOKING
 import com.travelsmartplus.travelsmartplus.data.network.Endpoints.AIRLINES_SEARCH

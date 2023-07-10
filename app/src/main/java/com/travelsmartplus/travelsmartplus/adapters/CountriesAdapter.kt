@@ -9,8 +9,6 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import com.travelsmartplus.travelsmartplus.R
-import com.travelsmartplus.travelsmartplus.data.models.Airline
-import com.travelsmartplus.travelsmartplus.data.models.Hotel
 
 /**
  * CountriesAdapter

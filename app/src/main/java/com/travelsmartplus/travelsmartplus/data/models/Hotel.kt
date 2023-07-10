@@ -1,8 +1,9 @@
 package com.travelsmartplus.travelsmartplus.data.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Hotel(
-    @JsonProperty("hotelChain") val hotelChain: String,
-    @JsonProperty("code") val code: String
+    val hotelChain: String,
+    val code: String
 )

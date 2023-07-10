@@ -12,6 +12,7 @@ import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedArrivalTime
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedDuration
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedStops
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedTime
+import kotlinx.datetime.toJavaLocalDateTime
 
 
 /**
@@ -61,11 +62,11 @@ class FlightResultsAdapter(
 
         // Set outbound details
         viewHolder.outboundFlight.findViewById<TextView>(R.id.flightItemAirline).text = outbound.flights[0].carrierName
-        viewHolder.outboundFlight.findViewById<TextView>(R.id.flightItemDepartureTimeText).text = formattedTime(outbound.flights[0].departureTime)
+        viewHolder.outboundFlight.findViewById<TextView>(R.id.flightItemDepartureTimeText).text = formattedTime(outbound.flights[0].departureTime.toJavaLocalDateTime())
         viewHolder.outboundFlight.findViewById<TextView>(R.id.flightItemOriginIataText).text = outbound.flights[0].departureAirport.iataCode
         viewHolder.outboundFlight.findViewById<TextView>(R.id.flightItemDuration).text = formattedDuration(outbound.duration, viewHolder.itemView.context)
         viewHolder.outboundFlight.findViewById<TextView>(R.id.flightItemStops).text = formattedStops(outbound)
-        viewHolder.outboundFlight.findViewById<TextView>(R.id.flightItemArrivalTimeText).text = formattedArrivalTime(outbound.flights[0].departureTime, outbound.flights.last().arrivalTime)
+        viewHolder.outboundFlight.findViewById<TextView>(R.id.flightItemArrivalTimeText).text = formattedArrivalTime(outbound.flights[0].departureTime.toJavaLocalDateTime(), outbound.flights.last().arrivalTime.toJavaLocalDateTime())
         viewHolder.outboundFlight.findViewById<TextView>(R.id.flightItemDestinationIataText).text = outbound.flights.last().arrivalAirport.iataCode
 
         // Shows inbound section for return flights
@@ -74,11 +75,11 @@ class FlightResultsAdapter(
 
             viewHolder.inboundFlight.visibility = View.VISIBLE
             viewHolder.inboundFlight.findViewById<TextView>(R.id.flightItemAirline).text = inbound.flights[0].carrierName
-            viewHolder.inboundFlight.findViewById<TextView>(R.id.flightItemDepartureTimeText).text = formattedTime(inbound.flights[0].departureTime)
+            viewHolder.inboundFlight.findViewById<TextView>(R.id.flightItemDepartureTimeText).text = formattedTime(inbound.flights[0].departureTime.toJavaLocalDateTime())
             viewHolder.inboundFlight.findViewById<TextView>(R.id.flightItemOriginIataText).text = inbound.flights[0].departureAirport.iataCode
             viewHolder.inboundFlight.findViewById<TextView>(R.id.flightItemDuration).text = formattedDuration(inbound.duration, viewHolder.itemView.context)
             viewHolder.inboundFlight.findViewById<TextView>(R.id.flightItemStops).text = formattedStops(inbound)
-            viewHolder.inboundFlight.findViewById<TextView>(R.id.flightItemArrivalTimeText).text = formattedArrivalTime(inbound.flights[0].departureTime, inbound.flights.last().arrivalTime)
+            viewHolder.inboundFlight.findViewById<TextView>(R.id.flightItemArrivalTimeText).text = formattedArrivalTime(inbound.flights[0].departureTime.toJavaLocalDateTime(), inbound.flights.last().arrivalTime.toJavaLocalDateTime())
             viewHolder.inboundFlight.findViewById<TextView>(R.id.flightItemDestinationIataText).text = inbound.flights.last().arrivalAirport.iataCode
 
         } else {

@@ -15,6 +15,7 @@ import com.travelsmartplus.travelsmartplus.databinding.FragmentEditPreferencesBi
 import com.travelsmartplus.travelsmartplus.viewModels.SetupViewModel
 import com.travelsmartplus.travelsmartplus.viewModels.UserViewModel
 import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * EditPreferencesFragment
@@ -23,6 +24,7 @@ import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
  * @author Gabriel Salas
  */
 
+@AndroidEntryPoint
 class EditPreferencesFragment : Fragment() {
 
     private lateinit var binding: FragmentEditPreferencesBinding
@@ -40,7 +42,7 @@ class EditPreferencesFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentEditPreferencesBinding.inflate(inflater, container, false)
         return binding.root

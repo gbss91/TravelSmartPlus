@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.databinding.FragmentSetupStartBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * SetupStartFragment
@@ -17,6 +18,7 @@ import com.travelsmartplus.travelsmartplus.databinding.FragmentSetupStartBinding
  * @author Gabriel Salas
  */
 
+@AndroidEntryPoint
 class SetupStartFragment : Fragment() {
 
     private lateinit var binding: FragmentSetupStartBinding

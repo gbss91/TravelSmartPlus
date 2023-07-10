@@ -5,41 +5,55 @@
     android:layout_height="wrap_content">
 
     <TableRow
-        android:paddingHorizontal="@dimen/default_padding"
+        android:paddingHorizontal="@dimen/small_padding"
         android:paddingVertical="@dimen/small_padding">
 
         <TextView
+            android:id="@+id/bookingRowId"
+            android:layout_width="0dp"
             android:layout_weight="1"
             android:paddingEnd="@dimen/xxsmall_padding"
             android:textSize="@dimen/small_text"
             android:textColor="@color/black"
+            android:textAlignment="textStart"
             android:fontFamily="@font/roboto"
             android:layout_column="0"
             tools:text="1001"/>
 
         <TextView
+            android:id="@+id/bookingRowDestination"
+            android:layout_width="0dp"
             android:layout_weight="2"
             android:paddingEnd="@dimen/xxsmall_padding"
             android:textSize="@dimen/small_text"
             android:textColor="@color/black"
             android:fontFamily="@font/roboto"
+            android:textAlignment="textStart"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:layout_column="1"
             tools:text="London"/>
 
         <TextView
-            android:layout_weight="1"
+            android:id="@+id/bookingRowDepartureDate"
+            android:layout_width="0dp"
+            android:layout_weight="2"
             android:paddingEnd="@dimen/xxsmall_padding"
             android:textSize="@dimen/small_text"
             android:textColor="@color/black"
             android:fontFamily="@font/roboto"
+            android:textAlignment="center"
             android:layout_column="2"
             tools:text="22 Nov 2023"/>
 
         <TextView
-            android:layout_weight="1"
+            android:id="@+id/bookingRowTotal"
+            android:layout_width="0dp"
+            android:layout_weight="2"
             android:textSize="@dimen/small_text"
             android:textColor="@color/black"
             android:fontFamily="@font/roboto"
+            android:textAlignment="center"
             android:layout_column="3"
             tools:text="€1500"/>
     </TableRow>

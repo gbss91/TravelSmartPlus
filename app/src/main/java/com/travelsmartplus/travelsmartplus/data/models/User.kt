@@ -1,18 +1,19 @@
 package com.travelsmartplus.travelsmartplus.data.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class User(
-    @JsonProperty("id") val id: Int? = 0,
-    @JsonProperty("orgId") val orgId: Int,
-    @JsonProperty("firstName") var firstName: String,
-    @JsonProperty("lastName") var lastName: String,
-    @JsonProperty("email") var email: String,
-    @JsonProperty("admin") var admin: Boolean,
-    @JsonProperty("password") var password: String,
-    @JsonProperty("salt") var salt: String,
-    @JsonProperty("accountSetup") var accountSetup: Boolean,
-    @JsonProperty("preferredAirlines") var preferredAirlines: List<String>? = null,
-    @JsonProperty("preferredHotelChains") var preferredHotelChains: List<String>? = null,
-    @JsonProperty("travelData") var travelData: TravelData? = null
+    val id: Int? = 0,
+    val orgId: Int,
+    var firstName: String,
+    var lastName: String,
+    var email: String,
+    var admin: Boolean,
+    var password: String,
+    var salt: String,
+    var accountSetup: Boolean,
+    var preferredAirlines: List<String>? = null,
+    var preferredHotelChains: List<String>? = null,
+    var travelData: TravelData? = null
 )

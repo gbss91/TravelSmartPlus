@@ -12,8 +12,9 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
+import com.travelsmartplus.travelsmartplus.data.models.Booking
+import com.travelsmartplus.travelsmartplus.data.models.User
 import com.travelsmartplus.travelsmartplus.databinding.FragmentBookingConfirmationBinding
-import com.travelsmartplus.travelsmartplus.databinding.FragmentPredictedBookingBinding
 import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -54,7 +55,14 @@ class BookingConfirmationFragment : Fragment() {
 
         // Observers
         bookingViewModel.booking.observe(viewLifecycleOwner) { booking ->
+
             binding.bookingConfirmationText.text = getString(R.string.confirmation_fragment_id, (booking?.id ?: ""))
+
+            // Set click listener
+            binding.bookingConfirmationBtn.setOnClickListener {
+                val action = BookingConfirmationFragmentDirections.actionBookingConfirmationFragmentToBookingFragment(booking?.id ?: -1)
+                findNavController().navigate(action)
+            }
         }
 
         bookingViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
