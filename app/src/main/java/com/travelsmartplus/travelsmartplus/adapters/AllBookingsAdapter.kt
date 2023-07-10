@@ -3,6 +3,8 @@ package com.travelsmartplus.travelsmartplus.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.travelsmartplus.travelsmartplus.R
@@ -20,9 +22,13 @@ import kotlinx.datetime.toJavaLocalDate
 class AllBookingsAdapter(
     private val bookings: List<Booking>,
     private val listener: OnItemClickListener<Int>
-) :
-    RecyclerView.Adapter<AllBookingsAdapter.ViewHolder>()
-{
+    ) :
+    RecyclerView.Adapter<AllBookingsAdapter.ViewHolder>(), Filterable {
+
+    private var originalBookings: List<Booking> = bookings
+    private var filteredBookings: List<Booking> = originalBookings
+
+
     // Reference to the type of views
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
@@ -40,7 +46,7 @@ class AllBookingsAdapter(
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                listener.onItemClick(bookings[position].id!!)
+                listener.onItemClick(filteredBookings[position].id!!)
             }
         }
     }
@@ -54,7 +60,7 @@ class AllBookingsAdapter(
 
     // Replace the contents of a view
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val booking = bookings[position]
+        val booking = filteredBookings[position]
 
         viewHolder.bookingId.text = booking.id.toString()
         viewHolder.destination.text = booking.destination.city
@@ -63,7 +69,46 @@ class AllBookingsAdapter(
     }
 
     // Return the size the dataset
-    override fun getItemCount() = bookings.size
+    override fun getItemCount() = filteredBookings.size
+
+    // Update adapter data
+    fun updateBookings(newBookings: List<Booking>) {
+        originalBookings = newBookings
+        filteredBookings = newBookings
+        notifyDataSetChanged()
+    }
+
+    // Filters data
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val filterResults = FilterResults()
+
+                // Filter patterns
+                val filterPattern = constraint?.toString()?.lowercase()?.trim() ?: ""
+                filteredBookings = originalBookings.filter { booking ->
+                    booking.destination.city.lowercase().contains(filterPattern) ||
+                            booking.id.toString().contains(filterPattern) ||
+                            booking.destination.country.lowercase().contains(filterPattern)
+                }
+
+                filterResults.values = filteredBookings
+                filterResults.count = filteredBookings.size
+                return filterResults
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                filteredBookings = if (results != null) {
+                    results.values as List<Booking>
+                } else {
+                    originalBookings
+                }
+                notifyDataSetChanged()
+            }
+        }
+    }
+
+
 
 
 }

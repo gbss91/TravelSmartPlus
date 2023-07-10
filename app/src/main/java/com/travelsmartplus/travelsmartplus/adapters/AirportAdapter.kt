@@ -23,7 +23,7 @@ import com.travelsmartplus.travelsmartplus.data.models.Airport
 class AirportAdapter(context: Context, airports: List<Airport>) :
     ArrayAdapter<Airport>(context, R.layout.item_airport_autocomplete, airports), Filterable {
 
-    private val originalAirports: List<Airport> = airports.toList()
+    private val originalAirports: List<Airport> = airports
     private var filteredAirports: List<Airport> = originalAirports
 
     override fun getCount(): Int {

@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.travelsmartplus.travelsmartplus.R
@@ -19,9 +21,11 @@ import com.travelsmartplus.travelsmartplus.data.models.User
 class UsersAdapter(
     private val users: List<User>,
     private val listener: OnItemClickListener<Int>
-) :
-    RecyclerView.Adapter<UsersAdapter.ViewHolder>()
-{
+    ) :
+    RecyclerView.Adapter<UsersAdapter.ViewHolder>(), Filterable {
+
+    private var originalUsers: List<User> = users
+    private var filteredUsers: List<User> = originalUsers
 
     // Reference to the type of views
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -37,7 +41,7 @@ class UsersAdapter(
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                listener.onItemClick(users[position].id!!)
+                listener.onItemClick(filteredUsers[position].id!!)
             }
         }
 
@@ -58,6 +62,44 @@ class UsersAdapter(
     }
 
     // Return the size the dataset
-    override fun getItemCount() = users.size
+    override fun getItemCount() = filteredUsers.size
+
+    // Update adapter data
+    fun updateUsers(newUsers: List<User>) {
+        originalUsers = newUsers
+        filteredUsers = newUsers
+        notifyDataSetChanged()
+    }
+
+    // Filters data
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val filterResults = FilterResults()
+
+                // Filter patterns
+                val filterPattern = constraint?.toString()?.lowercase()?.trim() ?: ""
+                filteredUsers = originalUsers.filter { user ->
+                    user.id.toString().contains(filterPattern) ||
+                            user.firstName.lowercase().contains(filterPattern) ||
+                            user.lastName.lowercase().contains(filterPattern) ||
+                            user.email.lowercase().contains(filterPattern)
+                }
+
+                filterResults.values = filteredUsers
+                filterResults.count = filteredUsers.size
+                return filterResults
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                filteredUsers = if (results != null) {
+                    results.values as List<User>
+                } else {
+                    originalUsers
+                }
+                notifyDataSetChanged()
+            }
+        }
+    }
 
 }

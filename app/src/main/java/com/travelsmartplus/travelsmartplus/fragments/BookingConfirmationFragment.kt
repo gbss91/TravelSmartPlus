@@ -12,8 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
-import com.travelsmartplus.travelsmartplus.data.models.Booking
-import com.travelsmartplus.travelsmartplus.data.models.User
 import com.travelsmartplus.travelsmartplus.databinding.FragmentBookingConfirmationBinding
 import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
 import dagger.hilt.android.AndroidEntryPoint

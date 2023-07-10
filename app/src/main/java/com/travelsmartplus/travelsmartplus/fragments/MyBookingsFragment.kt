@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -50,6 +51,21 @@ class MyBookingsFragment : Fragment(), OnItemClickListener<Int> {
 
         val recyclerView = binding.myBookingsListView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val bookingsAdapter = BookingsAdapter(emptyList(), this)
+        recyclerView.adapter = bookingsAdapter
+
+
+        // Set search bar
+        binding.myBookingsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                bookingsAdapter.filter.filter(newText)
+                return true
+            }
+        })
 
         // Observers
         bookingViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
@@ -65,8 +81,7 @@ class MyBookingsFragment : Fragment(), OnItemClickListener<Int> {
         bookingViewModel.myBookings.observe(viewLifecycleOwner) { myBookings ->
             val sortedBookings = myBookings.sortedBy { it.departureDate }
             if (myBookings.isNotEmpty()) {
-                val adapter = BookingsAdapter(sortedBookings, this)
-                recyclerView.adapter = adapter
+                bookingsAdapter.updateBookings(sortedBookings)
             } else {
                 recyclerView.adapter = null
             }

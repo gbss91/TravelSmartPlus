@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -52,6 +53,21 @@ class UsersFragment : Fragment(), OnItemClickListener<Int> {
 
         val recyclerView = binding.usersListView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val usersAdapter = UsersAdapter(emptyList(), this)
+        recyclerView.adapter = usersAdapter
+
+
+        // Set search bar
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                usersAdapter.filter.filter(newText)
+                return true
+            }
+        })
 
         // Set click listeners
         binding.addUserBtn.setOnClickListener {
@@ -72,8 +88,7 @@ class UsersFragment : Fragment(), OnItemClickListener<Int> {
         userViewModel.users.observe(viewLifecycleOwner) { users ->
             if (users.isNotEmpty()) {
                 val sortedUsers = users.sortedBy { it.firstName }
-                val adapter = UsersAdapter(sortedUsers, this)
-                recyclerView.adapter = adapter
+                usersAdapter.updateUsers(sortedUsers)
             } else {
                 recyclerView.adapter = null
             }

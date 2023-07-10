@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -50,6 +51,21 @@ class AllBookingsFragment : Fragment(), OnItemClickListener<Int> {
 
         val recyclerView = binding.allBookingsListView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val allBookingsAdapter = AllBookingsAdapter(emptyList(), this)
+        recyclerView.adapter = allBookingsAdapter
+
+
+        // Set search bar
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                allBookingsAdapter.filter.filter(newText)
+                return true
+            }
+        })
 
 
         // Observers
@@ -67,8 +83,7 @@ class AllBookingsFragment : Fragment(), OnItemClickListener<Int> {
 
             if (allBookings.isNotEmpty()) {
                 val sortedBookings = allBookings.sortedBy { it.departureDate }
-                val adapter = AllBookingsAdapter(sortedBookings, this)
-                recyclerView.adapter = adapter
+                allBookingsAdapter.updateBookings(sortedBookings)
             } else {
                 recyclerView.adapter = null
             }
@@ -76,13 +91,13 @@ class AllBookingsFragment : Fragment(), OnItemClickListener<Int> {
             // Sort by destination
             binding.allBookingsDestinationHeader.setOnClickListener {
                 val sortedBookings = allBookings.sortedBy { it.destination.city }
-                recyclerView.adapter = AllBookingsAdapter(sortedBookings, this)
+                allBookingsAdapter.updateBookings(sortedBookings)
             }
 
             // Sort by departure date
             binding.allBookingsDateHeader.setOnClickListener {
                 val sortedBookings = allBookings.sortedBy { it.departureDate }
-                recyclerView.adapter = AllBookingsAdapter(sortedBookings, this)
+                allBookingsAdapter.updateBookings(sortedBookings)
             }
         }
     }
