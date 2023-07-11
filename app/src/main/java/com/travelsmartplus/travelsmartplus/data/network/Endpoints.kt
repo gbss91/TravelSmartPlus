@@ -6,7 +6,7 @@ package com.travelsmartplus.travelsmartplus.data.network
  */
 
 object Endpoints {
-    const val BASE_URL = "http://ec2-54-78-78-128.eu-west-1.compute.amazonaws.com:80/api/"
+    const val BASE_URL = "http://127.0.0.1:8000/api/"
 
     // Authentication Endpoints
     const val AUTHENTICATE = "http://ec2-54-78-78-128.eu-west-1.compute.amazonaws.com:80/api/authenticate"

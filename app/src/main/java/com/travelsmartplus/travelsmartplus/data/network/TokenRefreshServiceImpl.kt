@@ -25,7 +25,7 @@ class TokenRefreshServiceImpl : TokenRefreshService {
         val cookie = Cookie.Builder()
             .name("user_id")
             .value(userId.toString())
-            .domain("ec2-54-78-78-128.eu-west-1.compute.amazonaws.com")
+            .domain("127.0.0.1")
             .build()
 
         val request = Request.Builder()
