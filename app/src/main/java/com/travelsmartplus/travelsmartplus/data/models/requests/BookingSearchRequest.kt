@@ -1,14 +1,20 @@
-package com.travelsmartplus.models.requests
+package com.travelsmartplus.travelsmartplus.data.models.requests
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.travelsmartplus.travelsmartplus.data.models.Airport
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class BookingSearchRequest(
-    @JsonProperty("originCity") val originCity: String,
-    @JsonProperty("originIataCode") val originIataCode: String,
-    @JsonProperty("destinationCity") val destinationCity: String,
-    @JsonProperty("destinationIataCode") val destinationIataCode: String,
-    @JsonProperty("departureDate") val departureDate: String,
-    @JsonProperty("returnDate") val returnDate: String?,
-    @JsonProperty("adultsNumber") val adultsNumber: Int,
-    @JsonProperty("adultsNumber") val bookingClass: String
+    var userId: Int? = 0,
+    val oneWay: Boolean,
+    val nonStop: Boolean,
+    val origin: Airport,
+    val destination: Airport,
+    val departureDate: String,
+    val returnDate: String?,
+    val adultsNumber: Int,
+    val travelClass: String,
+    val hotel: Boolean,
+    val checkInDate: String?,
+    val checkOutDate: String?
 )

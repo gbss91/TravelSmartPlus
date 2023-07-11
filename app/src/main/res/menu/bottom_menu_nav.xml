@@ -7,14 +7,16 @@
 
     <item android:id="@+id/btnMenuAllBookings"
         android:title="@string/title_allBookings"
-        android:icon="@drawable/ic_all_bookings"/>
+        android:icon="@drawable/ic_all_bookings"
+        android:visible="false"/>
 
     <item android:id="@+id/bnbPlaceholder"
         android:title=""/>
 
     <item android:id="@+id/btnMenuUsers"
         android:title="@string/title_users"
-        android:icon="@drawable/ic_users"/>
+        android:icon="@drawable/ic_users"
+        android:visible="false"/>
 
     <item android:id="@+id/btnMenuProfile"
         android:title="@string/title_profile"

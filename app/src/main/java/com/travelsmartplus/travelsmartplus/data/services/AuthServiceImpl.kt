@@ -3,6 +3,7 @@ package com.travelsmartplus.travelsmartplus.data.services
 import android.util.Log
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignUpRequest
+import com.travelsmartplus.travelsmartplus.data.models.requests.UpdatePasswordRequest
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
 import com.travelsmartplus.travelsmartplus.data.network.NetworkException
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.NETWORK_ERROR
@@ -15,10 +16,20 @@ import java.io.IOException
 import java.net.URLDecoder
 import javax.inject.Inject
 
+/**
+ * AuthServiceImpl
+ * Makes authentication calls to the API
+ *
+ * @property authService The service for authentication API requests using Retrofit.
+ * @property sessionManager The session manager for handling user session data.
+ * @author Gabriel Salas
+ */
+
 class AuthServiceImpl @Inject constructor(
     private val authService: AuthService,
     private val sessionManager: SessionManager
 ) : AuthService {
+
     override suspend fun signUp(signUpRequest: SignUpRequest): Response<Unit> {
         return withContext(Dispatchers.IO) {
             try {
@@ -28,11 +39,10 @@ class AuthServiceImpl @Inject constructor(
                 }
                 response
             } catch (e: Exception) {
-                Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
+                Log.e("AuthService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(NETWORK_ERROR)
-                    is IllegalStateException -> throw NetworkException(UNEXPECTED_ERROR)
-                    else -> throw e
+                    else -> throw NetworkException(UNEXPECTED_ERROR)
                 }
             }
         }
@@ -55,6 +65,9 @@ class AuthServiceImpl @Inject constructor(
                         sessionManager.saveToken(responseBody.token)
                         sessionManager.saveRefreshToken(responseBody.refreshToken)
                         sessionManager.saveCurrentUser(userId)
+                        sessionManager.saveAdmin(responseBody.admin)
+                        sessionManager.saveSetup(responseBody.accountSetup)
+                        sessionManager.saveOrgId(responseBody.orgId!!)
                     }
                 } else {
                     Log.e("AuthService", "Error response: ${response.code()} ${response.message()}")
@@ -62,11 +75,31 @@ class AuthServiceImpl @Inject constructor(
                 response
 
             } catch (e: Exception) {
-                Log.e("AuthService", "Exception: $e at ${e.fillInStackTrace().stackTrace[0]}")
+                Log.e("AuthService", "Exception: ${e.printStackTrace()}")
                 when (e) {
                     is IOException -> throw NetworkException(NETWORK_ERROR)
                     is IllegalStateException -> throw NetworkException(UNEXPECTED_ERROR)
                     else -> throw e
+                }
+            }
+        }
+    }
+
+    override suspend fun updatePassword(updatedPassword: UpdatePasswordRequest): Response<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = authService.updatePassword(updatedPassword)
+
+                if (!response.isSuccessful) {
+                    Log.e("AuthService", "Error response: ${response.code()} ${response.message()}")
+                }
+                response
+
+            } catch (e: Exception) {
+                Log.e("AuthService", "Exception: ${e.printStackTrace()}")
+                when (e) {
+                    is IOException -> throw NetworkException(NETWORK_ERROR)
+                    else -> throw NetworkException(UNEXPECTED_ERROR)
                 }
             }
         }

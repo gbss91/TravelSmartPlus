@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/setup_nav_graph"
+    app:startDestination="@id/setupStartFragment">
+
+    <fragment
+        android:id="@+id/setupFinishFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.SetupFinishFragment"
+        android:label="fragment_setup_finish"
+        tools:layout="@layout/fragment_setup_finish" />
+    <fragment
+        android:id="@+id/setupPasswordFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.SetupPasswordFragment"
+        android:label="fragment_setup_password"
+        tools:layout="@layout/fragment_setup_password" >
+        <action
+            android:id="@+id/action_setupPasswordFragment_to_setupPreferencesFragment"
+            app:destination="@id/setupPreferencesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setupPreferencesFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.SetupPreferencesFragment"
+        android:label="fragment_setup_preferences"
+        tools:layout="@layout/fragment_setup_preferences" >
+        <argument
+            android:name="newPass"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_setupPreferencesFragment_to_setupFinishFragment"
+            app:destination="@id/setupFinishFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setupStartFragment"
+        android:name="com.travelsmartplus.travelsmartplus.fragments.SetupStartFragment"
+        android:label="fragment_setup_start"
+        tools:layout="@layout/fragment_setup_start" >
+        <action
+            android:id="@+id/action_setupStartFragment_to_setupPasswordFragment"
+            app:destination="@id/setupPasswordFragment" />
+    </fragment>
+</navigation>

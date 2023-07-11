@@ -1,9 +1,28 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        kotlin_version = '1.8.0'
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.6.0")
+
+        // Dependencies Vulnerability Checks - Reference: https://owasp.org/www-project-dependency-check/
+        classpath("org.owasp:dependency-check-gradle:8.3.1")
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+    }
+}
+
 plugins {
-    id 'com.android.application' version '7.4.2' apply false
-    id 'com.android.library' version '7.4.2' apply false
-    id 'org.jetbrains.kotlin.android' version '1.7.10' apply false
+    id 'com.android.application' version '8.0.2' apply false
+    id 'com.android.library' version '8.0.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
     id 'com.google.dagger.hilt.android' version '2.45' apply false
+    id 'org.owasp.dependencycheck' version '6.3.1'
 }
 
 task clean(type: Delete) {

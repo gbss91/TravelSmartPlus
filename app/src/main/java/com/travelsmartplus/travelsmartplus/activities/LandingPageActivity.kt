@@ -1,9 +1,16 @@
 package com.travelsmartplus.travelsmartplus.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.travelsmartplus.travelsmartplus.databinding.ActivityLandingPageBinding
+
+/**
+ * LandingPageActivity
+ * Represents the app landing page with the button to sign in and sign up.
+ *
+ * @author Gabriel Salas
+ */
 
 class LandingPageActivity : AppCompatActivity() {
 

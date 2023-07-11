@@ -1,19 +1,23 @@
 package com.travelsmartplus.travelsmartplus.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignUpRequest
 import com.travelsmartplus.travelsmartplus.databinding.ActivitySignUpBinding
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages
-import com.travelsmartplus.travelsmartplus.utils.NotBlankRule
 import com.travelsmartplus.travelsmartplus.viewModels.AuthViewModel
-import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.AndroidEntryPoint
+
+/**
+ * SignUpActivity
+ * Represents the welcome sign up activity. Allows the user to create a new account.
+ *
+ * @author Gabriel Salas
+ */
 
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
@@ -37,11 +41,8 @@ class SignUpActivity : AppCompatActivity() {
 
         // Observers - observes responses and errors
         authViewModel.signUpResponse.observe(this) { response ->
-            if (response != null && response.isSuccessful) {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            } else {
-                val error = response?.errorBody()?.string() ?: ErrorMessages.UNKNOWN_ERROR
+            if (response != null && !response.isSuccessful) {
+                val error = response.errorBody()?.string() ?: ErrorMessages.UNKNOWN_ERROR
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
             }
         }
@@ -49,7 +50,9 @@ class SignUpActivity : AppCompatActivity() {
         authViewModel.signInResponse.observe(this) { response ->
             if (response != null && response.isSuccessful) {
                 val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
+                finish() // Avoids returning when pressing back button
             } else {
                 val error = response?.errorBody()?.string() ?: ErrorMessages.UNKNOWN_ERROR
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
@@ -57,7 +60,10 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         authViewModel.errorMessage.observe(this) { error ->
-            Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+            if (error != null) {
+                Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+                authViewModel.clearError()
+            }
         }
     }
 
@@ -72,34 +78,9 @@ class SignUpActivity : AppCompatActivity() {
         val duns = binding.dunsInput
 
         // Input validation
-        var inputValidation = {
-            firstName.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { firstName.error = it }.check()
-            lastName.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { lastName.error = it }.check()
-            email.validator().nonEmpty().addRule(NotBlankRule()).validEmail().addErrorCallback { email.error = it }.check()
-            companyName.validator().nonEmpty().addRule(NotBlankRule()).addErrorCallback { companyName.error = it }.check()
-            duns.validator().nonEmpty().addRule(NotBlankRule()).validNumber().addErrorCallback { duns.error = it }.check()
+        val inputValidation = authViewModel.signUpValidation(firstName, lastName, email, companyName, duns, password, confirmPass)
 
-            password.validator()
-                .nonEmpty()
-                .atleastOneUpperCase()
-                .atleastOneLowerCase()
-                .atleastOneNumber()
-                .minLength(8)
-                .addErrorCallback { password.error = it }
-                .check()
-
-            confirmPass.validator()
-                .textEqualTo(password.text.toString())
-                .addErrorCallback { confirmPass.error = "Password doesn't match" }
-                .check()
-
-            // Return if not errors
-            firstName.error == null && lastName.error == null && email.error == null &&
-                    companyName.error == null && duns.error == null && password.error == null &&
-                    confirmPass.error == null
-        }
-
-        if(inputValidation()) {
+        if(inputValidation) {
 
             val signUpRequest = SignUpRequest(
                 firstName.text.toString(),

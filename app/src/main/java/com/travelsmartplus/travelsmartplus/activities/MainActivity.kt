@@ -1,17 +1,22 @@
 package com.travelsmartplus.travelsmartplus.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.core.view.get
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.replace
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.NavHostFragment
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.databinding.ActivityMainBinding
-import com.travelsmartplus.travelsmartplus.fragments.*
 import com.travelsmartplus.travelsmartplus.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
+/**
+ * MainActivity
+ * Represents the main activity of the Android app.
+ *
+ * @author Gabriel Salas
+ */
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -24,53 +29,68 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Load the BookingSearchFragment at the start of the activity
-        replaceFragment(BookingSearchFragment())
+        val currentUser = mainViewModel.getCurrentUser()
+        val isAdmin = mainViewModel.isAdmin()
+
+        // Set up the NavController with the NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
+        val navController = navHostFragment.navController
 
         // Clear the selected item using hidden placeholder
         binding.bottomNavigationView.selectedItemId = R.id.bnbPlaceholder
 
+        // Back to booking search
+        val backToBookingSearch = NavOptions.Builder().setPopUpTo(R.id.bookingSearchFragment, false).build()
+
         binding.mainBtn.setOnClickListener {
             binding.bottomNavigationView.menu.setGroupCheckable(0, false, true)
-            replaceFragment(BookingSearchFragment())
+            navController.navigate(R.id.action_global_bookingSearchFragment)
         }
 
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
-            binding.bottomNavigationView.menu.setGroupCheckable(0, true, true)
             when (item.itemId) {
-                R.id.btnMenuBookings -> { replaceFragment(MyBookingsFragment())
+                R.id.btnMenuBookings -> {
+                    navController.navigate(R.id.myBookingsFragment, null, backToBookingSearch)
                     true
                 }
                 R.id.btnMenuAllBookings -> {
-                    replaceFragment(AllBookingsFragment())
+                    navController.navigate(R.id.allBookingsFragment, null, backToBookingSearch)
                     true
                 }
                 R.id.btnMenuUsers -> {
-                    replaceFragment(UsersFragment())
+                    navController.navigate(R.id.usersFragment, null, backToBookingSearch)
                     true
                 }
                 R.id.btnMenuProfile -> {
-                    replaceFragment(ProfileFragment())
+                    val args = Bundle()
+                    args.putInt("userId", currentUser)
+                    navController.navigate(R.id.profileFragment, args, backToBookingSearch)
                     true
                 }
                 else -> false
             }
         }
 
+        // Show buttons if admin
+        binding.bottomNavigationView.menu.findItem(R.id.btnMenuUsers)?.isVisible = isAdmin
+        binding.bottomNavigationView.menu.findItem(R.id.btnMenuAllBookings)?.isVisible = isAdmin
+
         // Observers - observes responses and errors
         mainViewModel.isSignedIn.observe(this) { signedIn ->
-            if (!signedIn) {
+            if (signedIn) {
+                mainViewModel.isSetup.observe(this) { isSetup ->
+                    if (!isSetup) {
+                        val intent = Intent(this, SetupActivity::class.java)
+                        startActivity(intent)
+                        finish() // Avoids returning when pressing back button
+                    }
+                }
+            } else {
                 val intent = Intent(this, LandingPageActivity::class.java)
                 startActivity(intent)
+                finish() // Avoids returning when pressing back button
             }
         }
     }
 
-    private fun replaceFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-        transaction.setReorderingAllowed(true)
-        transaction.replace(R.id.mainFragmentContainer, fragment)
-        transaction.commit()
-    }
 }

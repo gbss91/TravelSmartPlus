@@ -7,6 +7,14 @@ import com.travelsmartplus.travelsmartplus.utils.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+/**
+ * MainViewModel
+ * ViewModel class responsible for managing the main activity's state and session information.
+ *
+ * @property sessionManager The SessionManager instance for handling sessions.
+ * @author Gabriel Salas
+ */
+
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val sessionManager: SessionManager
@@ -14,11 +22,27 @@ class MainViewModel @Inject constructor(
 
     // LiveData object to hold the responses and variables
     private val _isSignedIn = MutableLiveData<Boolean>()
+    private val _isSetup = MutableLiveData<Boolean>()
     val isSignedIn: LiveData<Boolean> = _isSignedIn
+    val isSetup: LiveData<Boolean> = _isSetup
 
     init {
-        // Set the initial value of the signedIn variable
+        // Set initial values
         _isSignedIn.value = sessionManager.currentUser() != -1
+        _isSetup.value = sessionManager.isSetup()
+    }
+
+    // Clear session data - Used when deleting account
+    fun clearSession() {
+        sessionManager.clearSession()
+    }
+
+    fun getCurrentUser(): Int {
+        return sessionManager.currentUser()
+    }
+
+    fun isAdmin(): Boolean {
+        return sessionManager.admin()
     }
 
 }

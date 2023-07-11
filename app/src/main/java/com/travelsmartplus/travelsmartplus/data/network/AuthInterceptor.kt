@@ -8,6 +8,15 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
+/**
+ * AuthInterceptor
+ * Intercepts the request chain and adds the JWT token to the request header.
+ * If the response is unauthorized, it attempts to refresh the token and retry the request.
+ *
+ * @return The response from the server
+ * @author Gabriel Salas
+ */
+
 class AuthInterceptor @Inject constructor(
     private val sessionManager: SessionManager
 )  : Interceptor {
@@ -27,18 +36,26 @@ class AuthInterceptor @Inject constructor(
 
         // Retry with refresh token if unauthorised
         if (response.code == 401) {
+
             // If no refresh token available, return original response
             val refreshToken = sessionManager.getRefreshToken() ?: return response
 
+            // Close previous response
             response.close()
 
-            val newRequest = originalRequest.addHeader("Authorization", "Bearer $refreshToken").build()
+            // Retry request with refresh token
+            val newRequest = originalRequest
+                .removeHeader("Authorization")
+                .addHeader("Authorization", "Bearer $refreshToken").build()
             val newResponse = chain.proceed(newRequest)
-            // Refresh tokens if refresh token is valid and request is successful, else return unauthorised response
+
+            // Refresh tokens if successful, otherwise clear session to log user out
             if (newResponse.isSuccessful) {
                 scope.launch {
-                    refreshTokens()
+                    refreshTokens(sessionManager.currentUser(), refreshToken)
                 }
+            } else {
+                sessionManager.clearSession()
             }
             return newResponse
         }
@@ -46,9 +63,10 @@ class AuthInterceptor @Inject constructor(
     }
 
     private val tokenRefreshService = TokenRefreshServiceImpl()
+
     // Call to refresh tokens
-    private suspend fun refreshTokens() {
-        val authResponse = tokenRefreshService.authenticate()
+    private suspend fun refreshTokens(userId: Int?, refreshToken: String) {
+        val authResponse = tokenRefreshService.authenticate(userId, refreshToken)
         if (authResponse != null) {
             sessionManager.saveToken(authResponse.token)
             sessionManager.saveRefreshToken(authResponse.refreshToken)

@@ -2,7 +2,13 @@ package com.travelsmartplus.travelsmartplus.utils
 
 import com.wajahatkarim3.easyvalidation.core.rules.BaseRule
 
-// Custom rule - Extends EasyValidation Library to check for blank strings
+/**
+ * Custom rule
+ * Extends EasyValidation Library to check for blank strings
+ *
+ * @author Gabriel Salas
+ */
+
 class NotBlankRule : BaseRule {
 
 

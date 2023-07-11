@@ -1,60 +1,118 @@
 package com.travelsmartplus.travelsmartplus.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.travelsmartplus.travelsmartplus.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.travelsmartplus.travelsmartplus.adapters.AllBookingsAdapter
+import com.travelsmartplus.travelsmartplus.adapters.OnItemClickListener
+import com.travelsmartplus.travelsmartplus.databinding.FragmentAllBookingsBinding
+import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * A simple [Fragment] subclass.
- * Use the [AllBookingsFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * AllBookingsFragment.
+ * Displays all company bookings to the administrator.
+ *
+ * @author Gabriel Salas
  */
-class AllBookingsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+@AndroidEntryPoint
+class AllBookingsFragment : Fragment(), OnItemClickListener<Int> {
+
+    private lateinit var binding: FragmentAllBookingsBinding
+    private val bookingViewModel: BookingViewModel by activityViewModels() // Shared View Mode
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        binding = FragmentAllBookingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Set Loading GIF image
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.load)
+            .into(binding.allBookingsFragmentProgress)
+
+        val recyclerView = binding.allBookingsListView
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val allBookingsAdapter = AllBookingsAdapter(emptyList(), this)
+        recyclerView.adapter = allBookingsAdapter
+
+
+        // Set search bar
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                allBookingsAdapter.filter.filter(newText)
+                return true
+            }
+        })
+
+
+        // Observers
+        bookingViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                binding.usersTable.visibility = View.INVISIBLE
+                binding.allBookingsFragmentProgress.visibility = View.VISIBLE
+            } else {
+                binding.usersTable.visibility = View.VISIBLE
+                binding.allBookingsFragmentProgress.visibility = View.INVISIBLE
+            }
+        }
+
+        bookingViewModel.allBookings.observe(viewLifecycleOwner) { allBookings->
+
+            if (allBookings.isNotEmpty()) {
+                val sortedBookings = allBookings.sortedBy { it.departureDate }
+                allBookingsAdapter.updateBookings(sortedBookings)
+            } else {
+                recyclerView.adapter = null
+            }
+
+            // Sort by destination
+            binding.allBookingsDestinationHeader.setOnClickListener {
+                val sortedBookings = allBookings.sortedBy { it.destination.city }
+                allBookingsAdapter.updateBookings(sortedBookings)
+            }
+
+            // Sort by departure date
+            binding.allBookingsDateHeader.setOnClickListener {
+                val sortedBookings = allBookings.sortedBy { it.departureDate }
+                allBookingsAdapter.updateBookings(sortedBookings)
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_bookings, container, false)
+    // Get bookings data when the fragment is resumed or becomes visible
+    override fun onResume() {
+        super.onResume()
+        bookingViewModel.getAllBookings()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AllBookingsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AllBookingsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    // Handle clicking user row - Sends booking ID to open correct booking
+    override fun onItemClick(item: Int) {
+        val action = AllBookingsFragmentDirections.actionAllBookingsFragmentToBookingFragment(item)
+        findNavController().navigate(action)
     }
+
 }
