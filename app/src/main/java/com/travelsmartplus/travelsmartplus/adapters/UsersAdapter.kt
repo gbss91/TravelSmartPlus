@@ -56,7 +56,7 @@ class UsersAdapter(
 
     // Replace the contents of a view
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val user = users[position]
+        val user = filteredUsers[position]
 
         viewHolder.name.text = viewHolder.itemView.context.getString(R.string.users_row_name, user.firstName, user.lastName)
     }
