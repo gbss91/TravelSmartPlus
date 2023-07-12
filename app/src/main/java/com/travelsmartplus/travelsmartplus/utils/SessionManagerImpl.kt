@@ -1,6 +1,9 @@
 package com.travelsmartplus.travelsmartplus.utils
 
 import android.content.SharedPreferences
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,6 +18,13 @@ import javax.inject.Singleton
 @Singleton
 class SessionManagerImpl @Inject constructor(private val sharedPreferences: SharedPreferences) :
     SessionManager {
+
+    private val _authenticationExpired = MutableLiveData<Boolean>()
+    override val authenticationExpired: LiveData<Boolean> = _authenticationExpired
+
+    init {
+        _authenticationExpired.value = false
+    }
 
     companion object {
         private const val ACCESS_TOKEN = "token"
@@ -76,6 +86,19 @@ class SessionManagerImpl @Inject constructor(private val sharedPreferences: Shar
 
     override fun clearSession() {
         sharedPreferences.edit().clear().apply()
+
     }
+
+    // Informs MainActivity that authentication failed and clears session data
+    override fun authenticationExpired() {
+        _authenticationExpired.postValue(true)
+        Log.d("SessionManagerImpl", "_authenticationExpired set ${authenticationExpired.value}")
+        sharedPreferences.edit().clear().apply()
+    }
+
+    override fun setAuthenticationExpired(boolean: Boolean) {
+        _authenticationExpired.postValue(boolean)
+    }
+
 
 }

@@ -133,7 +133,6 @@ class ProfileFragment : Fragment() {
         userViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).setAnchorView(R.id.bottomNavigationView).show()
-                findNavController().navigate(R.id.action_predictedBookingFragment_to_bookingSearchFragment)
                 userViewModel.clearError()
             }
         }

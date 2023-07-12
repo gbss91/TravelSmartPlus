@@ -7,9 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.databinding.ActivitySignInBinding
+import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.SESSION_EXPIRED
 import com.travelsmartplus.travelsmartplus.utils.ErrorMessages.UNKNOWN_ERROR
+import com.travelsmartplus.travelsmartplus.utils.SessionManager
 import com.travelsmartplus.travelsmartplus.viewModels.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * SignInActivity
@@ -23,6 +26,9 @@ class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInBinding
     private val authViewModel: AuthViewModel by viewModels()
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +69,14 @@ class SignInActivity : AppCompatActivity() {
             if (error != null) {
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
                 authViewModel.clearError()
+            }
+        }
+
+        // Show message if session expired
+        sessionManager.authenticationExpired.observe(this) { expired ->
+            if (expired == true) {
+                Snackbar.make(binding.root, SESSION_EXPIRED, Snackbar.LENGTH_LONG).show()
+                sessionManager.setAuthenticationExpired(false)
             }
         }
     }
