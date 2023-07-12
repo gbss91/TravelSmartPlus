@@ -35,10 +35,10 @@
                 android:id="@+id/searchToggleGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/onewayDropdownContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/onewayDropdownContainer"
+                app:layout_constraintTop_toTopOf="parent"
                 app:selectionRequired="true"
                 app:singleSelection="true">
 
@@ -51,7 +51,7 @@
                     android:padding="5dp"
                     android:text="@string/btn_flight_search"
                     android:textSize="@dimen/xxsmall_text"
-                    app:cornerRadius="18dp"/>
+                    app:cornerRadius="18dp" />
 
                 <Button
                     android:id="@+id/flightHotelSearchBtn"
@@ -72,25 +72,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/text_dropdown_height"
                 android:labelFor="@id/onewayDropdownInput"
-                app:hintEnabled="false"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
                 app:endIconTint="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/searchToggleGroup"
+                app:hintEnabled="false"
+                app:layout_constraintBottom_toTopOf="@+id/fromContainer"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/fromContainer">
+                app:layout_constraintTop_toBottomOf="@+id/searchToggleGroup">
 
                 <AutoCompleteTextView
                     android:id="@+id/onewayDropdownInput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:dropDownVerticalOffset="0dp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:inputType="none"
                     android:paddingTop="0dp"
                     android:paddingBottom="0dp"
-                    android:fontFamily="@font/roboto_bold"
                     android:textColor="@color/white"
-                    android:inputType="none"
-                    android:textSize="@dimen/xsmall_text"
-                    android:dropDownVerticalOffset="0dp"/>
+                    android:textSize="@dimen/xsmall_text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,10 +119,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/roboto"
-                    android:paddingStart="@dimen/small_padding"
                     android:inputType="text"
+                    android:paddingStart="@dimen/small_padding"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/input_text"/>
+                    android:textSize="@dimen/input_text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -150,11 +150,11 @@
                     android:id="@+id/toSearchInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/small_padding"
                     android:fontFamily="@font/roboto"
                     android:inputType="text"
+                    android:paddingStart="@dimen/small_padding"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/input_text"/>
+                    android:textSize="@dimen/input_text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -183,13 +183,13 @@
                     android:id="@+id/departureDateSearchInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:inputType="date"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="@dimen/input_text"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -219,13 +219,13 @@
                     android:id="@+id/returnDateSearchInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:inputType="date"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="@dimen/input_text"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -276,8 +276,8 @@
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
-                app:layout_constraintStart_toEndOf="@+id/adultDropdownContainer"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/adultDropdownContainer"
                 app:layout_constraintTop_toBottomOf="@id/departureDateContainer">
 
                 <AutoCompleteTextView
@@ -315,13 +315,13 @@
                     android:id="@+id/checkInDateInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:inputType="date"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="@dimen/input_text"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -350,13 +350,13 @@
                     android:id="@+id/checkOutDateInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:inputType="date"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="@dimen/input_text"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -407,10 +407,17 @@
         layout="@layout/item_booking"
         android:layout_width="0dp"
         android:layout_height="@dimen/booking_card"
-        android:layout_marginVertical="@dimen/small_margin"
         android:layout_marginHorizontal="@dimen/default_margin"
+        android:layout_marginVertical="@dimen/small_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/upcomingTripSearch" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/upcomingTripGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="upcomingTripCard,upcomingTripSearch" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

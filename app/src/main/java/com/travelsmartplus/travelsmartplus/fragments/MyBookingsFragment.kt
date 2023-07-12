@@ -17,6 +17,8 @@ import com.travelsmartplus.travelsmartplus.adapters.OnItemClickListener
 import com.travelsmartplus.travelsmartplus.databinding.FragmentMyBookingsBinding
 import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.datetime.toKotlinLocalDate
+import java.time.LocalDate
 
 /**
  * MyBookingsFragment.
@@ -79,7 +81,7 @@ class MyBookingsFragment : Fragment(), OnItemClickListener<Int> {
         }
 
         bookingViewModel.myBookings.observe(viewLifecycleOwner) { myBookings ->
-            val sortedBookings = myBookings.sortedBy { it.departureDate }
+            val sortedBookings = myBookings.sortedBy { it.departureDate }.filter { it.departureDate > LocalDate.now().toKotlinLocalDate() }
             if (myBookings.isNotEmpty()) {
                 bookingsAdapter.updateBookings(sortedBookings)
             } else {
