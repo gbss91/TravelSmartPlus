@@ -18,13 +18,14 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val sessionManager: SessionManager
-) : ViewModel()  {
+) : ViewModel() {
 
     // LiveData object to hold the responses and variables
     private val _isSignedIn = MutableLiveData<Boolean>()
     private val _isSetup = MutableLiveData<Boolean>()
     val isSignedIn: LiveData<Boolean> = _isSignedIn
     val isSetup: LiveData<Boolean> = _isSetup
+
 
     init {
         // Set initial values

@@ -4,5 +4,5 @@ object  ErrorMessages {
     const val NETWORK_ERROR = "Network error occurred. Please try again later."
     const val UNEXPECTED_ERROR = "Something went wrong. Please try again later."
     const val UNKNOWN_ERROR = "Unknown error occurred."
-    const val NOT_FOUND_ERROR = "No results found. Please try a different date."
+    const val SESSION_EXPIRED = "Session Expired. Please sign in."
 }

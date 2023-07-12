@@ -34,11 +34,11 @@ class AuthInterceptor @Inject constructor(
 
         val response = chain.proceed(originalRequest.build())
 
-        // Retry with refresh token if unauthorised
-        if (response.code == 401) {
+        // Retry with refresh token if unauthorised or forbidden
+        if (response.code == 401 || response.code == 403) {
 
             // If no refresh token available, return original response
-            val refreshToken = sessionManager.getRefreshToken() ?: return response
+            val refreshToken = sessionManager.getRefreshToken()
 
             // Close previous response
             response.close()
@@ -52,10 +52,10 @@ class AuthInterceptor @Inject constructor(
             // Refresh tokens if successful, otherwise clear session to log user out
             if (newResponse.isSuccessful) {
                 scope.launch {
-                    refreshTokens(sessionManager.currentUser(), refreshToken)
+                    refreshTokens(sessionManager.currentUser(), refreshToken!!)
                 }
             } else {
-                sessionManager.clearSession()
+                sessionManager.authenticationExpired()
             }
             return newResponse
         }

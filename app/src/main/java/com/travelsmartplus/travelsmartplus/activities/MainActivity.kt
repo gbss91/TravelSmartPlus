@@ -8,8 +8,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.databinding.ActivityMainBinding
+import com.travelsmartplus.travelsmartplus.utils.SessionManager
 import com.travelsmartplus.travelsmartplus.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * MainActivity
@@ -23,6 +25,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,20 +56,24 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.btnMenuBookings -> {
                     navController.navigate(R.id.myBookingsFragment, null, backToBookingSearch)
+                    item.isCheckable = true
                     true
                 }
                 R.id.btnMenuAllBookings -> {
                     navController.navigate(R.id.allBookingsFragment, null, backToBookingSearch)
+                    item.isCheckable = true
                     true
                 }
                 R.id.btnMenuUsers -> {
                     navController.navigate(R.id.usersFragment, null, backToBookingSearch)
+                    item.isCheckable = true
                     true
                 }
                 R.id.btnMenuProfile -> {
                     val args = Bundle()
                     args.putInt("userId", currentUser)
                     navController.navigate(R.id.profileFragment, args, backToBookingSearch)
+                    item.isCheckable = true
                     true
                 }
                 else -> false
@@ -91,6 +100,16 @@ class MainActivity : AppCompatActivity() {
                 finish() // Avoids returning when pressing back button
             }
         }
+
+        // Send to sign in
+        sessionManager.authenticationExpired.observe(this) { expired ->
+            if (expired == true) {
+                val intent = Intent(this, SignInActivity::class.java)
+                startActivity(intent)
+                finish() // Avoids returning when pressing back button
+            }
+        }
+
     }
 
 }
