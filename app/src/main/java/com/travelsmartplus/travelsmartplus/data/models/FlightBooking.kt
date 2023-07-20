@@ -1,6 +1,6 @@
 package com.travelsmartplus.travelsmartplus.data.models
 
-import com.travelsmartplus.utils.BigDecimalSerializer
+import com.travelsmartplus.travelsmartplus.utils.BigDecimalSerializer
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 

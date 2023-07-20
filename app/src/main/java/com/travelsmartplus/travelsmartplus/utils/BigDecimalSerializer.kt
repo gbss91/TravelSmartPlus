@@ -1,4 +1,4 @@
-package com.travelsmartplus.utils
+package com.travelsmartplus.travelsmartplus.utils
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
