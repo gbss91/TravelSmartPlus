@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_bookingSearchFragment_to_predictedBookingFragment"
             app:destination="@id/predictedBookingFragment" />
+        <action
+            android:id="@+id/action_bookingSearchFragment_to_bookingFragment"
+            app:destination="@id/bookingFragment" />
     </fragment>
     <fragment
         android:id="@+id/usersFragment"

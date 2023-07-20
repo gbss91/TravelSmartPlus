@@ -3,19 +3,25 @@ package com.travelsmartplus.travelsmartplus.fragments
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.data.models.Airport
 import com.travelsmartplus.travelsmartplus.data.models.requests.BookingSearchRequest
 import com.travelsmartplus.travelsmartplus.databinding.FragmentBookingSearchBinding
+import com.travelsmartplus.travelsmartplus.utils.Formatters
 import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
 import com.travelsmartplus.travelsmartplus.widgets.CustomDatePicker
 import com.travelsmartplus.travelsmartplus.widgets.CustomDropdown
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toKotlinLocalDate
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -53,10 +59,12 @@ class BookingSearchFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentBookingSearchBinding.inflate(inflater, container, false)
 
+        binding.upcomingTripGroup.visibility = GONE
+
         // Set flight only button checked and remove hotel fields as default state
         binding.searchToggleGroup.check(R.id.flightOnlySearchBtn)
-        binding.checkInDateContainer.visibility = View.GONE
-        binding.checkOutDateContainer.visibility = View.GONE
+        binding.checkInDateContainer.visibility = GONE
+        binding.checkOutDateContainer.visibility = GONE
 
         // Set simple Dropdowns
         val adultsDropdownItems = resources.getStringArray(R.array.adults_dropdown)
@@ -78,13 +86,13 @@ class BookingSearchFragment : Fragment() {
                 when (checkedId) {
                     R.id.flightOnlySearchBtn -> {
                         flightHotel = false
-                        binding.checkInDateContainer.visibility = View.GONE
-                        binding.checkOutDateContainer.visibility = View.GONE
+                        binding.checkInDateContainer.visibility = GONE
+                        binding.checkOutDateContainer.visibility = GONE
                     }
                     R.id.flightHotelSearchBtn -> {
                         flightHotel = true
-                        binding.checkInDateContainer.visibility = View.VISIBLE
-                        binding.checkOutDateContainer.visibility = View.VISIBLE
+                        binding.checkInDateContainer.visibility = VISIBLE
+                        binding.checkOutDateContainer.visibility = VISIBLE
                     }
                 }
             }
@@ -96,11 +104,11 @@ class BookingSearchFragment : Fragment() {
             when (selectedItem) {
                 "ONE-WAY" -> {
                     oneWay = true
-                    binding.returnDateContainer.visibility = View.GONE
+                    binding.returnDateContainer.visibility = GONE
                 }
                 "RETURN" -> {
                     oneWay = false
-                    binding.returnDateContainer.visibility = View.VISIBLE
+                    binding.returnDateContainer.visibility = VISIBLE
                 }
             }
         }
@@ -135,6 +143,35 @@ class BookingSearchFragment : Fragment() {
             toAutocomplete.setAirportAutocomplete(requireContext(), binding.toSearchInput, airports)
         }
 
+        bookingViewModel.myBookings.observe(viewLifecycleOwner) { myBookings ->
+            if (myBookings.isNotEmpty()) {
+                val sortedBookings = myBookings.sortedBy { it.departureDate }
+                val upcomingBooking = sortedBookings.firstOrNull { it.departureDate > LocalDate.now().toKotlinLocalDate() }
+                if (upcomingBooking != null) {
+                    binding.upcomingTripCard.bookingItemDestination.text = upcomingBooking.destination.city
+                    binding.upcomingTripCard.bookingItemDate.text = Formatters.formattedDateLong(upcomingBooking.departureDate.toJavaLocalDate())
+
+                    // Load the image using Glide
+                    Glide.with(this)
+                        .load(upcomingBooking.imageUrl)
+                        .placeholder(R.drawable.timetable)
+                        .error(R.drawable.timetable)
+                        .into(binding.upcomingTripCard.bookingItemImage)
+
+                    binding.upcomingTripGroup.visibility = VISIBLE
+
+                    // Set on click listener
+                    binding.upcomingTripCard.root.setOnClickListener {
+                        val action = BookingSearchFragmentDirections.actionBookingSearchFragmentToBookingFragment(upcomingBooking.id!!)
+                        findNavController().navigate(action)
+                    }
+
+                } else {
+                    binding.upcomingTripGroup.visibility = GONE
+                }
+            }
+        }
+
         bookingViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error != null) {
                 Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).setAnchorView(R.id.bottomNavigationView).show()
@@ -142,12 +179,14 @@ class BookingSearchFragment : Fragment() {
             }
         }
 
+
     }
 
-    // Get airport data on resume
+    // Get airport data and upcoming booking on resume
     override fun onResume() {
         super.onResume()
         bookingViewModel.airportsAutoComplete()
+        bookingViewModel.getUserBookings()
     }
 
     private fun bookingSearch() {

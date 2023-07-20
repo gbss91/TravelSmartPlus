@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.travelsmartplus.travelsmartplus.R
 import com.travelsmartplus.travelsmartplus.data.models.Booking
 import com.travelsmartplus.travelsmartplus.utils.Formatters.formattedDateLong
@@ -67,7 +68,13 @@ class BookingsAdapter(
         viewHolder.destination.text = booking.destination.city
         viewHolder.date.text = formattedDateLong(booking.departureDate.toJavaLocalDate())
 
-        // Load the image using Glide
+        // Preload the image using Glide
+        Glide.with(viewHolder.itemView)
+            .load(booking.imageUrl)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .preload()
+
+        // Load the image into the ImageView
         Glide.with(viewHolder.itemView)
             .load(booking.imageUrl)
             .placeholder(R.drawable.timetable)
