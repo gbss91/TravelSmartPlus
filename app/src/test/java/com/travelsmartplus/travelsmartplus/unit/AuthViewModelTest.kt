@@ -1,7 +1,5 @@
 package com.travelsmartplus.travelsmartplus.unit
 
-import org.junit.Assert.*
-
 import org.junit.Test
 
 class AuthViewModelTest {
