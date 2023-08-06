@@ -1,29 +1,24 @@
 package com.travelsmartplus.travelsmartplus.unit
 
-import androidx.lifecycle.MutableLiveData
+import MainDispatcherRule
 import com.google.android.material.textfield.TextInputEditText
-import com.travelsmartplus.travelsmartplus.data.models.Airport
 import com.travelsmartplus.travelsmartplus.data.models.requests.SignInRequest
 import com.travelsmartplus.travelsmartplus.data.models.responses.AuthResponse
 import com.travelsmartplus.travelsmartplus.data.services.AuthService
-import com.travelsmartplus.travelsmartplus.data.services.BookingService
-import com.travelsmartplus.travelsmartplus.utils.SessionManager
 import com.travelsmartplus.travelsmartplus.viewModels.AuthViewModel
-import com.travelsmartplus.travelsmartplus.viewModels.BookingViewModel
-import io.mockk.Runs
 import io.mockk.coEvery
-import io.mockk.confirmVerified
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.unmockkAll
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -43,6 +38,12 @@ class AuthViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
+        Dispatchers.resetMain()
     }
 
     @Test

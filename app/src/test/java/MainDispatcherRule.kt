@@ -1,5 +1,3 @@
-package com.travelsmartplus.travelsmartplus.unit
-
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
