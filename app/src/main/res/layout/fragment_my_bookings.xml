@@ -45,16 +45,27 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Users Table Rows -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/myBookingsListView"
+    <ScrollView
+        android:id="@+id/myBookingsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_margin"
-        android:paddingBottom="@dimen/scroll_view_padding"
-        app:layout_constraintTop_toBottomOf="@id/myBookingsFragmentHeaderContainer"
+        android:layout_marginBottom="@dimen/scroll_view_margin"
+        android:background="@color/white"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/myBookingsFragmentHeaderContainer">
+
+        <!-- Users Table Rows -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/myBookingsListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:paddingBottom="300dp" />
+
+    </ScrollView>
+
 
     <!-- Progress indicator -->
     <ImageView
